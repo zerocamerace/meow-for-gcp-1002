@@ -160,6 +160,60 @@
             #webcrumbs .focus\:outline-none:focus { outline: 2px solid transparent; }
             #webcrumbs .focus\:ring-1:focus { box-shadow: 0 0 0 1px rgb(156 163 175); }
             #webcrumbs .focus\:ring-gray-400:focus { --tw-ring-color: rgb(156 163 175); }
+            #webcrumbs .primary-cta { border-radius: 20px; }
+            #webcrumbs .mobile-cat-section { margin-top: 40px; padding: 0 12px; }
+            #webcrumbs .mobile-cat-card {
+                background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+                border-radius: 28px;
+                padding: 28px 20px;
+                box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+            }
+            #webcrumbs .mobile-cat-card h2 {
+                font-size: 22px;
+                font-weight: 700;
+                color: #1f2937;
+                text-align: center;
+                margin: 0 0 12px 0;
+            }
+            #webcrumbs .mobile-cat-card p {
+                color: #4b5563;
+                font-size: 15px;
+                line-height: 1.6;
+                text-align: center;
+                margin: 0 auto;
+                max-width: 260px;
+            }
+            #webcrumbs .mobile-cat-grid {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 12px;
+                margin-top: 24px;
+            }
+            #webcrumbs .mobile-cat-grid img {
+                width: 100%;
+                aspect-ratio: 1 / 1;
+                object-fit: cover;
+                border-radius: 16px;
+                box-shadow: 0 6px 12px rgba(15, 23, 42, 0.08);
+            }
+            #webcrumbs .mobile-explore-btn {
+                margin-top: 28px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                padding: 14px 18px;
+                background: #1f2937;
+                color: #fff;
+                border-radius: 9999px;
+                font-size: 16px;
+                font-weight: 600;
+                box-shadow: 0 12px 24px rgba(17, 24, 39, 0.16);
+            }
+            #webcrumbs .mobile-explore-btn .material-symbols-outlined {
+                margin-right: 8px;
+                font-size: 22px;
+            }
             /* 移除所有連結的底線 */
             #webcrumbs a,
             #webcrumbs a:link,
@@ -177,11 +231,21 @@
                 #webcrumbs .sm\:h-48 { height: 192px; }
                 #webcrumbs .sm\:gap-4 { gap: 16px; }
                 #webcrumbs .sm\:max-w-full { max-width: 100%; }
+                #webcrumbs .primary-cta {
+                    border-radius: 9999px;
+                    background-color: #1f2937 !important;
+                    box-shadow: 0 16px 32px rgba(17, 24, 39, 0.2);
+                    font-size: 18px;
+                }
+                #webcrumbs .primary-cta .material-symbols-outlined { font-size: 22px; }
+                #webcrumbs .mobile-cat-section { margin-top: 32px; }
+                #webcrumbs .mobile-cat-card { padding: 32px 20px; }
             }
             @media (min-width: 768px) {
                 #webcrumbs .md\:flex { display: flex; }
                 #webcrumbs .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
                 #webcrumbs .md\:text-5xl { font-size: 48px; line-height: 52.8px; }
+                #webcrumbs .mobile-only { display: none; }
             }
             @media (max-width: 1024px) {
                 #webcrumbs .lg\:max-w-4xl { max-width: 56rem; }
@@ -250,8 +314,28 @@
                         </div>
                         <!-- 🟢 修改結束 -->
                         <div class="w-full max-w-md sm:max-w-full">
-                            <a href="{{ url_for('upload_health') }}" class="w-full py-4 px-6 bg-gray-700 hover:bg-gray-800 text-white rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center">
+                            <a href="{{ url_for('upload_health') }}" class="primary-cta w-full py-4 px-6 bg-gray-700 hover:bg-gray-800 text-white rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center">
                                 <span class="material-symbols-outlined mr-2">pets</span> 開啟你的專屬旅程
+                            </a>
+                        </div>
+                    </div>
+                    <div class="mobile-only mobile-cat-section">
+                        <div class="mobile-cat-card">
+                            <h2>我們的九宮格貓咪</h2>
+                            <p>九大貓咪人格一次看懂，看看哪一隻最貼近你的靈魂貓夥伴。</p>
+                            <div class="mobile-cat-grid">
+                                <img src="{{ url_for('static', filename='cat_cards/images/cats/A1.png') }}" alt="暖心貓（布偶貓）" />
+                                <img src="{{ url_for('static', filename='cat_cards/images/cats/A2.png') }}" alt="晴天貓（橘貓）" />
+                                <img src="{{ url_for('static', filename='cat_cards/images/cats/A3.png') }}" alt="活力貓（俄羅斯藍貓）" />
+                                <img src="{{ url_for('static', filename='cat_cards/images/cats/B1.png') }}" alt="恬靜貓（波斯貓）" />
+                                <img src="{{ url_for('static', filename='cat_cards/images/cats/B2.png') }}" alt="日常貓（三花貓）" />
+                                <img src="{{ url_for('static', filename='cat_cards/images/cats/B3.png') }}" alt="外強內柔貓（英短銀漸層）" />
+                                <img src="{{ url_for('static', filename='cat_cards/images/cats/C1.png') }}" alt="暖伴貓（摺耳貓）" />
+                                <img src="{{ url_for('static', filename='cat_cards/images/cats/C2.png') }}" alt="深思貓（黑貓）" />
+                                <img src="{{ url_for('static', filename='cat_cards/images/cats/C3.png') }}" alt="靜心貓（暹羅貓）" />
+                            </div>
+                            <a href="{{ url_for('featured_cats') }}" class="mobile-explore-btn">
+                                <span class="material-symbols-outlined">grid_view</span> 前往探索
                             </a>
                         </div>
                     </div>
