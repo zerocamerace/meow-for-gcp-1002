@@ -588,6 +588,18 @@
             </div>
             {% endif %}
 
+            <!-- 🟡 1003 修改：操作按鈕移至情緒摘要上方以強化行動導向版面 -->
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="downloadCard(event)">
+                    <span class="material-symbols-outlined">download</span>
+                    下載貓咪卡片
+                </button>
+                <a href="/" class="btn btn-primary">
+                    <span class="material-symbols-outlined">home</span>
+                    返回首頁
+                </a>
+            </div>
+
             {% if psychology %}
             <div class="info-card">
                 <h3>情緒測驗摘要</h3>
@@ -639,17 +651,7 @@
                 </div>
             </div>
             
-            <!-- 操作按鈕 -->
-            <div class="action-buttons">
-                <button class="btn btn-secondary" onclick="downloadCard(event)">
-                    <span class="material-symbols-outlined">download</span>
-                    下載貓咪卡片
-                </button>
-                <a href="/" class="btn btn-primary">
-                    <span class="material-symbols-outlined">home</span>
-                    返回首頁
-                </a>
-            </div>
+            <!-- 🟡 1003 修改：操作按鈕移位，原區塊保留註解避免重複呈現 -->
         </main>
     </div>
 
