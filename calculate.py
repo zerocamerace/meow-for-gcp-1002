@@ -12,15 +12,15 @@ db = firestore.client()
 
 # 🔹 固定的圖片 mapping
 cat_images = {
-    "A1": "https://firebasestorage.googleapis.com/v0/b/health-emo-cat-guide.firebasestorage.app/o/cat_cards%2FA1.png?alt=media&token=58d97409-e570-444c-8ed7-e647b1ec182b",
-    "A2": "https://firebasestorage.googleapis.com/v0/b/health-emo-cat-guide.firebasestorage.app/o/cat_cards%2FA2.png?alt=media&token=3f2095f2-80d7-48a9-97e5-5b42afc4cabc",
-    "A3": "https://firebasestorage.googleapis.com/v0/b/health-emo-cat-guide.firebasestorage.app/o/cat_cards%2FA3.png?alt=media&token=beaa5879-4ff1-41d2-b4d6-e35748f0f6b5",
-    "B1": "https://firebasestorage.googleapis.com/v0/b/health-emo-cat-guide.firebasestorage.app/o/cat_cards%2FB1.png?alt=media&token=6083faac-6e23-45c2-b8d6-bac3e7a95b3b",
-    "B2": "https://firebasestorage.googleapis.com/v0/b/health-emo-cat-guide.firebasestorage.app/o/cat_cards%2FB2.png?alt=media&token=807c6e80-c75e-4ded-bb63-3792fcb6cff4",
-    "B3": "https://firebasestorage.googleapis.com/v0/b/health-emo-cat-guide.firebasestorage.app/o/cat_cards%2FB3.png?alt=media&token=d39495b1-67ef-4b6d-8fd3-8b193ee434aa",
-    "C1": "https://firebasestorage.googleapis.com/v0/b/health-emo-cat-guide.firebasestorage.app/o/cat_cards%2FC1.png?alt=media&token=146a237e-4d49-4dd2-bafc-2d2b84347d0d",
-    "C2": "https://firebasestorage.googleapis.com/v0/b/health-emo-cat-guide.firebasestorage.app/o/cat_cards%2FC2.png?alt=media&token=1ba9e8ec-6de0-4579-8a32-d0b7fff6bf3a",
-    "C3": "https://firebasestorage.googleapis.com/v0/b/health-emo-cat-guide.firebasestorage.app/o/cat_cards%2FC3.png?alt=media&token=22d41015-dae2-4c19-a753-b9a4b4957843"
+    "A1": "https://firebasestorage.googleapis.com/v0/b/gold-chassis-473807-j1.firebasestorage.app/o/cat_cards%2FA1.png?alt=media&token=58d97409-e570-444c-8ed7-e647b1ec182b",
+    "A2": "https://firebasestorage.googleapis.com/v0/b/gold-chassis-473807-j1.firebasestorage.app/o/cat_cards%2FA2.png?alt=media&token=3f2095f2-80d7-48a9-97e5-5b42afc4cabc",
+    "A3": "https://firebasestorage.googleapis.com/v0/b/gold-chassis-473807-j1.firebasestorage.app/o/cat_cards%2FA3.png?alt=media&token=beaa5879-4ff1-41d2-b4d6-e35748f0f6b5",
+    "B1": "https://firebasestorage.googleapis.com/v0/b/gold-chassis-473807-j1.firebasestorage.app/o/cat_cards%2FB1.png?alt=media&token=6083faac-6e23-45c2-b8d6-bac3e7a95b3b",
+    "B2": "https://firebasestorage.googleapis.com/v0/b/gold-chassis-473807-j1.firebasestorage.app/o/cat_cards%2FB2.png?alt=media&token=807c6e80-c75e-4ded-bb63-3792fcb6cff4",
+    "B3": "https://firebasestorage.googleapis.com/v0/b/gold-chassis-473807-j1.firebasestorage.app/o/cat_cards%2FB3.png?alt=media&token=d39495b1-67ef-4b6d-8fd3-8b193ee434aa",
+    "C1": "https://firebasestorage.googleapis.com/v0/b/gold-chassis-473807-j1.firebasestorage.app/o/cat_cards%2FC1.png?alt=media&token=146a237e-4d49-4dd2-bafc-2d2b84347d0d",
+    "C2": "https://firebasestorage.googleapis.com/v0/b/gold-chassis-473807-j1.firebasestorage.app/o/cat_cards%2FC2.png?alt=media&token=1ba9e8ec-6de0-4579-8a32-d0b7fff6bf3a",
+    "C3": "https://firebasestorage.googleapis.com/v0/b/gold-chassis-473807-j1.firebasestorage.app/o/cat_cards%2FC3.png?alt=media&token=22d41015-dae2-4c19-a753-b9a4b4957843"
 }
 
 

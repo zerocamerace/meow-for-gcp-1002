@@ -695,7 +695,7 @@ FONT_CANDIDATES = [
 # 初始化 Firebase
 firebase_credentials_env = os.getenv("FIREBASE_CREDENTIALS")
 firebase_storage_bucket = os.getenv(
-    "FIREBASE_STORAGE_BUCKET", "health-emo-cat-guide.firebasestorage.app"
+    "FIREBASE_STORAGE_BUCKET", "gold-chassis-473807-j1.firebasestorage.app"
 )
 
 try:
@@ -744,7 +744,7 @@ except Exception as e:
     logging.error(f"Failed to initialise google-genai client: {e}")
     raise
 
-# 🟢 修改：啟動時列印路由表（Flask 3 不支援 before_first_request，故保留註解）  
+# 🟢 修改：啟動時列印路由表（Flask 3 不支援 before_first_request，故保留註解）
 # @app.before_first_request
 # def _print_url_map():
 #    logging.debug("URL Map:\n" + "\n".join([str(r) for r in app.url_map.iter_rules()]))
@@ -1408,4 +1408,4 @@ def generate_card():
 if __name__ == "__main__":
     # 若要列印路由表，可在這裡印出（避免 Flask 3 的 before_first_request）
     # logging.debug("URL Map:\n" + "\n".join([str(r) for r in app.url_map.iter_rules()]))
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
