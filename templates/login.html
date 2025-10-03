@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login - Meow Yourself</title>
+        <style>
+            @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
+            @import url(https://fonts.googleapis.com/css2?family=Open+Sans&display=swap);
+            @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200);
+            *, :after, :before {
+                border: 0 solid #e5e7eb;
+                box-sizing: border-box;
+            }
+            body {
+                line-height: inherit;
+                margin: 0;
+                overflow-x: hidden;
+            }
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+            .material-symbols-outlined {
+                font-family: 'Material Symbols Outlined';
+                font-weight: normal;
+                font-style: normal;
+                font-size: 24px;
+                line-height: 1;
+                letter-spacing: normal;
+                text-transform: none;
+                display: inline-block;
+                white-space: nowrap;
+                word-wrap: normal;
+                direction: ltr;
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+            #webcrumbs .absolute { position: absolute; }
+            #webcrumbs .relative { position: relative; }
+            #webcrumbs .right-0 { right: 0; }
+            #webcrumbs .z-10 { z-index: 10; }
+            #webcrumbs .mx-auto { margin-left: auto; margin-right: auto; }
+            #webcrumbs .mb-1 { margin-bottom: 4px; }
+            #webcrumbs .mb-10 { margin-bottom: 40px; }
+            #webcrumbs .mb-2 { margin-bottom: 8px; }
+            #webcrumbs .mb-4 { margin-bottom: 16px; }
+            #webcrumbs .mb-6 { margin-bottom: 24px; }
+            #webcrumbs .mb-8 { margin-bottom: 32px; }
+            #webcrumbs .ml-1 { margin-left: 4px; }
+            #webcrumbs .ml-2 { margin-left: 8px; }
+            #webcrumbs .mr-1 { margin-right: 4px; }
+            #webcrumbs .mr-2 { margin-right: 8px; }
+            #webcrumbs .mt-2 { margin-top: 8px; }
+            #webcrumbs .mt-20 { margin-top: 80px; }
+            #webcrumbs .mt-6 { margin-top: 24px; }
+            #webcrumbs .block { display: block; }
+            #webcrumbs .flex { display: flex; }
+            #webcrumbs .grid { display: grid; }
+            #webcrumbs .hidden { display: none; }
+            #webcrumbs .h-14 { height: 56px; }
+            #webcrumbs .h-4 { height: 16px; }
+            #webcrumbs .h-6 { height: 24px; }
+            #webcrumbs .h-64 { height: 256px; }
+            #webcrumbs .h-8 { height: 32px; }
+            #webcrumbs .h-full { height: 100%; }
+            #webcrumbs .min-h-\[80vh\] { min-height: 80vh; }
+            #webcrumbs .w-14 { width: 56px; }
+            #webcrumbs .w-4 { width: 16px; }
+            #webcrumbs .w-6 { width: 24px; }
+            #webcrumbs .w-8 { width: 32px; }
+            #webcrumbs .w-40 { width: 160px; }
+            #webcrumbs .w-full { width: 100%; }
+            #webcrumbs .max-w-\[1200px\] { max-width: 1200px; }
+            #webcrumbs .max-w-2xl { max-width: 42rem; }
+            #webcrumbs .max-w-3xl { max-width: 48rem; }
+            #webcrumbs .max-w-4xl { max-width: 56rem; }
+            #webcrumbs .max-w-5xl { max-width: 64rem; }
+            #webcrumbs .max-w-md { max-width: 28rem; }
+            #webcrumbs .transform {
+                transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
+                    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+            }
+            #webcrumbs .cursor-pointer { cursor: pointer; }
+            #webcrumbs .list-none { list-style-type: none; }
+            #webcrumbs .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+            #webcrumbs .flex-row { flex-direction: row; }
+            #webcrumbs .flex-col { flex-direction: column; }
+            #webcrumbs .items-center { align-items: center; }
+            #webcrumbs .justify-center { justify-content: center; }
+            #webcrumbs .justify-between { justify-content: space-between; }
+            #webcrumbs .gap-4 { gap: 16px; }
+            #webcrumbs .gap-8 { gap: 32px; }
+            #webcrumbs :is(.space-x-4 > :not([hidden]) ~ :not([hidden])) {
+                --tw-space-x-reverse: 0;
+                margin-left: calc(16px * (1 - var(--tw-space-x-reverse)));
+                margin-right: calc(16px * var(--tw-space-x-reverse));
+            }
+            #webcrumbs :is(.space-x-6 > :not([hidden]) ~ :not([hidden])) {
+                --tw-space-x-reverse: 0;
+                margin-left: calc(24px * (1 - var(--tw-space-x-reverse)));
+                margin-right: calc(24px * var(--tw-space-x-reverse));
+            }
+            #webcrumbs :is(.space-y-3 > :not([hidden]) ~ :not([hidden])) {
+                --tw-space-y-reverse: 0;
+                margin-bottom: calc(12px * var(--tw-space-y-reverse));
+                margin-top: calc(12px * (1 - var(--tw-space-y-reverse)));
+            }
+            #webcrumbs .overflow-hidden { overflow: hidden; }
+            #webcrumbs .rounded { border-radius: 12px; }
+            #webcrumbs .rounded-full { border-radius: 9999px; }
+            #webcrumbs .rounded-lg { border-radius: 24px; }
+            #webcrumbs .border { border-width: 1px; }
+            #webcrumbs .border-b { border-bottom-width: 1px; }
+            #webcrumbs .border-gray-100 { border-color: rgb(243 244 246); }
+            #webcrumbs .border-gray-200 { border-color: rgb(229 231 235); }
+            #webcrumbs .bg-gray-100 { background-color: rgb(243 244 246); }
+            #webcrumbs .bg-gray-50 { background-color: rgb(249 250 251); }
+            #webcrumbs .bg-gray-700 { background-color: rgb(55 65 81); }
+            #webcrumbs .bg-white { background-color: rgb(255 255 255); }
+            #webcrumbs .bg-gradient-to-b { background-image: linear-gradient(to bottom, var(--tw-gradient-stops)); }
+            #webcrumbs .from-transparent { --tw-gradient-from: transparent; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+            #webcrumbs .to-gray-900\/50 { --tw-gradient-to: rgba(17, 24, 39, 0.5); }
+            #webcrumbs .object-cover { object-fit: cover; }
+            #webcrumbs .p-2 { padding: 8px; }
+            #webcrumbs .p-4 { padding: 16px; }
+            #webcrumbs .p-6 { padding: 24px; }
+            #webcrumbs .px-4 { padding-left: 16px; padding-right: 16px; }
+            #webcrumbs .px-6 { padding-left: 24px; padding-right: 24px; }
+            #webcrumbs .py-1 { padding-bottom: 4px; padding-top: 4px; }
+            #webcrumbs .py-2 { padding-bottom: 8px; padding-top: 8px; }
+            #webcrumbs .py-4 { padding-bottom: 16px; padding-top: 16px; }
+            #webcrumbs .pt-0 { padding-top: 0; }
+            #webcrumbs .text-center { text-align: center; }
+            #webcrumbs .font-sans { font-family: Open Sans, ui-sans-serif, system-ui, sans-serif; }
+            #webcrumbs .text-2xl { font-size: 24px; line-height: 31.2px; }
+            #webcrumbs .text-4xl { font-size: 36px; line-height: 41.4px; }
+            #webcrumbs .text-lg { font-size: 18px; line-height: 27px; }
+            #webcrumbs .text-sm { font-size: 14px; line-height: 21px; }
+            #webcrumbs .text-xl { font-size: 20px; line-height: 28px; }
+            #webcrumbs .font-bold { font-weight: 700; }
+            #webcrumbs .font-medium { font-weight: 500; }
+            #webcrumbs .text-gray-600 { color: rgb(75 85 99); }
+            #webcrumbs .text-gray-700 { color: rgb(55 65 81); }
+            #webcrumbs .text-gray-800 { color: rgb(31 41 55); }
+            #webcrumbs .text-white { color: rgb(255 255 255); }
+            #webcrumbs .text-red-600 { color: rgb(220 38 38); }
+            #webcrumbs .text-green-600 { color: rgb(22 163 74); }
+            #webcrumbs .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+            #webcrumbs .transition-all { transition-duration: 0.15s; transition-property: all; }
+            #webcrumbs .transition-colors { transition-duration: 0.15s; transition-property: color, background-color, border-color; }
+            #webcrumbs .transition-transform { transition-duration: 0.15s; transition-property: transform; }
+            #webcrumbs .duration-200 { transition-duration: 0.2s; }
+            #webcrumbs .duration-300 { transition-duration: 0.3s; }
+            #webcrumbs .duration-500 { transition-duration: 0.5s; }
+            #webcrumbs .hover\:scale-105:hover { --tw-scale-x: 1.05; --tw-scale-y: 1.05; }
+            #webcrumbs .hover\:scale-\[1.02\]:hover { --tw-scale-x: 1.02; --tw-scale-y: 1.02; }
+            #webcrumbs .hover\:border-gray-400:hover { border-color: rgb(156 163 175); }
+            #webcrumbs .hover\:bg-gray-50:hover { background-color: rgb(249 250 251); }
+            #webcrumbs .hover\:bg-gray-800:hover { background-color: rgb(31 41 55); }
+            #webcrumbs .hover\:text-gray-700:hover { color: rgb(55 65 81); }
+            #webcrumbs .hover\:underline:hover { text-decoration: underline; }
+            #webcrumbs .focus\:outline-none:focus { outline: 2px solid transparent; }
+            #webcrumbs .focus\:ring-1:focus { box-shadow: 0 0 0 1px rgb(156 163 175); }
+            #webcrumbs .focus\:ring-gray-400:focus { --tw-ring-color: rgb(156 163 175); }
+            #webcrumbs a {
+                text-decoration: none; /* 移除底線 */
+            }
+            #webcrumbs a:hover,
+            #webcrumbs a:focus,
+            #webcrumbs a:active {
+                text-decoration: none; /* 移除懸停和點擊狀態的底線 */
+            }
+            @media (max-width: 640px) {
+                #webcrumbs .sm\:p-4 { padding: 16px; }
+                #webcrumbs .sm\:px-2 { padding-left: 8px; padding-right: 8px; }
+                #webcrumbs .sm\:text-3xl { font-size: 30px; line-height: 36px; }
+                #webcrumbs .sm\:text-lg { font-size: 16px; line-height: 24px; }
+                #webcrumbs .sm\:h-48 { height: 192px; }
+                #webcrumbs .sm\:gap-4 { gap: 16px; }
+                #webcrumbs .sm\:max-w-full { max-width: 100%; }
+            }
+            @media (min-width: 768px) {
+                #webcrumbs .md\:flex { display: flex; }
+                #webcrumbs .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+                #webcrumbs .md\:text-5xl { font-size: 48px; line-height: 52.8px; }
+            }
+            @media (max-width: 1024px) {
+                #webcrumbs .lg\:max-w-4xl { max-width: 56rem; }
+                #webcrumbs .lg\:max-w-3xl { max-width: 48rem; }
+            }
+        </style>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+        <link rel="apple-touch-icon" sizes="192x192" href="https://cdn.webcrumbs.org/assets/images/landing/logo192.png" />
+        <link rel="apple-touch-icon" sizes="512x512" href="https://cdn.webcrumbs.org/assets/images/landing/logo512.png" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Meow Yourself" />
+    </head>
+    <body>
+        <div id="webcrumbs">
+            <div class="max-w-[1200px] w-full bg-gray-50 font-sans mx-auto">
+                <header class="bg-white py-4 px-6 sm:px-2 flex justify-between items-center border-b border-gray-100">
+                    <div class="flex items-center">
+                        <svg class="h-6 w-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2C14.5 2 16.5 4 16.5 6.5C16.5 9 14.5 11 12 11C9.5 11 7.5 9 7.5 6.5C7.5 4 9.5 2 12 2Z"></path>
+                            <path d="M5 20C5 16.5 8 14 12 14C16 14 19 16.5 19 20"></path>
+                            <path d="M12 14L12 22M9 17L15 19M9 19L15 17"></path>
+                        </svg>
+                        <h1 class="ml-2 text-xl font-medium">Meow Yourself</h1>
+                    </div>
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="{{ url_for('home') }}" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
+                            <span class="material-symbols-outlined mr-1">home</span> 首頁
+                        </a>
+                        <a href="#" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
+                            <span class="material-symbols-outlined mr-1">pets</span> 我的貓咪
+                        </a>
+                    </nav>
+                    <div class="flex items-center">
+                        <details class="relative">
+                            <summary class="list-none flex items-center cursor-pointer">
+                                <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" class="h-8 w-8 rounded-full border border-gray-200 hover:border-gray-400 transition-all duration-200" alt="Profile" />
+                            </summary>
+                            <div id="profile-menu" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-sm py-1 z-10 border border-gray-100">
+                                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-200">登出</a>
+                            </div>
+                        </details>
+                    </div>
+                </header>
+                <main class="p-6 sm:p-4">
+                    <div class="flex flex-col items-center justify-center min-h-[80vh] max-w-4xl sm:max-w-full mx-auto">
+                        <h1 class="text-4xl sm:text-3xl md:text-5xl font-bold mb-6 text-center">登入</h1>
+                        <p class="text-xl sm:text-lg text-gray-600 mb-8 text-center max-w-2xl sm:max-w-full">
+                            歡迎回來！請登入你的帳戶。
+                        </p>
+                        <div class="bg-white rounded-lg shadow-sm p-5 max-w-md w-full sm:max-w-full">
+                            {% if error %}
+                            <p class="text-sm text-red-600 mb-4 text-center">{{ error }}</p>
+                            {% endif %}
+                            {% for category, message in get_flashed_messages(with_categories=true) %}
+                            <p class="text-sm {% if category == 'error' %}text-red-600{% else %}text-green-600{% endif %} mb-4 text-center">{{ message }}</p>
+                            {% endfor %}
+                            <form method="POST" action="{{ url_for('login') }}" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">電子郵件</label>
+                                    <input type="email" name="email" class="w-full p-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-400" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">密碼</label>
+                                    <input type="password" name="password" class="w-full p-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-400" required>
+                                </div>
+                                <button type="submit" class="w-full py-2 px-4 bg-gray-700 text-white rounded hover:bg-gray-800 transition-colors duration-300">
+                                    登入
+                                </button>
+                                <p class="text-sm text-gray-600 text-center mt-4">
+                                    還沒有帳號？<a href="{{ url_for('register') }}" class="text-gray-700 hover:text-gray-800">立即註冊</a>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </body>
+</html>

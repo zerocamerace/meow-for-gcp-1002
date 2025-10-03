@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>貓咪談心室</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #FDFCFB;
+            background-image: linear-gradient(160deg, #FDFCFB 0%, #E2D1C3 100%);
+        }
+        /* Cat/Pastel Theme */
+        :root {
+            --bg-main: #F8F7FC; /* Light Lavender */
+            --bg-secondary: #FFFFFF;
+            --text-primary: #4A4A68; /* Dark Purple-Gray */
+            --text-secondary: #8A8A9E; /* Medium Purple-Gray */
+            --accent-primary: #A491D3; /* Lavender */
+            --accent-primary-hover: #9279C5; /* Darker Lavender */
+            --user-bubble: #F1EDF9; /* Very Light Lavender */
+            --gemini-bubble: #FBFBFB; 
+            --shadow-color: rgba(146, 121, 197, 0.1);
+        }
+        .transition-all { transition: all 0.3s ease-in-out; }
+        .view-transition {
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+        .chat-bubble {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .dot-flashing {
+            position: relative;
+            width: 8px;
+            height: 8px;
+            border-radius: 5px;
+            background-color: var(--accent-primary);
+            color: var(--accent-primary);
+            animation: dotFlashing 1s infinite linear alternate;
+            animation-delay: .5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+        .dot-flashing::before {
+            left: -12px;
+            width: 8px;
+            height: 8px;
+            border-radius: 5px;
+            background-color: var(--accent-primary);
+            color: var(--accent-primary);
+            animation: dotFlashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 12px;
+            width: 8px;
+            height: 8px;
+            border-radius: 5px;
+            background-color: var(--accent-primary);
+            color: var(--accent-primary);
+            animation: dotFlashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+        @keyframes dotFlashing {
+            0% { background-color: var(--accent-primary); }
+            50%, 100% { background-color: rgba(164, 145, 211, 0.2); }
+        }
+        .custom-shadow {
+             box-shadow: 0 4px 10px -1px var(--shadow-color), 0 2px 8px -2px var(--shadow-color);
+        }
+        .custom-shadow-lg {
+            box-shadow: 0 10px 20px -3px var(--shadow-color), 0 4px 8px -4px var(--shadow-color);
+        }
+        .card-paw-decoration {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%23F1EDF9'%3E%3Cpath d='M65.2 55.8c-1.8-1.8-4.2-2.8-6.7-2.8s-4.9 1-6.7 2.8c-3.7 3.7-3.7 9.7 0 13.4 1.8 1.8 4.2 2.8 6.7 2.8s4.9-1 6.7-2.8c3.7-3.7 3.7-9.7 0-13.4zm19.5-19.5c-1.8-1.8-4.2-2.8-6.7-2.8s-4.9 1-6.7 2.8c-3.7 3.7-3.7 9.7 0 13.4 1.8 1.8 4.2 2.8 6.7 2.8s4.9-1 6.7-2.8c3.7-3.7 3.7-9.7 0-13.4zm-39 0c-1.8-1.8-4.2-2.8-6.7-2.8s-4.9 1-6.7 2.8c-3.7 3.7-3.7 9.7 0 13.4 1.8 1.8 4.2 2.8 6.7 2.8s4.9-1 6.7-2.8c3.7-3.7 3.7-9.7 0-13.4zm-19.5 19.5c-1.8-1.8-4.2-2.8-6.7-2.8s-4.9 1-6.7 2.8c-3.7 3.7-3.7 9.7 0 13.4 1.8 1.8 4.2 2.8 6.7 2.8s4.9-1 6.7-2.8c3.7-3.7 3.7-9.7 0-13.4zM50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: top 0.5rem right 0.5rem;
+            background-size: 4rem;
+            position: relative;
+        }
+        textarea {
+            resize: none;
+            overflow-y: hidden;
+        }
+    </style>
+</head>
+<body class="text-[var(--text-primary)] flex items-center justify-center min-h-screen p-4">
+
+    <div id="app-container" class="w-full max-w-6xl mx-auto h-screen flex flex-col">
+
+        <!-- Mode Selection View -->
+        <div id="selection-view" class="flex flex-col items-center justify-center h-full view-transition">
+            <div class="text-center mb-12">
+                 <svg class="w-24 h-24 mx-auto text-purple-200 mb-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M15.5,14.5c-0.83,0-1.5-0.67-1.5-1.5s.67-1.5,1.5-1.5 s1.5,0.67,1.5,1.5S16.33,14.5,15.5,14.5z M8.5,14.5c-0.83,0-1.5-0.67-1.5-1.5s.67-1.5,1.5-1.5s1.5,0.67,1.5,1.5S9.33,14.5,8.5,14.5z M12,9.5C9.12,9.5,7.5,7.71,7.5,6C7.5,5.17,8.17,4.5,9,4.5c0.76,0,1.38,0.57,1.48,1.3c0.11,0.77,0.76,1.2,1.52,1.2s1.41-0.43,1.52-1.2 c0.1-0.73,0.72-1.3,1.48-1.3c0.83,0,1.5,0.67,1.5,1.5C16.5,7.71,14.88,9.5,12,9.5z"/></svg>
+                <h1 class="text-4xl md:text-5xl font-bold mb-2">貓咪談心室</h1>
+                <p class="text-lg text-[var(--text-secondary)]">選一位貓咪朋友，開始你們的悄悄話時間。</p>
+                <!-- 🟢 修改開始：提供重新上傳健檢報告入口（強化外觀與新增貓爪 emoji） -->
+                <a href="{{ url_for('upload_health', reupload=1) }}" class="inline-flex items-center gap-4 mt-6 px-8 py-3.5 rounded-full text-base font-semibold text-gray-700 border border-transparent bg-white/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all" style="font-size: 200%;">
+                    <span class="flex items-center gap-3">🐾 我要重新上傳報告</span>
+                </a>
+                <!-- 🟢 修改結束 -->
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
+                <button onclick="selectMode('deep-chat')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6">
+                    <div class="bg-purple-100 p-4 rounded-full"><svg class="w-10 h-10 text-purple-500" viewBox="0 0 24 24" fill="currentColor"><path d="M19.78,11.73c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09C17.91,12.2,17.5,12.5,17,12.5c-0.46,0-0.86-0.26-1.06-0.64 c-0.33-0.63-0.01-1.41,0.62-1.74l0.16-0.08c-0.12-0.53-0.30-1.04-0.54-1.51c-0.78-1.52-2.02-2.76-3.54-3.54 c-0.47-0.24-0.98-0.42-1.51-0.54l-0.08,0.16c-0.33,0.63-1.11,0.95-1.74,0.62C8.6,7.14,8.34,6.74,8.34,6.27 c0-0.50,0.30-0.91,0.69-1.27l0.09-0.09c0.39-0.39,0.39-1.02,0-1.41c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09 C7.20,4,7,4.54,7,5c0,1.10,0.90,2,2,2c0.23,0,0.45-0.04,0.66-0.11L9.50,7.17C8.50,7.50,7.50,8.50,7.17,9.50L6.89,9.34 C6.96,9.13,7,8.90,7,8.67c0-1.10-0.90-2-2-2c-0.46,0-0.99,0.20-1.32,0.53L3.59,7.29C3.20,7.68,3.20,8.31,3.59,8.71z M15.29,3.59 c0.39-0.39,1.02-0.39,1.41,0l0.09,0.09C17.18,4,17.40,4.54,17.40,5c0,1.10-0.90,2-2,2c-0.23,0-0.45-0.04-0.66-0.11L14.50,7.17 c1,0.33,2,1.33,2.33,2.33l0.28-0.16C17.04,9.13,17,8.90,17,8.67c0-1.10,0.90-2,2-2c0.46,0,0.99,0.20,1.32,0.53l0.09,0.09 c0.39,0.39,1.02,0.39,1.41,0c0.39-0.39,0.39-1.02,0-1.41L21.71,3.59C21.32,3.20,20.78,3.20,20.39,3.59z M12,14c-2.21,0-4,1.79-4,4 s1.79,4,4,4s4-1.79,4-4S14.21,14,12,14z"/></svg></div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold">深度聊聊</h2>
+                        <p class="text-[var(--text-secondary)] text-sm max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 overflow-hidden transition-all duration-300 mt-1">讓溫柔的「喵奶奶」陪你深入探索內心世界，慢慢梳理思緒。</p>
+                    </div>
+                </button>
+                <button onclick="selectMode('quick-qa')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6">
+                    <div class="bg-amber-100 p-4 rounded-full"><svg class="w-10 h-10 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5,14h-0.79l-0.28-0.27c1.2-1.4,1.82-3.31,1.48-5.34c-0.47-2.78-2.79-5-5.59-5.34c-4.23-0.52-7.79,3.04-7.27,7.27 c0.34,2.8,2.56,5.12,5.34,5.59c2.03,0.34,3.94-0.28,5.34-1.48L14,14.47V15.5l5,5l1.5-1.5L15.5,14z M9.5,14C7.01,14,5,11.99,5,9.5 C5,7.01,7.01,5,9.5,5S14,7.01,14,9.5C14,11.99,11.99,14,9.5,14z"/></svg></div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold">焦點訪談</h2>
+                        <p class="text-[var(--text-secondary)] text-sm max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 overflow-hidden transition-all duration-300 mt-1">由專業的「喵記者」引導，快速釐清當下的心情與狀況。</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="hidden flex-col h-full view-transition opacity-0 scale-95 w-full">
+            <header class="flex items-center mb-4">
+                <button onclick="confirmReturnToMenu()" class="bg-gray-100 hover:bg-gray-200 text-gray-500 p-2 rounded-full transition-all mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <div class="flex-grow">
+                    <h1 id="dashboard-title" class="text-xl font-bold text-slate-700">與 喵奶奶 深度聊聊</h1>
+                    <div id="progress-bar-container" class="w-full bg-gray-200 rounded-full h-1.5 mt-1.5">
+                        <div id="progress-bar-fill" class="bg-[var(--accent-primary)] h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </header>
+            <main id="main-grid" class="grid grid-cols-1 gap-6 flex-grow min-h-0">
+                <!-- Left: Chat Panel -->
+                <div id="chat-panel" class="bg-[var(--bg-secondary)] rounded-2xl custom-shadow flex flex-col h-full max-h-[calc(100vh-120px)]">
+                    <div id="chat-history" class="flex-grow p-4 space-y-4 overflow-y-auto scroll-smooth">
+                        <!-- Messages will be injected here -->
+                    </div>
+                    <div id="quick-replies-container" class="p-2 flex flex-wrap gap-2 justify-center border-t border-gray-100">
+                        <!-- Quick replies will be injected here -->
+                    </div>
+                    <div class="p-4 border-t border-gray-100">
+                        <div class="flex items-center gap-3">
+                            <textarea id="message-input" rows="1" class="w-full p-3 border-gray-200 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] transition-all" placeholder="說點什麼吧... (Ctrl+Enter 送出)"></textarea>
+                            <button onclick="sendMessage()" class="bg-[var(--accent-primary)] text-white p-3 rounded-lg hover:bg-[var(--accent-primary-hover)] transition-all disabled:bg-gray-400 disabled:cursor-not-allowed" id="send-button">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 12.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm-7 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- 🟢 修改開始：聊天室免責聲明 -->
+                    <div class="px-4 pb-4">
+                        <div class="bg-amber-100 border border-amber-300 text-amber-900 rounded-xl px-4 py-3 text-xs text-center leading-relaxed">
+                            <strong>【特別提醒】</strong> 本測驗僅為娛樂與參考，並非醫療建議。若有任何身心困擾，請尋求專業協助。
+                        </div>
+                    </div>
+                    <!-- 🟢 修改結束 -->
+                </div>
+                <!-- Right: Dashboard Panel -->
+                <div id="dashboard-panel" class="hidden rounded-2xl overflow-y-auto h-full max-h-[calc(100vh-120px)] space-y-6 scroll-smooth">
+                    <div class="bg-white p-6 rounded-2xl custom-shadow card-paw-decoration">
+                         <h3 class="font-semibold mb-2 text-slate-600 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="currentColor"><path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M12,19c-1.66,0-3-1.34-3-3s1.34-3,3-3s3,1.34,3,3 S13.66,19,12,19z M15,9H9V4h6V9z"/></svg>
+                            悄悄話總結
+                        </h3>
+                        <div id="report-summary" class="text-[var(--text-secondary)] text-sm prose max-w-none prose-p:my-1">完成對話後，這裡會出現一份暖心總結。</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Custom Confirmation Modal -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 z-50 hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full transform transition-transform duration-300 scale-95">
+            <h2 class="text-xl font-bold mb-4 text-slate-800">確定要離開嗎？</h2>
+            <p class="text-slate-600 mb-6">現在離開的話，這次的對話紀錄會消失喔。</p>
+            <div class="flex justify-end gap-3">
+                <button id="cancel-return-btn" class="bg-gray-200 text-gray-800 font-semibold py-2 px-5 rounded-lg hover:bg-gray-300 transition-all">繼續聊</button>
+                <button id="confirm-return-btn" class="bg-red-500 text-white font-semibold py-2 px-5 rounded-lg hover:bg-red-600 transition-all">確定離開</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Notification Modal -->
+    <div id="result-modal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 z-50 hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full text-center transform transition-transform duration-300 scale-95">
+            <div class="mx-auto bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                <svg class="w-10 h-10 text-purple-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M16.71,9.29l-6.59,6.59c-0.39,0.39-1.02,0.39-1.41,0 L6,13.17c-0.39-0.39-0.39-1.02,0-1.41s1.02-0.39,1.41,0L9,12.36l5.88-5.88c0.39-0.39,1.02-0.39,1.41,0S17.1,8.9,16.71,9.29z"/></svg>
+            </div>
+            <h2 class="text-2xl font-bold mb-3 text-slate-800">悄悄話已完成 ✨</h2>
+            <p class="text-slate-600 mb-6">我已經將我們的對話整理好了，快來看看吧！</p>
+            <button id="close-result-modal" class="bg-[var(--accent-primary)] text-white font-semibold py-2.5 px-8 rounded-lg hover:bg-[var(--accent-primary-hover)] transition-all w-full">我知道了</button>
+        </div>
+    </div>
+
+
+    <script>
+        // --- DOM Elements ---
+        const healthReportData = {{ latest_health_report|tojson|default('null', true)|safe }};
+        const selectionView = document.getElementById('selection-view');
+        const dashboardView = document.getElementById('dashboard-view');
+        const dashboardPanel = document.getElementById('dashboard-panel');
+        const dashboardTitle = document.getElementById('dashboard-title');
+        const chatHistory = document.getElementById('chat-history');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const quickRepliesContainer = document.getElementById('quick-replies-container');
+        const reportSummary = document.getElementById('report-summary');
+        const confirmModal = document.getElementById('confirm-modal');
+        const confirmReturnBtn = document.getElementById('confirm-return-btn');
+        const cancelReturnBtn = document.getElementById('cancel-return-btn');
+        const resultModal = document.getElementById('result-modal');
+        const closeResultModalBtn = document.getElementById('close-result-modal');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const chatPanel = document.getElementById('chat-panel');
+        const mainGrid = document.getElementById('main-grid');
+
+        // --- App State ---
+        const appState = {
+            mode: null,
+            conversationHistory: [],
+            isLoading: false,
+            isAnalysisReady: false,
+            isReportGenerated: false,
+            turnCount: 0,
+            confidence: 0
+        };
+
+        // --- Loading Messages ---
+        const loadingMessages = {
+            'deep-chat': ["奶奶正在為你泡一杯熱茶...", "讓我想想... 哎呀，毛線球滾到哪去了？", "別急，溫暖的話語需要慢慢醞釀。"],
+            'quick-qa': ["稿子正在快速編輯中！", "獨家消息！你的心情頭條即將發布！", "正在確認消息來源，請稍候..."]
+        };
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            messageInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            messageInput.addEventListener('input', () => {
+                messageInput.style.height = 'auto';
+                messageInput.style.height = (messageInput.scrollHeight) + 'px';
+            });
+            // Modal listeners
+            confirmReturnBtn.addEventListener('click', () => {
+                returnToMenu();
+                hideConfirmModal();
+            });
+            cancelReturnBtn.addEventListener('click', hideConfirmModal);
+            confirmModal.addEventListener('click', (e) => {
+                if(e.target === confirmModal) hideConfirmModal();
+            });
+            closeResultModalBtn.addEventListener('click', () => {
+                hideResultModal();
+            });
+            resultModal.addEventListener('click', (e) => {
+                if(e.target === resultModal) {
+                    hideResultModal();
+                }
+            });
+        });
+
+        // --- View & State Management ---
+        function selectMode(mode) {
+            appState.mode = mode;
+            resetState();
+            
+            dashboardTitle.textContent = mode === 'deep-chat' ? '與 喵奶奶 深度聊聊' : '與 喵記者 焦點訪談';
+            
+            selectionView.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                selectionView.classList.add('hidden');
+                dashboardView.classList.remove('hidden');
+                setTimeout(() => {
+                    dashboardView.classList.remove('opacity-0', 'scale-95');
+                    dashboardView.classList.add('flex');
+                }, 50);
+                startConversation();
+            }, 400);
+        }
+
+        function returnToMenu() {
+            dashboardView.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                dashboardView.classList.add('hidden');
+                dashboardView.classList.remove('flex');
+                selectionView.classList.remove('hidden');
+                setTimeout(() => {
+                    selectionView.classList.remove('opacity-0', 'scale-95');
+                }, 50);
+                resetState();
+                resetUI();
+            }, 400);
+        }
+        
+        function confirmReturnToMenu() {
+            if (appState.conversationHistory.length > 0) {
+                showConfirmModal();
+            } else {
+                returnToMenu();
+            }
+        }
+
+        function showConfirmModal() {
+            confirmModal.classList.remove('hidden');
+            setTimeout(() => {
+                confirmModal.classList.remove('opacity-0');
+                confirmModal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function hideConfirmModal() {
+            confirmModal.classList.add('opacity-0');
+            confirmModal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                confirmModal.classList.add('hidden');
+            }, 300);
+        }
+
+        function showResultModal() {
+            resultModal.classList.remove('hidden');
+            setTimeout(() => {
+                resultModal.classList.remove('opacity-0');
+                resultModal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function hideResultModal() {
+            resultModal.classList.add('opacity-0');
+            resultModal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                resultModal.classList.add('hidden');
+                // 關閉彈窗後顯示總結內容
+                showSummarySection();
+            }, 300);
+        }
+
+        function showSummarySection() {
+            // 顯示 dashboard panel
+            if (chatPanel && dashboardPanel) {
+                chatPanel.classList.add('hidden');
+                dashboardPanel.classList.remove('hidden');
+                dashboardPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // 在總結下方加入生成貓咪圖卡的按鈕
+            const summaryContainer = document.getElementById('report-summary').parentElement;
+            
+            // 檢查是否已經有按鈕，避免重複添加
+            if (!document.getElementById('generate-card-button')) {
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'mt-6 text-center';
+                
+                const generateCardBtn = document.createElement('button');
+                generateCardBtn.id = 'generate-card-button';
+                generateCardBtn.className = 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105';
+                generateCardBtn.innerHTML = '🐱 點選此產生貓咪圖卡 ✨';
+                generateCardBtn.onclick = () => {
+                    window.location.href = "{{ url_for('generate_card') }}";
+                };
+                
+                buttonContainer.appendChild(generateCardBtn);
+                summaryContainer.appendChild(buttonContainer);
+            }
+        }
+        
+        function resetState() {
+            Object.assign(appState, {
+                conversationHistory: [], isLoading: false, isAnalysisReady: false,
+                isReportGenerated: false, turnCount: 0, confidence: 0
+            });
+        }
+
+        function resetUI() {
+            chatHistory.innerHTML = '';
+            messageInput.value = '';
+            quickRepliesContainer.innerHTML = '';
+            reportSummary.textContent = '完成對話後，這裡會出現一份暖心總結。';
+            updateProgressBar(0);
+            
+            // 移除生成貓咪圖卡按鈕
+            const existingButton = document.getElementById('generate-card-button');
+            if (existingButton) {
+                existingButton.parentElement.remove();
+            }
+            
+            if (chatPanel && dashboardPanel) {
+                chatPanel.classList.remove('hidden');
+                dashboardPanel.classList.add('hidden');
+            }
+        }
+
+        // --- Conversation Logic ---
+        function startConversation() {
+            const initialUserMessage = { role: 'user', parts: [{ text: "你好" }] };
+            appState.conversationHistory.push(initialUserMessage);
+
+            if (appState.mode === 'quick-qa') {
+                const initialModelMessage = {
+                    nextPrompt: "你好！我是喵記者，對什麼事感到好奇呢？我們來聊聊吧！",
+                    quickReplies: ["工作", "健康", "人際關係"],
+                };
+                addMessage('gemini', initialModelMessage.nextPrompt);
+                renderQuickReplies(initialModelMessage.quickReplies);
+                appState.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify(initialModelMessage) }] });
+
+            } else {
+                 addMessage('gemini', "孩子，你好啊。我是喵奶奶，心裡有什麼事，都可以跟我慢慢說。");
+                 appState.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify({nextPrompt: "孩子，你好啊。我是喵奶奶，心裡有什麼事，都可以跟我慢慢說。"}) }] });
+            }
+        }
+
+        async function sendMessage(quickReplyText = null) {
+            const text = quickReplyText || messageInput.value.trim();
+            if (!text || appState.isLoading) return;
+            
+            addMessage('user', text);
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+            clearQuickReplies();
+            
+            const explicitTriggerKeywords = ['總結', '回顧', '幫我總結', '聊夠了', '可以總結一下嗎', '那接下來呢', '我應該怎麼做', '怎麼辦', '怎麼做', '我準備好總結了'];
+            const isExplicitTrigger = explicitTriggerKeywords.some(keyword => text.includes(keyword));
+
+            if (isExplicitTrigger && !appState.isReportGenerated) {
+                appState.isAnalysisReady = true;
+                generateReport();
+                return;
+            }
+
+            appState.conversationHistory.push({ role: 'user', parts: [{ text }] });
+            appState.turnCount++;
+            setLoading(true);
+            
+            try {
+                const modelResponse = await callChatAPI(buildPrompt());
+                handleModelResponse(modelResponse);
+            } catch (error) {
+                console.error("API Call Error:", error);
+                addMessage('gemini', "嗚...我好像有點斷線了，可以再說一次嗎？");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function handleModelResponse(response) {
+            if(!response || !response.nextPrompt) {
+                console.error("Invalid response from model:", response);
+                addMessage('gemini', "抱歉，我好像有點迷糊了，可以再問一次嗎？");
+                return;
+            }
+
+            appState.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify(response) }] });
+            addMessage('gemini', response.nextPrompt);
+            
+            let progress = 0;
+            if (appState.mode === 'quick-qa') {
+                appState.confidence = response.confidence_0_100 || appState.confidence;
+                progress = appState.confidence;
+                renderQuickReplies(response.quickReplies || []);
+                if (appState.confidence >= 60 && !appState.isReportGenerated) {
+                    renderGenerateReportButton();
+                }
+
+            } else { // deep-chat
+                progress = Math.min(90, (appState.turnCount / 5) * 100); 
+                 if (appState.turnCount >= 3 && !appState.isReportGenerated) {
+                    renderGenerateReportButton();
+                }
+            }
+            updateProgressBar(progress);
+        }
+
+        function renderGenerateReportButton() {
+            if (document.getElementById('generate-report-btn')) return;
+
+            const button = document.createElement('button');
+            button.id = 'generate-report-btn';
+            button.className = "w-full max-w-xs mx-auto my-2 bg-green-100 hover:bg-green-200 text-sm text-green-800 font-bold py-2 px-4 rounded-full transition-all border border-green-300 shadow-sm";
+            button.textContent = "✨悄悄話總結";
+            button.onclick = () => {
+                appState.isAnalysisReady = true;
+                generateReport();
+                clearQuickReplies();
+            };
+            quickRepliesContainer.appendChild(button);
+        }
+
+        async function generateReport() {
+            if (appState.isReportGenerated) return;
+            appState.isReportGenerated = true;
+            setLoading(true, "正在為你整理悄悄話...");
+            updateProgressBar(100);
+
+            try {
+                const reportData = await callReportAPI();
+                
+                if (!reportData.emotionVector || 
+                    typeof reportData.emotionVector.valence !== 'number' || 
+                    typeof reportData.emotionVector.arousal !== 'number' || 
+                    typeof reportData.emotionVector.dominance !== 'number') {
+                    throw new Error("Invalid emotionVector structure received.");
+                }
+
+                // Frontend: Detect extreme/aggressive language in user messages
+                const extremeKeywords = ['恨死', '毀滅', '絕望', '暴力', '殺', '死', '痛恨', '崩潰', '瘋了'];
+                let extremeCount = 0;
+                const matchedKeywords = new Set();
+                appState.conversationHistory
+                    .filter(msg => msg.role === 'user')
+                    .forEach(msg => {
+                        const text = msg.parts[0].text.toLowerCase();
+                        extremeKeywords.forEach(keyword => {
+                            if (text.includes(keyword)) {
+                                extremeCount++;
+                                matchedKeywords.add(keyword);
+                            }
+                        });
+                    });
+
+                // Adjust emotionVector if extreme language detected
+                let emotionVector = {
+                    valence: reportData.emotionVector.valence,
+                    arousal: reportData.emotionVector.arousal,
+                    dominance: reportData.emotionVector.dominance
+                };
+                const deductAmount = extremeCount > 0 ? Math.min(30, extremeCount * 10) : 0;
+                if (extremeCount > 0) {
+                    emotionVector.valence -= deductAmount;
+                    emotionVector.arousal += deductAmount;
+                    emotionVector.dominance -= deductAmount;
+                }
+
+                // Validate and clamp to 1-100
+                emotionVector = {
+                    valence: Math.max(1, Math.min(100, Math.round(emotionVector.valence))),
+                    arousal: Math.max(1, Math.min(100, Math.round(emotionVector.arousal))),
+                    dominance: Math.max(1, Math.min(100, Math.round(emotionVector.dominance)))
+                };
+
+                const mindScore = Math.round(
+                    (emotionVector.valence * 0.6) + 
+                    (emotionVector.dominance * 0.3) + 
+                    ((100 - Math.abs(emotionVector.arousal - 50)) * 0.1)
+                );
+
+                // Calculate bodyScore based on healthReportData
+                let bodyScore;
+                if (healthReportData && typeof healthReportData.health_score === 'number' && healthReportData.health_score >= 0 && healthReportData.health_score <= 100) {
+                    bodyScore = healthReportData.health_score;
+                } else {
+                    const warnings = Array.isArray(healthReportData?.health_warnings) ? healthReportData.health_warnings.filter(Boolean) : [];
+                    bodyScore = warnings.length > 0 ? Math.round(80 - (warnings.length * 5)) : 85;
+                }
+
+                const combinedScore = Math.round((mindScore + bodyScore) / 2);
+
+                // Log scores to frontend console (for debugging)
+                console.log('Generated Scores:', {
+                    mindScore: Math.max(0, Math.min(100, mindScore)),
+                    bodyScore: Math.max(0, Math.min(100, bodyScore)),
+                    combinedScore: Math.max(0, Math.min(100, combinedScore)),
+                    emotionVector: emotionVector,
+                    extremeLanguage: {
+                        detected: extremeCount > 0,
+                        matchedKeywords: Array.from(matchedKeywords),
+                        deductAmount: deductAmount
+                    }
+                });
+
+                const finalReportData = {
+                    ...reportData,
+                    emotionVector,
+                    summary: getSummaryPlainText(reportData.summary),
+                    mindScore: Math.max(0, Math.min(100, mindScore)),
+                    bodyScore: Math.max(0, Math.min(100, bodyScore)),
+                    combinedScore: Math.max(0, Math.min(100, combinedScore)),
+                    extremeLanguage: {
+                        detected: extremeCount > 0,
+                        matchedKeywords: Array.from(matchedKeywords),
+                        deductAmount: deductAmount
+                    }
+                };
+
+                // Save scores to backend
+                try {
+                    const response = await fetch('{{ url_for("save_psychology_scores") }}', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            mindScore: finalReportData.mindScore,
+                            bodyScore: finalReportData.bodyScore,
+                            combinedScore: finalReportData.combinedScore,
+                            summary: finalReportData.summary,
+                            keywords: finalReportData.keywords,
+                            emotionVector: finalReportData.emotionVector,
+                            conversationHistory: appState.conversationHistory,
+                            extremeLanguage: finalReportData.extremeLanguage
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorPayload = await response.json().catch(() => ({}));
+                        throw new Error(errorPayload.error || `HTTP ${response.status}`);
+                    }
+                } catch (error) {
+                    console.error("Failed to save scores:", error);
+                    addMessage('gemini', "紀錄分數時遇到問題，請稍後再試一次。");
+                }
+
+                displayReport(finalReportData);
+            } catch (error) {
+                console.error("Report Generation Error:", error);
+                addMessage('gemini', "糟糕，整理的時候不小心把墨水打翻了，請稍後再試一次。");
+                appState.isReportGenerated = false;
+            } finally {
+                setLoading(false);
+            }
+        }
+        function updateProgressBar(percentage) {
+            progressBarFill.style.width = `${Math.min(100, percentage)}%`;
+        }
+
+        // --- API & Prompting ---
+        function buildPrompt() {
+            let systemInstruction;
+            
+            if (appState.mode === 'deep-chat') {
+                systemInstruction = `
+                    你的角色: 你是個超棒的喵奶奶，你說話很溫柔、很有同理心喔！
+                    你的任務:
+                    1. 每次回覆前，都要先用一句話同理一下使用者，例如：「喔～聽起來你好像覺得...」
+                    2. 然後再問一個開放式問題，讓使用者能多說一些心裡話。
+                    3. 語氣要一直保持暖心又慈祥！
+                    4. 不要自己決定何時結束對話，使用者會點擊按鈕來產生報告。
+                    
+                    回傳格式 (必須是嚴格的 JSON):
+                    {
+                      "nextPrompt": "你的回覆文字。",
+                      "isAnalysisReady": false
+                    }
+                `;
+            } else { // quick-qa
+                const isFirstInteraction = appState.turnCount <= 1;
+                if(isFirstInteraction) {
+                     systemInstruction = `
+                        你的角色: 你是個專業又好奇的喵記者。
+                        你的任務 (初次對話):
+                        1. 根據使用者的主題選擇 ("工作", "健康", 或 "人際關係")，提出第一個相關問題。
+                        2. 問題要簡潔明瞭，並附上三個相關的快速回覆按鈕選項。
+                        3. 對話的「信心指數」（confidence_0_100）從 20 開始。
+                        
+                        回傳格式 (必須是嚴格的 JSON):
+                        {
+                          "nextPrompt": "你的回覆文字，請問得簡單明瞭。",
+                          "quickReplies": ["選項1", "選項2", "選項3"],
+                          "isAnalysisReady": false,
+                          "confidence_0_100": 20
+                        }
+                    `;
+                } else {
+                     systemInstruction = `
+                        你的角色: 你是個專業又好奇的喵記者。
+                        你的任務 (對話中):
+                        1. 根據使用者最新的回答，繼續問下一個簡潔又直接的問題。
+                        2. 同時給他三個相關的快速回覆選項。
+                        3. 「信心指數」(confidence_0_100) 在之前的 ${appState.confidence} 基礎上增加 15-25。
+                        4. 不要自己決定何時結束對話，使用者會看到一個按鈕來決定何時產生報告。
+                        
+                        回傳格式 (必須是嚴格的 JSON):
+                        {
+                          "nextPrompt": "你的回覆文字。",
+                          "quickReplies": ["選項1", "選項2", "選項3"],
+                          "isAnalysisReady": false,
+                          "confidence_0_100": ${Math.min(100, appState.confidence + 20)}
+                        }
+                    `;
+                }
+            }
+            return systemInstruction;
+        }
+
+        function buildReportPrompt() {
+            const conversationText = appState.conversationHistory
+                .map(msg => {
+                    let text = msg.parts[0].text;
+                    try {
+                        const parsed = JSON.parse(text);
+                        if (typeof parsed === 'object' && parsed.nextPrompt) {
+                            text = parsed.nextPrompt;
+                        }
+                    } catch (e) { /* It's a plain string, do nothing */ }
+                    const role = msg.role === 'model' ? (appState.mode === 'deep-chat' ? '喵奶奶' : '喵記者') : '使用者';
+                    return `${role}: ${text}`;
+                })
+                .join('\n\n');
+
+            const healthSummaryBlock = formatHealthReportForPrompt();
+            const personaPrompt = appState.mode === 'deep-chat' 
+                ? '請你扮演「喵奶奶」的角色，用極度溫柔、慈祥且充滿鼓勵的口吻，像貓咪一樣慵懶溫暖地做出總結。在總結中，請適時使用 **粗體字** 來強調重點，並在結尾加上一個溫暖的表情符號，例如 ✨ 或 ❤️。語氣必須非常正面，巧妙地融入貓咪元素（例如：呼嚕、毛線球、曬太陽等）。'
+                : '請你扮演「喵記者」的角色，用專業、敏銳且充滿活力的口吻，像貓咪一樣好奇地做出總結。在總結中，請適時使用 **粗體字** 來強調重點，並在結尾加上一個活潑的表情符號，例如 ✨ 或 🐾。語氣必須非常正面，巧妙地融入貓咪元素（例如：貓掌、頭條、獨家新聞等）。';
+
+            return `
+                你的角色: 你是一位專業的心理分析師，同時也是一位溫暖的貓咪夥伴。
+                你的任務: 根據以下的健康報告摘要與對話紀錄，產生一份結構化的分析報告，並將身心狀態串連在一起給出建議。情緒分析需基於 VAD 模型（Valence-Arousal-Dominance），根據對話內容和健康數據動態生成 emotionVector 的值，範圍嚴格限制在 1-100：
+                - Valence（情緒正負）：反映對話中的正面（高分）或負面（低分）情緒。
+                - Arousal（喚醒度）：反映對話中的情緒強度，低分表示平靜，高分表示激動。
+                - Dominance（支配感）：反映對話中用戶的控制感，低分表示無力感，高分表示掌控感。
+                額外規則：掃描用戶對話中的極端或激進語言（如咒罵、威脅、極端負面詞如“恨死”“毀滅”“絕望”“暴力”等）。如果檢測到，斟酌扣分：降低 valence 10-20 分（更負面）、增加 arousal 10-20 分（更激動）、降低 dominance 10-20 分（更無力），視嚴重度調整（例如多次出現則扣更多），但確保值在 1-100 範圍內。
+
+                健康報告摘要:
+                ---
+                ${healthSummaryBlock}
+                ---
+
+                對話紀錄:
+                ---
+                ${conversationText}
+                ---
+
+                總結的風格指南: ${personaPrompt}
+
+                請嚴格遵循以下的 JSON 格式回傳，不要有任何額外的文字或解釋:
+                {
+                "summary": "一段約 100-150 字的溫暖總結，用第二人稱（你）的角度，同理並總結使用者的狀況。必須遵循上述的風格指南，使用 **粗體** 和表情符號 ✨。",
+                "keywords": ["一個包含3-5個核心議題關鍵字的陣列"],
+                "emotionVector": {
+                    "valence": "1-100 的整數，基於對話情緒正負",
+                    "arousal": "1-100 的整數，基於對話情緒強度",
+                    "dominance": "1-100 的整數，基於對話控制感"
+                }
+                }
+            `;
+        }
+        async function callChatAPI(systemInstruction) {
+            const response = await fetch('{{ url_for("chat_api") }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    conversationHistory: appState.conversationHistory,
+                    systemInstruction: systemInstruction
+                })
+            });
+            if (response.ok) {
+                return await response.json();
+            } else {
+                console.error("API call failed:", response.status);
+                return { nextPrompt: "網路好像不太穩定，請檢查連線後再試一次。" };
+            }
+        }
+        
+        async function callReportAPI() {
+            const response = await fetch('{{ url_for("report_api") }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    conversationHistory: appState.conversationHistory,
+                    systemInstruction: buildReportPrompt()
+                })
+            });
+            if (response.ok) {
+                return await response.json();
+            } else {
+                console.error("Report API call failed:", response.status);
+                return { summary: "抱歉，整理總結時出了點小差錯，請稍後再試。" };
+            }
+        }
+
+        // --- UI Rendering ---
+        function addMessage(sender, text) {
+            const messageWrapper = document.createElement('div');
+            messageWrapper.className = `flex items-end gap-2 max-w-[85%] chat-bubble ${sender === 'user' ? 'self-end flex-row-reverse' : 'self-start'}`;
+
+            const icon = document.createElement('div');
+            icon.className = 'w-8 h-8 rounded-full flex-shrink-0';
+
+            const bubble = document.createElement('div');
+            bubble.className = `p-3 rounded-2xl`;
+
+            if (sender === 'user') {
+                icon.classList.add('bg-gray-200');
+                icon.innerHTML = `<svg class="w-full h-full text-gray-500 p-1.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
+                bubble.classList.add('bg-[var(--user-bubble)]', 'text-[var(--text-primary)]', 'rounded-br-none');
+                bubble.textContent = text;
+            } else { // gemini
+                icon.classList.add(appState.mode === 'deep-chat' ? 'bg-purple-100' : 'bg-amber-100');
+                const catIcon = appState.mode === 'deep-chat' ?
+                    `<svg class="w-full h-full text-purple-500 p-1" viewBox="0 0 24 24" fill="currentColor"><path d="M19.78,11.73c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09C17.91,12.2,17.5,12.5,17,12.5c-0.46,0-0.86-0.26-1.06-0.64 c-0.33-0.63-0.01-1.41,0.62-1.74l0.16-0.08c-0.12-0.53-0.30-1.04-0.54-1.51c-0.78-1.52-2.02-2.76-3.54-3.54 c-0.47-0.24-0.98-0.42-1.51-0.54l-0.08,0.16c-0.33,0.63-1.11,0.95-1.74,0.62C8.6,7.14,8.34,6.74,8.34,6.27 c0-0.50,0.30-0.91,0.69-1.27l0.09-0.09c0.39-0.39,0.39-1.02,0-1.41c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09 C7.20,4,7,4.54,7,5c0,1.10,0.90,2,2,2c0.23,0,0.45-0.04,0.66-0.11L9.50,7.17C8.50,7.50,7.50,8.50,7.17,9.50L6.89,9.34 C6.96,9.13,7,8.90,7,8.67c0-1.10-0.90-2-2-2c-0.46,0-0.99,0.20-1.32,0.53L3.59,7.29C3.20,7.68,3.20,8.31,3.59,8.71z M15.29,3.59 c0.39-0.39,1.02-0.39,1.41,0l0.09,0.09C17.18,4,17.40,4.54,17.40,5c0,1.10-0.90,2-2,2c-0.23,0-0.45-0.04-0.66-0.11L14.50,7.17 c1,0.33,2,1.33,2.33,2.33l0.28-0.16C17.04,9.13,17,8.90,17,8.67c0-1.10,0.90-2,2-2c0.46,0,0.99,0.20,1.32,0.53l0.09,0.09 c0.39,0.39,1.02,0.39,1.41,0c0.39-0.39,0.39-1.02,0-1.41L21.71,3.59C21.32,3.20,20.78,3.20,20.39,3.59z M12,14c-2.21,0-4,1.79-4,4 s1.79,4,4,4s4-1.79,4-4S14.21,14,12,14z"/></svg>` :
+                    `<svg class="w-full h-full text-amber-500 p-1" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5,14h-0.79l-0.28-0.27c1.2-1.4,1.82-3.31,1.48-5.34c-0.47-2.78-2.79-5-5.59-5.34c-4.23-0.52-7.79,3.04-7.27,7.27 c0.34,2.8,2.56,5.12,5.34,5.59c2.03,0.34,3.94-0.28,5.34-1.48L14,14.47V15.5l5,5l1.5-1.5L15.5,14z M9.5,14C7.01,14,5,11.99,5,9.5 C5,7.01,7.01,5,9.5,5S14,7.01,14,9.5C14,11.99,11.99,14,9.5,14z"/></svg>`;
+                icon.innerHTML = catIcon;
+                bubble.classList.add('bg-[var(--gemini-bubble)]', 'text-[var(--text-primary)]', 'rounded-bl-none', 'border', 'border-gray-100');
+                bubble.textContent = text;
+            }
+
+            messageWrapper.appendChild(icon);
+            messageWrapper.appendChild(bubble);
+            chatHistory.appendChild(messageWrapper);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function setLoading(isLoading, customMessage = null) {
+            appState.isLoading = isLoading;
+            sendButton.disabled = isLoading;
+            messageInput.disabled = isLoading;
+            messageInput.placeholder = isLoading ? "貓咪正在思考中..." : "說點什麼吧... (Ctrl+Enter 送出)";
+
+            const existingLoader = document.getElementById('loading-indicator');
+            if (existingLoader) {
+                existingLoader.remove();
+            }
+
+            if (isLoading) {
+                const messageWrapper = document.createElement('div');
+                messageWrapper.id = 'loading-indicator';
+                messageWrapper.className = 'flex items-center gap-3 self-start chat-bubble';
+
+                const icon = document.createElement('div');
+                icon.className = `w-8 h-8 rounded-full flex-shrink-0 ${appState.mode === 'deep-chat' ? 'bg-purple-100' : 'bg-amber-100'}`;
+                const catIcon = appState.mode === 'deep-chat' ?
+                    `<svg class="w-full h-full text-purple-500 p-1" viewBox="0 0 24 24" fill="currentColor"><path d="M19.78,11.73c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09C17.91,12.2,17.5,12.5,17,12.5c-0.46,0-0.86-0.26-1.06-0.64 c-0.33-0.63-0.01-1.41,0.62-1.74l0.16-0.08c-0.12-0.53-0.30-1.04-0.54-1.51c-0.78-1.52-2.02-2.76-3.54-3.54 c-0.47-0.24-0.98-0.42-1.51-0.54l-0.08,0.16c-0.33,0.63-1.11,0.95-1.74,0.62C8.6,7.14,8.34,6.74,8.34,6.27 c0-0.50,0.30-0.91,0.69-1.27l0.09-0.09c0.39-0.39,0.39-1.02,0-1.41c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09 C7.20,4,7,4.54,7,5c0,1.10,0.90,2,2,2c0.23,0,0.45-0.04,0.66-0.11L9.50,7.17C8.50,7.50,7.50,8.50,7.17,9.50L6.89,9.34 C6.96,9.13,7,8.90,7,8.67c0-1.10-0.90-2-2-2c-0.46,0-0.99,0.20-1.32,0.53L3.59,7.29C3.20,7.68,3.20,8.31,3.59,8.71z M15.29,3.59 c0.39-0.39,1.02-0.39,1.41,0l0.09,0.09C17.18,4,17.40,4.54,17.40,5c0,1.10-0.90,2-2,2c-0.23,0-0.45-0.04-0.66-0.11L14.50,7.17 c1,0.33,2,1.33,2.33,2.33l0.28-0.16C17.04,9.13,17,8.90,17,8.67c0-1.10,0.90-2,2-2c0.46,0,0.99,0.20,1.32,0.53l0.09,0.09 c0.39,0.39,1.02,0.39,1.41,0c0.39-0.39,0.39-1.02,0-1.41L21.71,3.59C21.32,3.20,20.78,3.20,20.39,3.59z M12,14c-2.21,0-4,1.79-4,4 s1.79,4,4,4s4-1.79,4-4S14.21,14,12,14z"/></svg>` :
+                    `<svg class="w-full h-full text-amber-500 p-1" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5,14h-0.79l-0.28-0.27c1.2-1.4,1.82-3.31,1.48-5.34c-0.47-2.78-2.79-5-5.59-5.34c-4.23-0.52-7.79,3.04-7.27,7.27 c0.34,2.8,2.56,5.12,5.34,5.59c2.03,0.34,3.94-0.28,5.34-1.48L14,14.47V15.5l5,5l1.5-1.5L15.5,14z M9.5,14C7.01,14,5,11.99,5,9.5 C5,7.01,7.01,5,9.5,5S14,7.01,14,9.5C14,11.99,11.99,14,9.5,14z"/></svg>`;
+                icon.innerHTML = catIcon;
+
+                const bubble = document.createElement('div');
+                bubble.className = 'p-3 rounded-2xl bg-[var(--gemini-bubble)] border border-gray-100 flex items-center gap-3';
+                const dots = document.createElement('div');
+                dots.className = 'dot-flashing';
+                const loadingText = document.createElement('span');
+                loadingText.className = 'text-sm text-[var(--text-secondary)] italic';
+                const messages = loadingMessages[appState.mode] || ["請稍候..."];
+                loadingText.textContent = customMessage || messages[Math.floor(Math.random() * messages.length)];
+
+                bubble.appendChild(dots);
+                bubble.appendChild(loadingText);
+                messageWrapper.appendChild(icon);
+                messageWrapper.appendChild(bubble);
+                chatHistory.appendChild(messageWrapper);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+        }
+
+        function renderQuickReplies(replies) {
+            clearQuickReplies();
+            replies.forEach(reply => {
+                const button = document.createElement('button');
+                button.className = "bg-gray-100 hover:bg-[var(--accent-primary-hover)] hover:text-white text-sm text-[var(--text-secondary)] font-medium py-1.5 px-3 rounded-full transition-all border border-gray-200";
+                button.textContent = reply;
+                button.onclick = () => sendMessage(reply);
+                quickRepliesContainer.appendChild(button);
+            });
+        }
+
+        function clearQuickReplies() {
+            quickRepliesContainer.innerHTML = '';
+        }
+
+        function displayReport(reportData) {
+            const formattedSummary = formatSummary(reportData.summary);
+            reportSummary.innerHTML = `<p>${formattedSummary}</p>`;
+
+            showResultModal();
+            window.currentReportData = reportData;
+        }
+
+        function formatHealthReportForPrompt() {
+            if (!healthReportData) {
+                return '健康報告資料不足，僅能依對話資訊提供建議。';
+            }
+
+            const score = healthReportData.health_score;
+            const warnings = Array.isArray(healthReportData.health_warnings)
+                ? healthReportData.health_warnings.filter(Boolean)
+                : [];
+            const warningText = warnings.length ? warnings.join('、') : '目前沒有特別警示項目';
+
+            const vitalStats = healthReportData.vital_stats || {};
+            const vitalLines = Object.entries(vitalStats)
+                .filter(([, value]) => value !== null && value !== '' && value !== undefined)
+                .map(([key, value]) => `${key}: ${value}`)
+                .slice(0, 12)
+                .join('\n');
+
+            return [
+                `健康分數：${typeof score === 'number' ? score : '無提供'}`,
+                `重點警示：${warningText}`,
+                vitalLines ? `主要指標：\n${vitalLines}` : '主要指標：資料不足'
+            ].join('\n');
+        }
+
+        function buildHealthInsightSnippet() {
+            if (!healthReportData) return '';
+
+            const warnings = Array.isArray(healthReportData.health_warnings)
+                ? healthReportData.health_warnings.filter(Boolean)
+                : [];
+
+            const adviceCatalog = [
+                { pattern: /(糖化血色素|hemoglobin_a1c)/i, advice: '調整甜食與精緻澱粉攝取，安排規律運動幫助血糖穩定' },
+                { pattern: /(三酸甘油酯|triglycerides)/i, advice: '少吃油炸與高糖飲品，改以高纖蔬果與好油脂為主' },
+                { pattern: /(總膽固醇|total_cholesterol|低密度|ldl)/i, advice: '試著增加日常活動量並挑選低脂蛋白質' },
+                { pattern: /(體重|bmi)/i, advice: '維持規律運動與均衡飲食，幫身體找到舒適節奏' },
+                { pattern: /(血壓|systolic|diastolic)/i, advice: '留意鹽分與作息，放慢生活步調讓血壓放鬆' },
+                { pattern: /(尿蛋白|urine_protein|尿糖|urine_glucose)/i, advice: '多補水、適量運動並定期追蹤腎臟狀況' }
+            ];
+
+            const advices = [];
+            warnings.forEach(warning => {
+                for (const entry of adviceCatalog) {
+                    if (entry.pattern.test(warning)) {
+                        if (!advices.includes(entry.advice)) {
+                            advices.push(entry.advice);
+                        }
+                        return;
+                    }
+                }
+            });
+
+            if (!advices.length && typeof healthReportData.health_score === 'number') {
+                if (healthReportData.health_score >= 80) {
+                    advices.push('持續保持好習慣，讓身體維持在喜歡的節奏');
+                } else {
+                    advices.push('規律動一動、調整飲食比例，讓身體慢慢回到舒服狀態');
+                }
+            }
+
+            return advices.slice(0, 2).join('，');
+        }
+
+        function getSummaryPlainText(rawSummary) {
+            const cleaned = (rawSummary || '').trim();
+            const summaryText = (!cleaned || /模型沒有產生報告內容/.test(cleaned))
+                ? buildFallbackSummary()
+                : cleaned;
+            return summaryText.replace(/\*\*(.*?)\*\*/g, '$1');
+        }
+
+        function formatSummary(rawSummary) {
+            const plainText = getSummaryPlainText(rawSummary);
+            return plainText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-purple-600">$1</strong>');
+        }
+
+        function buildFallbackSummary() {
+            const userMessages = appState.conversationHistory
+                .filter(msg => msg.role === 'user')
+                .map(msg => {
+                    const part = Array.isArray(msg.parts) && msg.parts.length ? msg.parts[0] : null;
+                    if (!part) return '';
+                    if (typeof part === 'string') return part;
+                    return part.text || '';
+                })
+                .filter(Boolean);
+
+            const latestShare = userMessages.length ? userMessages[userMessages.length - 1] : '你剛剛分享的心情';
+            const snippet = latestShare.length > 20 ? `${latestShare.slice(0, 20)}…` : latestShare;
+            const healthHint = buildHealthInsightSnippet();
+            const healthSentence = healthHint ? `也可以試著${healthHint}，讓身體慢慢找到舒服的節奏。` : '';
+            return `我聽見你提到「${snippet}」，那份在意很真實。${healthSentence}記得放慢腳步、給自己一點緩衝，必要時也和信任的夥伴聊聊。我會在這裡陪你，一起等心情變得更輕鬆。✨`;
+        }
+
+    </script>
+</body>
+</html>

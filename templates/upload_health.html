@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Upload Health Report - Meow Yourself</title>
+        <style>
+            @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
+            @import url(https://fonts.googleapis.com/css2?family=Open+Sans&display=swap);
+            @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200);
+            *, :after, :before {
+                border: 0 solid #e5e7eb;
+                box-sizing: border-box;
+            }
+            body {
+                line-height: inherit;
+                margin: 0;
+                overflow-x: hidden;
+            }
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+            .material-symbols-outlined {
+                font-family: 'Material Symbols Outlined';
+                font-weight: normal;
+                font-style: normal;
+                font-size: 24px;
+                line-height: 1;
+                letter-spacing: normal;
+                text-transform: none;
+                display: inline-block;
+                white-space: nowrap;
+                word-wrap: normal;
+                direction: ltr;
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+            #webcrumbs .absolute { position: absolute; }
+            #webcrumbs .relative { position: relative; }
+            #webcrumbs .right-0 { right: 0; }
+            #webcrumbs .z-10 { z-index: 10; }
+            #webcrumbs .mx-auto { margin-left: auto; margin-right: auto; }
+            #webcrumbs .mb-1 { margin-bottom: 4px; }
+            #webcrumbs .mb-10 { margin-bottom: 40px; }
+            #webcrumbs .mb-2 { margin-bottom: 8px; }
+            #webcrumbs .mb-4 { margin-bottom: 16px; }
+            #webcrumbs .mb-6 { margin-bottom: 24px; }
+            #webcrumbs .mb-8 { margin-bottom: 32px; }
+            #webcrumbs .ml-1 { margin-left: 4px; }
+            #webcrumbs .ml-2 { margin-left: 8px; }
+            #webcrumbs .mr-1 { margin-right: 4px; }
+            #webcrumbs .mr-2 { margin-right: 8px; }
+            #webcrumbs .mt-2 { margin-top: 8px; }
+            #webcrumbs .mt-6 { margin-top: 24px; }
+            #webcrumbs .mt-8 { margin-top: 32px; }
+            #webcrumbs .mt-20 { margin-top: 80px; }
+            #webcrumbs .block { display: block; }
+            #webcrumbs .flex { display: flex; }
+            #webcrumbs .grid { display: grid; }
+            #webcrumbs .hidden { display: none; }
+            #webcrumbs .h-14 { height: 56px; }
+            #webcrumbs .h-4 { height: 16px; }
+            #webcrumbs .h-6 { height: 24px; }
+            #webcrumbs .h-64 { height: 256px; }
+            #webcrumbs .h-8 { height: 32px; }
+            #webcrumbs .h-full { height: 100%; }
+            #webcrumbs .min-h-\[80vh\] { min-height: 80vh; }
+            #webcrumbs .w-14 { width: 56px; }
+            #webcrumbs .w-4 { width: 16px; }
+            #webcrumbs .w-6 { width: 24px; }
+            #webcrumbs .w-8 { width: 32px; }
+            #webcrumbs .w-40 { width: 160px; }
+            #webcrumbs .w-full { width: 100%; }
+            #webcrumbs .max-w-\[1200px\] { max-width: 1200px; }
+            #webcrumbs .max-w-2xl { max-width: 42rem; }
+            #webcrumbs .max-w-3xl { max-width: 48rem; }
+            #webcrumbs .max-w-4xl { max-width: 56rem; }
+            #webcrumbs .max-w-5xl { max-width: 64rem; }
+            #webcrumbs .max-w-md { max-width: 28rem; }
+            #webcrumbs .transform {
+                transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))
+                    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+            }
+            #webcrumbs .cursor-pointer { cursor: pointer; }
+            #webcrumbs .list-none { list-style-type: none; }
+            #webcrumbs .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+            #webcrumbs .flex-row { flex-direction: row; }
+            #webcrumbs .flex-col { flex-direction: column; }
+            #webcrumbs .items-center { align-items: center; }
+            #webcrumbs .justify-center { justify-content: center; }
+            #webcrumbs .justify-between { justify-content: space-between; }
+            #webcrumbs .gap-4 { gap: 16px; }
+            #webcrumbs .gap-8 { gap: 32px; }
+            #webcrumbs :is(.space-x-4 > :not([hidden]) ~ :not([hidden])) {
+                --tw-space-x-reverse: 0;
+                margin-left: calc(16px * (1 - var(--tw-space-x-reverse)));
+                margin-right: calc(16px * var(--tw-space-x-reverse));
+            }
+            #webcrumbs :is(.space-x-6 > :not([hidden]) ~ :not([hidden])) {
+                --tw-space-x-reverse: 0;
+                margin-left: calc(24px * (1 - var(--tw-space-x-reverse)));
+                margin-right: calc(24px * var(--tw-space-x-reverse));
+            }
+            #webcrumbs :is(.space-y-3 > :not([hidden]) ~ :not([hidden])) {
+                --tw-space-y-reverse: 0;
+                margin-bottom: calc(12px * var(--tw-space-y-reverse));
+                margin-top: calc(12px * (1 - var(--tw-space-y-reverse)));
+            }
+            #webcrumbs :is(.space-y-6 > :not([hidden]) ~ :not([hidden])) {
+                --tw-space-y-reverse: 0;
+                margin-bottom: calc(24px * var(--tw-space-y-reverse));
+                margin-top: calc(24px * (1 - var(--tw-space-y-reverse)));
+            }
+            #webcrumbs .overflow-hidden { overflow: hidden; }
+            #webcrumbs .rounded { border-radius: 12px; }
+            #webcrumbs .rounded-full { border-radius: 9999px; }
+            #webcrumbs .rounded-lg { border-radius: 24px; }
+            #webcrumbs .border { border-width: 1px; }
+            #webcrumbs .border-b { border-bottom-width: 1px; }
+            #webcrumbs .border-gray-100 { border-color: rgb(243 244 246); }
+            #webcrumbs .border-gray-200 { border-color: rgb(229 231 235); }
+            #webcrumbs .bg-gray-100 { background-color: rgb(243 244 246); }
+            #webcrumbs .bg-gray-50 { background-color: rgb(249 250 251); }
+            #webcrumbs .bg-gray-700 { background-color: rgb(55 65 81); }
+            #webcrumbs .bg-white { background-color: rgb(255 255 255); }
+            #webcrumbs .bg-gradient-to-b { background-image: linear-gradient(to bottom, var(--tw-gradient-stops)); }
+            #webcrumbs .from-transparent { --tw-gradient-from: transparent; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+            #webcrumbs .to-gray-900\/50 { --tw-gradient-to: rgba(17, 24, 39, 0.5); }
+            #webcrumbs .object-cover { object-fit: cover; }
+            #webcrumbs .p-2 { padding: 8px; }
+            #webcrumbs .p-4 { padding: 16px; }
+            #webcrumbs .p-6 { padding: 24px; }
+            #webcrumbs .px-4 { padding-left: 16px; padding-right: 16px; }
+            #webcrumbs .px-6 { padding-left: 24px; padding-right: 24px; }
+            #webcrumbs .py-1 { padding-bottom: 4px; padding-top: 4px; }
+            #webcrumbs .py-2 { padding-bottom: 8px; padding-top: 8px; }
+            #webcrumbs .py-3 { padding-bottom: 12px; padding-top: 12px; }
+            #webcrumbs .py-4 { padding-bottom: 16px; padding-top: 16px; }
+            #webcrumbs .pt-0 { padding-top: 0; }
+            #webcrumbs .text-center { text-align: center; }
+            #webcrumbs .font-sans { font-family: Open Sans, ui-sans-serif, system-ui, sans-serif; }
+            #webcrumbs .text-2xl { font-size: 24px; line-height: 31.2px; }
+            #webcrumbs .text-4xl { font-size: 36px; line-height: 41.4px; }
+            #webcrumbs .text-lg { font-size: 18px; line-height: 27px; }
+            #webcrumbs .text-sm { font-size: 14px; line-height: 21px; }
+            #webcrumbs .text-xl { font-size: 20px; line-height: 28px; }
+            #webcrumbs .font-bold { font-weight: 700; }
+            #webcrumbs .font-medium { font-weight: 500; }
+            #webcrumbs .text-gray-600 { color: rgb(75 85 99); }
+            #webcrumbs .text-gray-700 { color: rgb(55 65 81); }
+            #webcrumbs .text-gray-800 { color: rgb(31 41 55); }
+            #webcrumbs .text-white { color: rgb(255 255 255); }
+            #webcrumbs .text-red-600 { color: rgb(220 38 38); }
+            #webcrumbs .text-green-600 { color: rgb(22 163 74); }
+            #webcrumbs .text-yellow-600 { color: rgb(202 138 4); }
+            #webcrumbs .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+            #webcrumbs .transition-all { transition-duration: 0.15s; transition-property: all; }
+            #webcrumbs .transition-colors { transition-duration: 0.15s; transition-property: color, background-color, border-color; }
+            #webcrumbs .transition-transform { transition-duration: 0.15s; transition-property: transform; }
+            #webcrumbs .duration-200 { transition-duration: 0.2s; }
+            #webcrumbs .duration-300 { transition-duration: 0.3s; }
+            #webcrumbs .duration-500 { transition-duration: 0.5s; }
+            #webcrumbs .hover\:scale-105:hover { --tw-scale-x: 1.05; --tw-scale-y: 1.05; }
+            #webcrumbs .hover\:scale-\[1.02\]:hover { --tw-scale-x: 1.02; --tw-scale-y: 1.02; }
+            #webcrumbs .hover\:border-gray-400:hover { border-color: rgb(156 163 175); }
+            #webcrumbs .hover\:bg-gray-50:hover { background-color: rgb(249 250 251); }
+            #webcrumbs .hover\:bg-gray-800:hover { background-color: rgb(31 41 55); }
+            #webcrumbs .hover\:text-gray-700:hover { color: rgb(55 65 81); }
+            #webcrumbs .hover\:underline:hover { text-decoration: underline; }
+            #webcrumbs .focus\:outline-none:focus { outline: 2px solid transparent; }
+            #webcrumbs .focus\:ring-1:focus { box-shadow: 0 0 0 1px rgb(156 163 175); }
+            #webcrumbs .focus\:ring-gray-400:focus { --tw-ring-color: rgb(156 163 175); }
+            #webcrumbs a {
+                text-decoration: none;
+            }
+            #webcrumbs a:hover,
+            #webcrumbs a:focus,
+            #webcrumbs a:active {
+                text-decoration: none;
+            }
+            
+            /* 自定義上傳按鈕樣式 */
+            .upload-section {
+                border: 2px dashed #d1d5db;
+                border-radius: 12px;
+                padding: 24px;
+                text-align: center;
+                transition: all 0.3s ease;
+            }
+            
+            .upload-section:hover {
+                border-color: #9ca3af;
+                background-color: #f9fafb;
+            }
+            
+            .upload-section.drag-over {
+                border-color: #6b7280;
+                background-color: #f3f4f6;
+            }
+
+            .button-reupload {
+                display: inline-flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 20px;
+                border-radius: 999px;
+                background-color: #ffffff;
+                color: #374151;
+                font-size: 16px;
+                font-weight: 600;
+                border: 1px solid rgba(17, 24, 39, 0.08);
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+                transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+                white-space: nowrap;
+            }
+
+            .button-reupload:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+                border-color: rgba(17, 24, 39, 0.15);
+            }
+
+            .button-reupload:focus {
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+            }
+
+            .button-reupload .paw-icon {
+                font-size: 20px;
+            }
+
+            .button-reupload .upload-icon {
+                font-size: 22px;
+            }
+
+            .button-reupload .button-text {
+                letter-spacing: 0.02em;
+            }
+
+            .loading-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.6);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                backdrop-filter: blur(4px);
+                z-index: 999;
+            }
+
+            .loading-overlay.hidden {
+                display: none !important;
+            }
+
+            .loading-card {
+                background: #fff;
+                border-radius: 20px;
+                padding: 48px 40px;
+                text-align: center;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            }
+
+            .dots-loader {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                margin-bottom: 24px;
+            }
+
+            .dot {
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                animation: bounce 1.4s ease-in-out infinite;
+            }
+
+            .dot:nth-child(1) {
+                background: linear-gradient(135deg, #ec4899, #f472b6);
+                animation-delay: 0s;
+            }
+
+            .dot:nth-child(2) {
+                background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+                animation-delay: 0.2s;
+            }
+
+            .dot:nth-child(3) {
+                background: linear-gradient(135deg, #3b82f6, #60a5fa);
+                animation-delay: 0.4s;
+            }
+
+            @keyframes bounce {
+                0%, 80%, 100% {
+                    transform: scale(1) translateY(0);
+                    opacity: 0.7;
+                }
+                40% {
+                    transform: scale(1.3) translateY(-20px);
+                    opacity: 1;
+                }
+            }
+
+            .loading-text {
+                font-size: 18px;
+                color: #374151;
+                font-weight: 500;
+                line-height: 1.6;
+            }
+
+            .file-input {
+                display: none;
+            }
+            
+            .upload-buttons {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                margin-top: 16px;
+                flex-wrap: wrap;
+            }
+            
+            .btn-upload {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 8px 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                background-color: white;
+                color: #374151;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                font-size: 14px;
+            }
+            
+            .btn-upload:hover {
+                background-color: #f9fafb;
+                border-color: #9ca3af;
+            }
+            
+            .file-info {
+                margin-top: 16px;
+                padding: 12px;
+                background-color: #f3f4f6;
+                border-radius: 8px;
+                display: none;
+            }
+            
+            @media (max-width: 640px) {
+                #webcrumbs .sm\:p-4 { padding: 16px; }
+                #webcrumbs .sm\:px-2 { padding-left: 8px; padding-right: 8px; }
+                #webcrumbs .sm\:text-3xl { font-size: 30px; line-height: 36px; }
+                #webcrumbs .sm\:text-lg { font-size: 16px; line-height: 24px; }
+                #webcrumbs .sm\:h-48 { height: 192px; }
+                #webcrumbs .sm\:gap-4 { gap: 16px; }
+                #webcrumbs .sm\:max-w-full { max-width: 100%; }
+                
+                .upload-buttons {
+                    flex-direction: column;
+                    align-items: center;
+                }
+                
+                .btn-upload {
+                    width: 100%;
+                    justify-content: center;
+                    max-width: 200px;
+                }
+            }
+            @media (min-width: 768px) {
+                #webcrumbs .md\:flex { display: flex; }
+                #webcrumbs .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+                #webcrumbs .md\:text-5xl { font-size: 48px; line-height: 52.8px; }
+            }
+            @media (max-width: 1024px) {
+                #webcrumbs .lg\:max-w-4xl { max-width: 56rem; }
+                #webcrumbs .lg\:max-w-3xl { max-width: 48rem; }
+            }
+        </style>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+        <link rel="apple-touch-icon" sizes="192x192" href="https://cdn.webcrumbs.org/assets/images/landing/logo192.png" />
+        <link rel="apple-touch-icon" sizes="512x512" href="https://cdn.webcrumbs.org/assets/images/landing/logo512.png" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Meow Yourself" />
+    </head>
+    <body>
+        <div id="webcrumbs">
+            <div class="max-w-[1200px] w-full bg-gray-50 font-sans mx-auto">
+                <header class="bg-white py-4 px-6 sm:px-2 flex justify-between items-center border-b border-gray-100">
+                    <div class="flex items-center">
+                        <svg class="h-6 w-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2C14.5 2 16.5 4 16.5 6.5C16.5 9 14.5 11 12 11C9.5 11 7.5 9 7.5 6.5C7.5 4 9.5 2 12 2Z"></path>
+                            <path d="M5 20C5 16.5 8 14 12 14C16 14 19 16.5 19 20"></path>
+                            <path d="M12 14L12 22M9 17L15 19M9 19L15 17"></path>
+                        </svg>
+                        <h1 class="ml-2 text-xl font-medium">Meow Yourself</h1>
+                    </div>
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="{{ url_for('home') }}" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
+                            <span class="material-symbols-outlined mr-1">home</span> 首頁
+                        </a>
+                        <a href="#" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
+                            <span class="material-symbols-outlined mr-1">pets</span> 我的貓咪
+                        </a>
+                    </nav>
+                    <div class="flex items-center">
+                        <details class="relative">
+                            <summary class="list-none flex items-center cursor-pointer">
+                                <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" class="h-8 w-8 rounded-full border border-gray-200 hover:border-gray-400 transition-all duration-200" alt="Profile" />
+                            </summary>
+                            <div id="profile-menu" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-sm py-1 z-10 border border-gray-100">
+                                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-200">登出</a>
+                            </div>
+                        </details>
+                    </div>
+                </header>
+                <main class="p-6 sm:p-4">
+                    <div class="flex flex-col items-center justify-center min-h-[80vh] max-w-4xl sm:max-w-full mx-auto">
+                        <h1 class="text-4xl sm:text-3xl md:text-5xl font-bold mb-6 text-center">上傳健康報告</h1>
+                        <p class="text-xl sm:text-lg text-gray-600 mb-8 text-center max-w-2xl sm:max-w-full">
+                            請上傳您的健康報告（PDF 或 JPG/PNG 格式，最大 10MB）
+                        </p>
+                        {% if auto_redirect %}
+                        <!-- 已有報告時顯示重新上傳選項並自動導向心理測驗 -->
+                        <div class="w-full max-w-3xl sm:max-w-full mb-8 text-center">
+                            <div class="inline-block bg-white/70 border border-gray-200 text-gray-700 rounded-2xl px-6 py-4 text-base leading-relaxed shadow-sm">
+                                <p class="mb-3" style="font-size: 200%;">已找到您最近一次的健檢報告，系統將為您跳轉至心理測驗。</p>
+                                <a href="{{ url_for('upload_health', reupload=1) }}" class="button-reupload">
+                                    <span class="paw-icon" aria-hidden="true">🐾</span>
+                                    <span class="button-text">我要重新上傳報告</span>
+                                    <span class="material-symbols-outlined upload-icon" aria-hidden="true">file_upload</span>
+                                </a>
+                            </div>
+                        </div>
+                        <script>
+                            setTimeout(function () {
+                                window.location.href = {{ psychology_url|tojson }};
+                            }, 3000);
+                        </script>
+                        {% endif %}
+                        <!-- 上傳頁免責聲明 -->
+                        <div class="w-full max-w-4xl sm:max-w-full mb-8">
+                            <div class="bg-amber-100 border border-amber-300 text-amber-900 rounded-xl px-6 py-4 text-sm text-center leading-relaxed">
+                                <strong>【特別提醒】</strong> 本測驗僅為娛樂與參考，並非醫療建議。若有任何身心困擾，請尋求專業協助。
+                            </div>
+                        </div>
+                        {% if force_reupload %}
+                        <!-- 提醒使用者正在重新上傳 -->
+                        <div class="w-full max-w-3xl sm:max-w-full mb-6">
+                            <div class="bg-white/80 border border-gray-200 text-gray-700 rounded-xl px-5 py-3 text-sm text-center">
+                                您選擇重新上傳健檢報告，提交後將覆蓋最新紀錄。
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if not auto_redirect %}
+                        <div class="bg-white rounded-lg shadow-sm p-6 max-w-md w-full sm:max-w-full">
+                            {% if error %}
+                            <p class="text-sm text-red-600 mb-4 text-center">{{ error }}</p>
+                            {% endif %}
+                            {% for category, message in get_flashed_messages(with_categories=true) %}
+                            <p class="text-sm {% if category == 'error' %}text-red-600{% elif category == 'warning' %}text-yellow-600{% else %}text-green-600{% endif %} mb-4 text-center">{{ message }}</p>
+                            {% endfor %}
+                            <form method="POST" action="{{ url_for('upload_health') }}" enctype="multipart/form-data" class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">選擇檔案或拍照上傳</label>
+                                    
+                                    <!-- 上傳區域 -->
+                                    <div class="upload-section" onclick="triggerFileInput()">
+                                        <div class="mb-4">
+                                            <span class="material-symbols-outlined text-gray-400" style="font-size: 48px;">upload_file</span>
+                                        </div>
+                                        <p class="text-gray-600 mb-2">點擊此處或拖拽檔案到這裡</p>
+                                        <p class="text-sm text-gray-500">支援 PDF、JPG、PNG 格式，最大 10MB</p>
+                                        
+                                        <!-- 上傳按鈕組 -->
+                                        <div class="upload-buttons">
+                                            <button type="button" class="btn-upload" onclick="event.stopPropagation(); triggerFileInput()">
+                                                <span class="material-symbols-outlined">folder_open</span>
+                                                選擇檔案
+                                            </button>
+                                            <button type="button" class="btn-upload" onclick="event.stopPropagation(); triggerCameraInput()">
+                                                <span class="material-symbols-outlined">photo_camera</span>
+                                                拍照
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 只需要一個主要的檔案輸入 -->
+                                    <input type="file" id="health_report" name="health_report" accept="image/jpeg,image/png,application/pdf" class="file-input" onchange="showFileInfo(this)">
+                                    
+                                    <!-- 拍照專用的輸入（隱藏） -->
+                                    <input type="file" id="camera_input" accept="image/jpeg,image/png" capture="camera" class="file-input" onchange="syncCameraFile(this)">
+                                    
+                                    <!-- 檔案資訊顯示 -->
+                                    <div id="file-info" class="file-info">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <span class="material-symbols-outlined text-green-600 mr-2">check_circle</span>
+                                                <span id="file-name" class="text-sm font-medium"></span>
+                                            </div>
+                                            <span id="file-size" class="text-xs text-gray-500"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="w-full py-3 px-4 bg-gray-700 text-white rounded hover:bg-gray-800 transition-colors duration-300 mt-8">
+                                    上傳健康報告
+                                </button>
+                            </form>
+                            
+                            <!-- 顯示健康分析結果 -->
+                            {% if get_flashed_messages(with_categories=true) %}
+                            <div class="mt-6 bg-white rounded-lg shadow-sm p-6 max-w-md w-full sm:max-w-full">
+                                <h2 class="text-xl font-bold mb-4">健康報告分析結果</h2>
+                                {% for category, message in get_flashed_messages(with_categories=true) %}
+                                <p class="text-sm {% if category == 'error' %}text-red-600{% elif category == 'warning' %}text-yellow-600{% else %}text-green-600{% endif %} mb-2">{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <div id="upload-loading" class="loading-overlay hidden" aria-live="assertive">
+            <div class="loading-card">
+                <div class="dots-loader">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <p id="loading-message" class="loading-text">
+                    報告正在上傳中，請稍候...
+                </p>
+            </div>
+        </div>
+
+        <script>
+            // 檔案拖拽功能
+            const uploadSection = document.querySelector('.upload-section');
+            
+            uploadSection.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadSection.classList.add('drag-over');
+            });
+            
+            uploadSection.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadSection.classList.remove('drag-over');
+            });
+            
+            uploadSection.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadSection.classList.remove('drag-over');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const mainInput = document.getElementById('health_report');
+                    mainInput.files = files;
+                    showFileInfo(mainInput);
+                }
+            });
+            
+            // 觸發檔案選擇
+            function triggerFileInput() {
+                document.getElementById('health_report').click();
+            }
+            
+            // 觸發拍照
+            function triggerCameraInput() {
+                document.getElementById('camera_input').click();
+            }
+            
+            // 同步拍照檔案到主輸入
+            function syncCameraFile(cameraInput) {
+                if (cameraInput.files && cameraInput.files[0]) {
+                    const mainInput = document.getElementById('health_report');
+                    
+                    // 創建 FileList 物件並賦值給主輸入
+                    const dt = new DataTransfer();
+                    dt.items.add(cameraInput.files[0]);
+                    mainInput.files = dt.files;
+                    
+                    showFileInfo(mainInput);
+                }
+            }
+
+            // 顯示檔案資訊
+            function showFileInfo(input) {
+                const fileInfo = document.getElementById('file-info');
+                const fileName = document.getElementById('file-name');
+                const fileSize = document.getElementById('file-size');
+                
+                if (input.files && input.files[0]) {
+                    const file = input.files[0];
+                    const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+                    
+                    fileName.textContent = file.name;
+                    fileSize.textContent = `${sizeInMB} MB`;
+                    fileInfo.style.display = 'block';
+                    
+                    // 檢查檔案大小
+                    if (file.size > 10 * 1024 * 1024) {
+                        fileInfo.style.backgroundColor = '#fee2e2';
+                        fileName.style.color = '#dc2626';
+                        fileSize.style.color = '#dc2626';
+                        fileSize.textContent += ' (超過限制)';
+                    } else {
+                        fileInfo.style.backgroundColor = '#f0fdf4';
+                        fileName.style.color = '#166534';
+                        fileSize.style.color = '#6b7280';
+                    }
+                } else {
+                    fileInfo.style.display = 'none';
+                }
+            }
+
+            const loadingOverlay = document.getElementById('upload-loading');
+            const loadingMessage = document.getElementById('loading-message');
+
+            function showLoading(message) {
+                if (message) {
+                    loadingMessage.innerHTML = message;
+                }
+                loadingOverlay.classList.remove('hidden');
+                // 禁止背景滾動
+                document.body.style.overflow = 'hidden';
+            }
+
+            function hideLoading() {
+                loadingOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            // 監聽表單提交
+            const uploadForm = document.querySelector('form[action="{{ url_for("upload_health") }}"]');
+            if (uploadForm) {
+                uploadForm.addEventListener('submit', (e) => {
+                    // 檢查是否有選擇檔案
+                    const fileInput = document.getElementById('health_report');
+                    if (!fileInput.files || fileInput.files.length === 0) {
+                        e.preventDefault();
+                        alert('請先選擇要上傳的檔案！');
+                        return false;
+                    }
+                    
+                    // 檢查檔案大小
+                    const file = fileInput.files[0];
+                    if (file.size > 10 * 1024 * 1024) {
+                        e.preventDefault();
+                        alert('檔案大小超過 10MB 限制！');
+                        return false;
+                    }
+                    
+                    // 顯示 loading
+                    showLoading('報告正在上傳中，請稍候...');
+                });
+            }
+
+            // 如果有自動跳轉，顯示 loading
+            {% if auto_redirect %}
+            showLoading('正在為您跳轉至心理測驗...');
+            {% endif %}
+
+            // 頁面載入完成後，隱藏可能殘留的 loading
+            window.addEventListener('load', () => {
+                // 如果不是自動跳轉的情況，確保 loading 是隱藏的
+                {% if not auto_redirect %}
+                hideLoading();
+                {% endif %}
+            });
+        </script>
+    </body>
+</html>

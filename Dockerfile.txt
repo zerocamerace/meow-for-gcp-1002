@@ -1,0 +1,36 @@
+# syntax=docker/dockerfile:1
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    TZ=Asia/Taipei \
+    LANG=C.UTF-8
+
+WORKDIR /app
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    libmagic1 \
+    libjpeg62-turbo \
+    libpng16-16 \
+    libopenjp2-7 \
+    libtiff6 \
+    libfreetype6 \
+    fonts-noto-cjk \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt ./
+RUN pip install --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt gunicorn
+
+COPY . .
+
+RUN groupadd --system appuser \
+ && useradd --system --gid appuser --create-home appuser \
+ && chown -R appuser:appuser /app
+
+USER appuser
+ENV PATH=/home/appuser/.local/bin:$PATH \
+    PORT=8080
+
+CMD ["sh", "-c", "exec gunicorn --bind :${PORT:-8080} --workers 2 --threads 8 --timeout 0 app:app"]

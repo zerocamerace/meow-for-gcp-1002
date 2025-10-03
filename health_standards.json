@@ -1,0 +1,269 @@
+{
+  "health_standards": {
+    "glucose": {
+      "name": "血糖",
+      "unit": "mg/dL",
+      "aliases": ["血糖", "飯前血糖", "fasting glucose"],
+      "reference_value": "70-99",
+      "grades": {
+        "male": {
+          "A": [100, 125],
+          "B": [126, 180],
+          "C": [181, 9999]
+        },
+        "female": {
+          "A": [100, 125],
+          "B": [126, 180],
+          "C": [181, 9999]
+        }
+      }
+    },
+    "hemoglobin_a1c": {
+      "name": "糖化血色素",
+      "unit": "%",
+      "aliases": ["HbA1c"],
+      "reference_value": "<5.7",
+      "grades": {
+        "male": {
+          "A": [5.7, 6.4],
+          "B": [6.5, 7.5],
+          "C": [7.6, 99]
+        },
+        "female": {
+          "A": [5.7, 6.4],
+          "B": [6.5, 7.5],
+          "C": [7.6, 99]
+        }
+      }
+    },
+    "total_cholesterol": {
+      "name": "總膽固醇",
+      "unit": "mg/dL",
+      "aliases": ["T-cho"],
+      "reference_value": "<200",
+      "grades": {
+        "male": {
+          "A": [200, 239],
+          "B": [240, 280],
+          "C": [281, 9999]
+        },
+        "female": {
+          "A": [200, 239],
+          "B": [240, 280],
+          "C": [281, 9999]
+        }
+      }
+    },
+    "triglycerides": {
+      "name": "三酸甘油酯",
+      "unit": "mg/dL",
+      "aliases": ["TG", "triglycerides"],
+      "reference_value": "<150",
+      "grades": {
+        "male": {
+          "A": [150, 199],
+          "B": [200, 499],
+          "C": [500, 9999]
+        },
+        "female": {
+          "A": [150, 199],
+          "B": [200, 499],
+          "C": [500, 9999]
+        }
+      }
+    },
+    "ldl_cholesterol": {
+      "name": "低密度膽固醇",
+      "unit": "mg/dL",
+      "aliases": ["LDL", "壞膽固醇"],
+      "reference_value": "<130",
+      "grades": {
+        "male": {
+          "A": [130, 159],
+          "B": [160, 189],
+          "C": [190, 9999]
+        },
+        "female": {
+          "A": [130, 159],
+          "B": [160, 189],
+          "C": [190, 9999]
+        }
+      }
+    },
+    "hdl_cholesterol": {
+      "name": "高密度膽固醇",
+      "unit": "mg/dL",
+      "aliases": ["HDL", "好膽固醇"],
+      "reference_value_male": ">40",
+      "reference_value_female": ">50",
+      "grades": {
+        "male": {
+          "A": [35, 39],
+          "B": [30, 34],
+          "C": [0, 29]
+        },
+        "female": {
+          "A": [45, 49],
+          "B": [40, 44],
+          "C": [0, 39]
+        }
+      }
+    },
+    "bmi": {
+      "name": "身體質量指數",
+      "unit": "kg/m²",
+      "aliases": ["BMI"],
+      "reference_value": "18.5-24",
+      "grades": {
+        "male": {
+          "A": [24, 26.9],
+          "B": [27, 29.9],
+          "C": [30, 99]
+        },
+        "female": {
+          "A": [24, 26.9],
+          "B": [27, 29.9],
+          "C": [30, 99]
+        }
+      }
+    },
+    "alt": {
+      "name": "丙胺酸轉胺酶",
+      "unit": "U/L",
+      "aliases": ["GPT", "SGPT"],
+      "reference_value_male": "5-40",
+      "reference_value_female": "5-35",
+      "grades": {
+        "male": {
+          "A": [41, 60],
+          "B": [61, 100],
+          "C": [101, 999]
+        },
+        "female": {
+          "A": [36, 60],
+          "B": [61, 100],
+          "C": [101, 999]
+        }
+      }
+    },
+    "ast": {
+      "name": "天門冬胺酸轉胺酶",
+      "unit": "U/L",
+      "aliases": ["GOT", "SGOT"],
+      "reference_value_male": "5-40",
+      "reference_value_female": "5-35",
+      "grades": {
+        "male": {
+          "A": [41, 60],
+          "B": [61, 100],
+          "C": [101, 999]
+        },
+        "female": {
+          "A": [36, 60],
+          "B": [61, 100],
+          "C": [101, 999]
+        }
+      }
+    },
+    "creatinine": {
+      "name": "肌酸酐",
+      "unit": "mg/dL",
+      "aliases": ["Creatinine"],
+      "reference_value_male": "0.7-1.3",
+      "reference_value_female": "0.6-1.1",
+      "grades": {
+        "male": {
+          "A": [1.31, 1.5],
+          "B": [1.51, 2.0],
+          "C": [2.01, 99]
+        },
+        "female": {
+          "A": [1.11, 1.3],
+          "B": [1.31, 1.8],
+          "C": [1.81, 99]
+        }
+      }
+    },
+    "uric_acid": {
+      "name": "尿酸",
+      "unit": "mg/dL",
+      "aliases": ["uric acid"],
+      "reference_value_male": "3.5-7.2",
+      "reference_value_female": "2.5-6.0",
+      "grades": {
+        "male": {
+          "A": [7.3, 8.0],
+          "B": [8.1, 10.0],
+          "C": [10.1, 99]
+        },
+        "female": {
+          "A": [6.1, 7.0],
+          "B": [7.1, 9.0],
+          "C": [9.1, 99]
+        }
+      }
+    },
+    "hemoglobin": {
+      "name": "血色素",
+      "unit": "g/dL",
+      "aliases": ["Hb"],
+      "reference_value_male": "13-17",
+      "reference_value_female": "12-16"
+    },
+    "wbc": {
+      "name": "白血球",
+      "unit": "10³/uL",
+      "aliases": ["WBC"],
+      "reference_value": "4.5-11"
+    },
+    "rbc": {
+      "name": "紅血球",
+      "unit": "10⁶/uL",
+      "aliases": ["RBC"],
+      "reference_value_male": "4.5-5.9",
+      "reference_value_female": "4.1-5.1"
+    },
+    "platelet": {
+      "name": "血小板",
+      "unit": "10³/uL",
+      "aliases": ["PLT"],
+      "reference_value": "150-450"
+    },
+    "urine_glucose": {
+      "name": "尿液葡萄糖",
+      "unit": "",
+      "aliases": ["urine glucose"],
+      "reference_value": "(-)"
+    },
+    "urine_protein": {
+      "name": "尿液蛋白質",
+      "unit": "",
+      "aliases": ["urine protein"],
+      "reference_value": "(-)"
+    },
+    "blood_pressure_systolic": {
+      "name": "收縮壓",
+      "unit": "mmHg",
+      "aliases": ["收縮壓", "systolic"],
+      "reference_value": "<130"
+    },
+    "blood_pressure_diastolic": {
+      "name": "舒張壓",
+      "unit": "mmHg",
+      "aliases": ["舒張壓", "diastolic"],
+      "reference_value": "<80"
+    },
+    "HBsAg": {
+      "name": "B型肝炎抗原",
+      "unit": "",
+      "aliases": ["HBsAg"],
+      "reference_value": "(-)"
+    },
+    "urine_ob": {
+      "name": "尿液潛血",
+      "unit": "",
+      "aliases": ["urine OB"],
+      "reference_value": "(-)"
+    }
+  }
+}
