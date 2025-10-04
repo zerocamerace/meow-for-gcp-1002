@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -251,8 +251,34 @@
         <!-- Mode Selection View -->
         <div id="selection-view" class="flex flex-col items-center justify-center h-full view-transition">
             <div class="text-center mb-12">
-                 <svg class="w-24 h-24 mx-auto text-purple-200 mb-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M15.5,14.5c-0.83,0-1.5-0.67-1.5-1.5s.67-1.5,1.5-1.5 s1.5,0.67,1.5,1.5S16.33,14.5,15.5,14.5z M8.5,14.5c-0.83,0-1.5-0.67-1.5-1.5s.67-1.5,1.5-1.5s1.5,0.67,1.5,1.5S9.33,14.5,8.5,14.5z M12,9.5C9.12,9.5,7.5,7.71,7.5,6C7.5,5.17,8.17,4.5,9,4.5c0.76,0,1.38,0.57,1.48,1.3c0.11,0.77,0.76,1.2,1.52,1.2s1.41-0.43,1.52-1.2 c0.1-0.73,0.72-1.3,1.48-1.3c0.83,0,1.5,0.67,1.5,1.5C16.5,7.71,14.88,9.5,12,9.5z"/></svg>
-                <h1 class="text-4xl md:text-5xl font-bold mb-2">貓咪談心室</h1>
+                 <!--<svg class="w-24 h-24 mx-auto text-purple-200 mb-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M15.5,14.5c-0.83,0-1.5-0.67-1.5-1.5s.67-1.5,1.5-1.5 s1.5,0.67,1.5,1.5S16.33,14.5,15.5,14.5z M8.5,14.5c-0.83,0-1.5-0.67-1.5-1.5s.67-1.5,1.5-1.5s1.5,0.67,1.5,1.5S9.33,14.5,8.5,14.5z M12,9.5C9.12,9.5,7.5,7.71,7.5,6C7.5,5.17,8.17,4.5,9,4.5c0.76,0,1.38,0.57,1.48,1.3c0.11,0.77,0.76,1.2,1.52,1.2s1.41-0.43,1.52-1.2 c0.1-0.73,0.72-1.3,1.48-1.3c0.83,0,1.5,0.67,1.5,1.5C16.5,7.71,14.88,9.5,12,9.5z"/></svg>-->
+                <!-- GALING 10/4 貓咪 Logo 區塊 (使用 SVG 繪製 - 增加眼睛和鬍鬚) 
+                 顏色已改為橘色 text-orange-400 -->
+            <div class="mb-4">
+                <svg class="w-20 h-20 text-orange-400 mx-auto transform hover:scale-110 transition duration-300" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 臉部主體 (Head) -->
+                    <circle cx="16" cy="18" r="10" fill="currentColor" fill-opacity="0.8" stroke="none"/>
+                    
+                    <!-- 左耳 (Left Ear) - 逆時針旋轉 45 度 (回到上一個旋轉版本)，Y 座標維持 11.7 -->
+                    <path d="M8 5.4 L12.5 11.7 L3.5 11.7 Z" fill="currentColor" transform="rotate(-50 8 12)"/>
+                    <!-- 右耳 (Right Ear) - 順時針旋轉 45 度 (回到上一個旋轉版本)，Y 座標維持 11.7 -->
+                    <path d="M24 5.4 L28.5 11.7 L19.5 11.7 Z" fill="currentColor" transform="rotate(50 24 12)"/>
+                    
+                    <!-- 眼睛 (Eyes - 深色圓點) -->
+                    <circle cx="12" cy="16" r="1.5" fill="#333" stroke="none"/>
+                    <circle cx="20" cy="16" r="1.5" fill="#333" stroke="none"/>
+                    
+                    <!-- 鼻子 (Nose - 小三角形) -->
+                    <path d="M16 18 L15 20 L17 20 Z" fill="#333" stroke="none"/>
+                    
+                    <!-- 鬍鬚 (Whiskers - 簡單線條) -->
+                    <line x1="20" y1="21" x2="28" y2="21" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
+                    <line x1="20" y1="23" x2="28" y2="24" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
+                    <line x1="12" y1="21" x2="4" y2="21" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
+                    <line x1="12" y1="23" x2="4" y2="24" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
+                </svg>
+            </div>
+                 <h1 class="text-4xl md:text-5xl font-bold mb-2">貓咪談心室</h1>
                 <p class="text-lg text-[var(--text-secondary)]">選一位貓咪朋友，開始你們的悄悄話時間。</p>
                 <!-- 🟢 修改開始：提供重新上傳健檢報告入口（強化外觀與新增貓爪 emoji） -->
                 <a href="{{ url_for('upload_health', reupload=1) }}" class="inline-flex items-center gap-4 mt-6 px-8 py-3.5 rounded-full text-base font-semibold text-gray-700 border border-transparent bg-white/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all" style="font-size: 200%;">
@@ -399,7 +425,7 @@
         };
 
 
-        // --- Selection Card Bubble Effect ---
+        // --- 10/04 Galing新增 Selection Card Bubble Effect ---
         function createSelectionBubbleEffect(card) {
             const container = document.createElement('div');
             container.className = 'selection-bubble-container';
