@@ -138,6 +138,23 @@
             }
         }
 
+        /* GALING 品牌介紹視窗彈出10/04 */
+        .brand-intro-modal {
+            background: rgba(32, 24, 50, 0.72);
+        }
+        /* GALING 品牌介紹視窗彈出10/04 */
+        .brand-intro-card {
+            max-width: 480px;
+            width: min(92%, 480px);
+            background: #fff8f3;
+        }
+        /* GALING 品牌介紹視窗彈出10/04 */
+        .brand-intro-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
         /* GALING 調整喵奶奶頭像52px/48px 10/04 */
         .grandma-avatar, .reporter-avatar {
             width: 52px;
@@ -361,6 +378,17 @@
         </div>
     </div>
     
+    <!-- GALING 品牌介紹視窗彈出10/04 -->
+    <div id="brand-intro-modal" class="fixed inset-0 brand-intro-modal flex items-center justify-center p-6 z-50 hidden opacity-0 transition-opacity duration-300">
+        <div id="brand-intro-card" class="brand-intro-card rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300 relative">
+            <button type="button" id="brand-intro-close" class="absolute top-4 right-4 bg-white/80 hover:bg-white text-gray-600 rounded-full p-2 shadow-md transition" aria-label="關閉品牌介紹視窗">×</button>
+            <img src="{{ url_for('static', filename='window.jpg') }}" alt="品牌介紹">
+            <div class="p-6 bg-white/90 backdrop-blur-sm">
+                <button id="brand-intro-enter-btn" class="w-full bg-gradient-to-r from-orange-400 to-orange-500 text-white font-semibold py-3 rounded-full shadow-lg hover:shadow-xl transition">進入貓咪談心室</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Custom Confirmation Modal -->
     <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 z-50 hidden transition-opacity duration-300 opacity-0">
         <div class="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full transform transition-transform duration-300 scale-95">
@@ -398,6 +426,14 @@
         const sendButton = document.getElementById('send-button');
         const sendIcon = document.getElementById('send-icon');
         const quickRepliesContainer = document.getElementById('quick-replies-container');
+        // GALING 品牌介紹視窗彈出10/04
+        const brandIntroModal = document.getElementById('brand-intro-modal');
+        // GALING 品牌介紹視窗彈出10/04
+        const brandIntroCard = document.getElementById('brand-intro-card');
+        // GALING 品牌介紹視窗彈出10/04
+        const brandIntroEnterBtn = document.getElementById('brand-intro-enter-btn');
+        // GALING 品牌介紹視窗彈出10/04
+        const brandIntroCloseBtn = document.getElementById('brand-intro-close');
         const reportSummary = document.getElementById('report-summary');
         const confirmModal = document.getElementById('confirm-modal');
         const confirmReturnBtn = document.getElementById('confirm-return-btn');
@@ -503,6 +539,28 @@
             });
         }
 
+        // GALING 品牌介紹視窗彈出10/04
+        function showBrandIntroModal() {
+            if (!brandIntroModal || !brandIntroCard) return;
+            brandIntroModal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                brandIntroModal.classList.remove('opacity-0');
+                brandIntroCard.classList.remove('scale-95');
+            });
+        }
+
+        // GALING 品牌介紹視窗彈出10/04
+        function closeBrandIntroModal() {
+            if (!brandIntroModal || !brandIntroCard) return;
+            brandIntroModal.classList.add('opacity-0');
+            brandIntroCard.classList.add('scale-95');
+            setTimeout(() => {
+                if (brandIntroModal.classList.contains('opacity-0')) {
+                    brandIntroModal.classList.add('hidden');
+                }
+            }, 300);
+        }
+
         function initSelectionBubbleEffects() {
             selectionModeCards.forEach(card => {
                 const effect = createSelectionBubbleEffect(card);
@@ -564,6 +622,33 @@
             isDesktopDevice = detectDesktopDevice();
             resolvedPlaceholderText = isDesktopDevice ? DESKTOP_PLACEHOLDER_MESSAGE : MOBILE_PLACEHOLDER_MESSAGE;
             messageInput.placeholder = resolvedPlaceholderText;
+
+            // GALING 品牌介紹視窗彈出10/04
+            if (brandIntroEnterBtn) {
+                brandIntroEnterBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closeBrandIntroModal();
+                });
+            }
+            // GALING 品牌介紹視窗彈出10/04
+            if (brandIntroCloseBtn) {
+                brandIntroCloseBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closeBrandIntroModal();
+                });
+            }
+            // GALING 品牌介紹視窗彈出10/04
+            if (brandIntroCard) {
+                brandIntroCard.addEventListener('click', (event) => event.stopPropagation());
+            }
+            // GALING 品牌介紹視窗彈出10/04
+            if (brandIntroModal) {
+                brandIntroModal.addEventListener('click', closeBrandIntroModal);
+            }
+            // GALING 品牌介紹視窗彈出10/04
+            if (healthReportData && brandIntroModal && brandIntroCard) {
+                showBrandIntroModal();
+            }
 
             messageInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
