@@ -351,7 +351,10 @@
             isAnalysisReady: false,
             isReportGenerated: false,
             turnCount: 0,
-            confidence: 0
+            confidence: 0,
+            qaQuestionCount: 0,
+            isMaxQaReached: false,
+            hasShownMaxQaReminder: false
         };
 
         // --- Loading Messages ---
@@ -556,7 +559,8 @@
         function resetState() {
             Object.assign(appState, {
                 conversationHistory: [], isLoading: false, isAnalysisReady: false,
-                isReportGenerated: false, turnCount: 0, confidence: 0
+                isReportGenerated: false, turnCount: 0, confidence: 0,
+                qaQuestionCount: 0, isMaxQaReached: false, hasShownMaxQaReminder: false
             });
         }
 
@@ -632,6 +636,17 @@
 
             appState.conversationHistory.push({ role: 'user', parts: [{ text }] });
             appState.turnCount++;
+            const isFinalQuickQaAnswer = appState.mode === 'quick-qa' && appState.isMaxQaReached;
+
+            if (isFinalQuickQaAnswer) {
+                if (!appState.hasShownMaxQaReminder) {
+                    addMessage('gemini', "謝謝你完成所有題目啦！如果想整理這次的訪談，可以點「悄悄話總結」。");
+                    appState.hasShownMaxQaReminder = true;
+                }
+                renderGenerateReportButton();
+                return;
+            }
+
             setLoading(true);
 
             try {
@@ -651,6 +666,17 @@
                 console.error("Invalid response from model:", response);
                 addMessage('gemini', "抱歉，我好像有點迷糊了，可以再問一次嗎？");
                 return;
+            }
+
+            if (appState.mode === 'quick-qa' && !appState.isMaxQaReached) {
+                appState.qaQuestionCount += 1;
+                if (appState.qaQuestionCount >= 15) {
+                    const finalPromptLabel = '【這是最後一題】';
+                    if (typeof response.nextPrompt === 'string' && !response.nextPrompt.includes(finalPromptLabel)) {
+                        response.nextPrompt = `${finalPromptLabel}${response.nextPrompt}`;
+                    }
+                    appState.isMaxQaReached = true;
+                }
             }
 
             appState.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify(response) }] });
@@ -855,6 +881,7 @@
                         1. 根據使用者的主題選擇 ("工作", "健康", 或 "人際關係")，提出第一個相關問題。
                         2. 問題要簡潔明瞭，並附上三個相關的快速回覆按鈕選項。
                         3. 對話的「信心指數」（confidence_0_100）從 20 開始。
+                        4. 訪談最多只能提出 15 題選擇題，第 15 題要在題目前加上「【這是最後一題】」，之後不要再出題或提供選項。
                         
                         回傳格式 (必須是嚴格的 JSON):
                         {
@@ -872,6 +899,7 @@
                         2. 同時給他三個相關的快速回覆選項。
                         3. 「信心指數」(confidence_0_100) 在之前的 ${appState.confidence} 基礎上增加 15-25。
                         4. 不要自己決定何時結束對話，使用者會看到一個按鈕來決定何時產生報告。
+                        5. 訪談最多只能提出 15 題選擇題，第 15 題要在題目前加上「【這是最後一題】」，之後不要再出題或提供選項。
                         
                         回傳格式 (必須是嚴格的 JSON):
                         {
