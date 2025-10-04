@@ -1407,5 +1407,19 @@ def generate_card():
 
 if __name__ == "__main__":
     # 若要列印路由表，可在這裡印出（避免 Flask 3 的 before_first_request）
-    # logging.debug("URL Map:\n" + "\n".join([str(r) for r in app.url_map.iter_rules()]))
-    app.run(debug=True)
+    # logging.debug("URL Map: %s", list(app.url_map.iter_rules()))
+    port = int(os.environ.get("FLASK_RUN_PORT", 5001))
+    host = os.environ.get("FLASK_RUN_HOST", "0.0.0.0")
+
+    # === GALING 10/02 ngrok測試用 開始 ===
+    use_ngrok = os.environ.get("USE_NGROK") == "1"
+    if use_ngrok:
+        try:
+            from pyngrok import ngrok
+            public_url = ngrok.connect(port, "http")
+            logging.info("ngrok tunnel started: %s", public_url)
+        except Exception as ngrok_error:
+            logging.error("Failed to start ngrok tunnel: %s", ngrok_error)
+    # === GALING 10/02 ngrok測試用 結束 ===
+
+    app.run(host=host, port=port, debug=True)
