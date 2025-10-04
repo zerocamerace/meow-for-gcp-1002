@@ -99,6 +99,45 @@
             overflow-y: hidden;
         }
 
+        .selection-mode-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .selection-mode-card > *:not(.selection-bubble-container) {
+            position: relative;
+            z-index: 1;
+        }
+        .selection-bubble-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .selection-bubble {
+            position: absolute;
+            bottom: -80px;
+            border-radius: 9999px;
+            background: rgba(209, 196, 233, 0.45);
+            box-shadow: 0 0 18px rgba(255, 255, 255, 0.35);
+            transform: translateY(0) scale(0.7);
+            opacity: 0;
+            animation: selectionBubbleFloat linear forwards;
+        }
+        @keyframes selectionBubbleFloat {
+            0% {
+                transform: translateY(0) scale(0.6);
+                opacity: 0;
+            }
+            20% {
+                opacity: var(--bubble-opacity, 0.6);
+            }
+            100% {
+                transform: translateY(-120%) scale(1.4);
+                opacity: 0;
+            }
+        }
+
         /* GALING 調整喵奶奶頭像52px/48px 10/04 */
         .grandma-avatar, .reporter-avatar {
             width: 52px;
@@ -222,16 +261,16 @@
                 <!-- 🟢 修改結束 -->
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
-                <button onclick="selectMode('deep-chat')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6">
-                    <div class="bg-purple-100 p-4 rounded-full"><svg class="w-10 h-10 text-purple-500" viewBox="0 0 24 24" fill="currentColor"><path d="M19.78,11.73c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09C17.91,12.2,17.5,12.5,17,12.5c-0.46,0-0.86-0.26-1.06-0.64 c-0.33-0.63-0.01-1.41,0.62-1.74l0.16-0.08c-0.12-0.53-0.30-1.04-0.54-1.51c-0.78-1.52-2.02-2.76-3.54-3.54 c-0.47-0.24-0.98-0.42-1.51-0.54l-0.08,0.16c-0.33,0.63-1.11,0.95-1.74,0.62C8.6,7.14,8.34,6.74,8.34,6.27 c0-0.50,0.30-0.91,0.69-1.27l0.09-0.09c0.39-0.39,0.39-1.02,0-1.41c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09 C7.20,4,7,4.54,7,5c0,1.10,0.90,2,2,2c0.23,0,0.45-0.04,0.66-0.11L9.50,7.17C8.50,7.50,7.50,8.50,7.17,9.50L6.89,9.34 C6.96,9.13,7,8.90,7,8.67c0-1.10-0.90-2-2-2c-0.46,0-0.99,0.20-1.32,0.53L3.59,7.29C3.20,7.68,3.20,8.31,3.59,8.71z M15.29,3.59 c0.39-0.39,1.02-0.39,1.41,0l0.09,0.09C17.18,4,17.40,4.54,17.40,5c0,1.10-0.90,2-2,2c-0.23,0-0.45-0.04-0.66-0.11L14.50,7.17 c1,0.33,2,1.33,2.33,2.33l0.28-0.16C17.04,9.13,17,8.90,17,8.67c0-1.10,0.90-2,2-2c0.46,0,0.99,0.20,1.32,0.53l0.09,0.09 c0.39,0.39,1.02,0.39,1.41,0c0.39-0.39,0.39-1.02,0-1.41L21.71,3.59C21.32,3.20,20.78,3.20,20.39,3.59z M12,14c-2.21,0-4,1.79-4,4 s1.79,4,4,4s4-1.79,4-4S14.21,14,12,14z"/></svg></div>
+                <button onclick="selectMode('deep-chat')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6 relative overflow-hidden selection-mode-card" data-bubble-color="rgba(184, 172, 215, 0.55)">
+                    <div class="bg-purple-100 p-4 rounded-full"><img src="{{ url_for('static', filename='grandma.jpg') }}" alt="喵奶奶春蘭" class="w-[60px] h-[60px] rounded-full object-cover shadow-sm" /></div>
                     <div class="flex-1">
                         <h2 class="text-2xl font-bold">深度聊聊</h2>
                         <!-- GALING 修改描述位置+新增綽號 10/04 -->
                         <p class="text-[var(--text-secondary)] text-sm mt-2 leading-relaxed">讓溫柔的「喵奶奶春蘭」陪你深入探索內心世界，慢慢梳理思緒，你可以傳送任何想聊的心情話語給喵奶奶春蘭，若感覺聊夠了，可以按「悄悄話總結」噢！</p>
                     </div>
                 </button>
-                <button onclick="selectMode('quick-qa')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6">
-                    <div class="bg-amber-100 p-4 rounded-full"><svg class="w-10 h-10 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5,14h-0.79l-0.28-0.27c1.2-1.4,1.82-3.31,1.48-5.34c-0.47-2.78-2.79-5-5.59-5.34c-4.23-0.52-7.79,3.04-7.27,7.27 c0.34,2.8,2.56,5.12,5.34,5.59c2.03,0.34,3.94-0.28,5.34-1.48L14,14.47V15.5l5,5l1.5-1.5L15.5,14z M9.5,14C7.01,14,5,11.99,5,9.5 C5,7.01,7.01,5,9.5,5S14,7.01,14,9.5C14,11.99,11.99,14,9.5,14z"/></svg></div>
+                <button onclick="selectMode('quick-qa')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6 relative overflow-hidden selection-mode-card" data-bubble-color="rgba(255, 201, 130, 0.55)">
+                    <div class="bg-amber-100 p-4 rounded-full"><img src="{{ url_for('static', filename='reporter.jpg') }}" alt="喵記者馬克" class="w-[60px] h-[60px] rounded-full object-cover shadow-sm" /></div>
                     <div class="flex-1">
                         <h2 class="text-2xl font-bold">焦點訪談</h2>
                         <!-- GALING 修改描述位置+新增綽號 10/04 -->
@@ -342,6 +381,8 @@
         const progressBarFill = document.getElementById('progress-bar-fill');
         const chatPanel = document.getElementById('chat-panel');
         const mainGrid = document.getElementById('main-grid');
+        const selectionModeCards = document.querySelectorAll('.selection-mode-card');
+        const selectionBubbleEffects = [];
 
         // --- App State ---
         const appState = {
@@ -356,6 +397,95 @@
             isMaxQaReached: false,
             hasShownMaxQaReminder: false
         };
+
+
+        // --- Selection Card Bubble Effect ---
+        function createSelectionBubbleEffect(card) {
+            const container = document.createElement('div');
+            container.className = 'selection-bubble-container';
+            card.appendChild(container);
+
+            const color = card.dataset.bubbleColor || 'rgba(209, 196, 233, 0.45)';
+            const minSize = Number(card.dataset.bubbleMin || 26);
+            const maxSize = Number(card.dataset.bubbleMax || 72);
+            const minDuration = Number(card.dataset.bubbleDurationMin || 5);
+            const maxDuration = Number(card.dataset.bubbleDurationMax || 11);
+            const spawnInterval = Number(card.dataset.bubbleInterval || 200);
+            const initialCount = Math.max(1, Number(card.dataset.bubbleInitial || 18));
+
+            let intervalId = null;
+            let running = false;
+
+            const spawnBubble = (isInitial = false) => {
+                if (!document.body.contains(card)) return;
+                const bubble = document.createElement('span');
+                bubble.className = 'selection-bubble';
+
+                const size = Math.random() * (maxSize - minSize) + minSize;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${Math.random() * 100}%`;
+
+                const duration = Math.random() * (maxDuration - minDuration) + minDuration;
+                bubble.style.animationDuration = `${duration}s`;
+                const delay = isInitial ? Math.random() * 1.2 : Math.random() * 1.8;
+                bubble.style.animationDelay = `${delay}s`;
+
+                bubble.style.backgroundColor = color;
+                bubble.style.setProperty('--bubble-opacity', (Math.random() * 0.35 + 0.35).toFixed(2));
+
+                bubble.addEventListener('animationend', () => bubble.remove());
+                container.appendChild(bubble);
+                return bubble;
+            };
+
+            const start = () => {
+                if (running) return;
+                running = true;
+                container.innerHTML = '';
+                const firstBubble = spawnBubble(false);
+                if (firstBubble) {
+                    firstBubble.style.animationDelay = '0s';
+                }
+                for (let i = 1; i < initialCount; i++) {
+                    spawnBubble(true);
+                }
+                intervalId = window.setInterval(() => spawnBubble(false), spawnInterval);
+            };
+
+            const stop = () => {
+                if (!running) return;
+                running = false;
+                if (intervalId !== null) {
+                    window.clearInterval(intervalId);
+                    intervalId = null;
+                }
+                container.innerHTML = '';
+            };
+
+            return { start, stop };
+        }
+
+        function toggleSelectionBubbles(shouldRun) {
+            selectionBubbleEffects.forEach(effect => {
+                if (!effect) return;
+                if (shouldRun) {
+                    effect.start();
+                } else {
+                    effect.stop();
+                }
+            });
+        }
+
+        function initSelectionBubbleEffects() {
+            selectionModeCards.forEach(card => {
+                const effect = createSelectionBubbleEffect(card);
+                selectionBubbleEffects.push(effect);
+            });
+            toggleSelectionBubbles(true);
+        }
+
+        initSelectionBubbleEffects();
 
         // --- Loading Messages ---
         const loadingMessages = {
@@ -441,6 +571,7 @@
         // --- View & State Management ---
         function selectMode(mode) {
             appState.mode = mode;
+            toggleSelectionBubbles(false);
             resetState();
             appState.qaQuestionCount = 0;
             appState.isMaxQaReached = false;
@@ -479,6 +610,7 @@
                 selectionView.classList.remove('hidden');
                 setTimeout(() => {
                     selectionView.classList.remove('opacity-0', 'scale-95');
+                    toggleSelectionBubbles(true);
                 }, 50);
                 resetState();
                 resetUI();
