@@ -16,6 +16,43 @@
                 line-height: inherit;
                 margin: 0;
                 overflow-x: hidden;
+                background-color: #E2D1C3; /* #1005庭婕這裡改了背景為暖黃色 */
+            }
+            #webcrumbs .warm-shell {
+                background-color: #E2D1C3; /* #1005庭婕這裡新增頁面暖黃色主底 */
+            }
+            #webcrumbs .warm-surface {
+                background-color: #EFE0D2; /* #1005庭婕這裡統一卡片改為暖黃色調 */
+            }
+            #webcrumbs .warm-cta {
+                background-color: #E2D1C3; /* #1005庭婕這裡將主要按鈕套用暖黃色 */
+                color: #3F2B1E;
+                border: 1px solid #CDB59F;
+            }
+            #webcrumbs .warm-cta:hover {
+                background-color: #D7C0AE; /* #1005庭婕這裡設定暖黃色按鈕滑過效果 */
+                color: #2B1C13;
+            }
+            #webcrumbs .warm-divider {
+                border-bottom: 1px solid rgba(205, 181, 159, 0.6); /* #1005庭婕這裡統一分隔線暖色 */
+            }
+            #webcrumbs .warm-border {
+                border: 1px solid rgba(205, 181, 159, 0.6); /* #1005庭婕這裡把框線改成暖色 */
+            }
+            #webcrumbs .warm-note {
+                background-color: rgba(226, 209, 195, 0.8); /* #1005庭婕這裡新增提醒區塊用暖黃色半透明 */
+            }
+            #webcrumbs .warm-menu {
+                background-color: rgba(226, 209, 195, 0.95); /* #1005庭婕這裡調整下拉選單為柔和暖色 */
+                border: none; /* #1005庭婕這裡拿掉深色框線 */
+                box-shadow: 0 8px 20px rgba(63, 43, 30, 0.08); /* #1005庭婕這裡加上淡淡陰影 */
+            }
+            #webcrumbs .warm-menu-link {
+                color: #3F2B1E; /* #1005庭婕這裡設定下拉選項文字為暖色系 */
+            }
+            #webcrumbs .warm-menu-link:hover {
+                background-color: rgba(205, 181, 159, 0.35); /* #1005庭婕這裡讓下拉選項滑過保持輕盈 */
+                color: #2B1C13;
             }
             img {
                 max-width: 100%;
@@ -45,6 +82,7 @@
             #webcrumbs .mb-2 { margin-bottom: 8px; }
             #webcrumbs .mb-4 { margin-bottom: 16px; }
             #webcrumbs .mb-6 { margin-bottom: 24px; }
+            #webcrumbs .mb-7 { margin-bottom: 28px; }
             #webcrumbs .mb-8 { margin-bottom: 32px; }
             #webcrumbs .ml-1 { margin-left: 4px; }
             #webcrumbs .ml-2 { margin-left: 8px; }
@@ -377,7 +415,7 @@
                 #webcrumbs .lg\:max-w-3xl { max-width: 48rem; }
             }
         </style>
-        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+        <link rel="icon" href="favicon.ico" />
         <link rel="apple-touch-icon" sizes="192x192" href="https://cdn.webcrumbs.org/assets/images/landing/logo192.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="https://cdn.webcrumbs.org/assets/images/landing/logo512.png" />
         <meta name="theme-color" content="#ffffff" />
@@ -387,22 +425,14 @@
     </head>
     <body>
         <div id="webcrumbs">
-            <div class="max-w-[1200px] w-full bg-gray-50 font-sans mx-auto">
-                <header class="bg-white py-4 px-6 sm:px-2 flex justify-between items-center border-b border-gray-100">
+            <div class="max-w-[1200px] w-full font-sans mx-auto warm-shell">
+                <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
                     <div class="flex items-center">
-                        <svg class="h-6 w-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2C14.5 2 16.5 4 16.5 6.5C16.5 9 14.5 11 12 11C9.5 11 7.5 9 7.5 6.5C7.5 4 9.5 2 12 2Z"></path>
-                            <path d="M5 20C5 16.5 8 14 12 14C16 14 19 16.5 19 20"></path>
-                            <path d="M12 14L12 22M9 17L15 19M9 19L15 17"></path>
-                        </svg>
-                        <h1 class="ml-2 text-xl font-medium">Meow Yourself</h1>
+                        <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" class="h-6 w-auto" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
                     </div>
                     <nav class="hidden md:flex space-x-6">
                         <a href="{{ url_for('home') }}" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
                             <span class="material-symbols-outlined mr-1">home</span> 首頁
-                        </a>
-                        <a href="#" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
-                            <span class="material-symbols-outlined mr-1">pets</span> 我的貓咪
                         </a>
                     </nav>
                     <div class="flex items-center">
@@ -410,23 +440,30 @@
                             <summary class="list-none flex items-center cursor-pointer">
                                 <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" class="h-8 w-8 rounded-full border border-gray-200 hover:border-gray-400 transition-all duration-200" alt="Profile" />
                             </summary>
-                            <div id="profile-menu" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-sm py-1 z-10 border border-gray-100">
-                                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-200">登出</a>
+                            <div id="profile-menu" class="absolute right-0 mt-2 w-40 rounded shadow-sm py-1 z-10 border border-gray-100 warm-surface warm-menu">
+                                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">登出</a>
                             </div>
                         </details>
                     </div>
                 </header>
                 <main class="p-6 sm:p-4">
                     <div class="flex flex-col items-center justify-center min-h-[80vh] max-w-4xl sm:max-w-full mx-auto">
-                        <h1 class="text-4xl sm:text-3xl md:text-5xl font-bold mb-6 text-center">上傳健康報告</h1>
-                        <p class="text-xl sm:text-lg text-gray-600 mb-8 text-center max-w-2xl sm:max-w-full">
+                        <h1 class="text-3xl sm:text-2xl md:text-4xl font-bold mb-4 text-center">上傳健康報告</h1>
+                        <p class="text-lg sm:text-base text-gray-600 mb-6 text-center max-w-2xl sm:max-w-full">
                             請上傳您的健康報告（PDF 或 JPG/PNG 格式，最大 10MB）
                         </p>
+                        
+                        <!-- 上傳頁免責聲明 -->
+                        <div class="w-full max-w-4xl sm:max-w-full mb-6">
+                            <div class="bg-amber-100 warm-border text-amber-900 rounded-xl px-5 py-3 text-sm text-center leading-relaxed">
+                                <strong>【特別提醒】</strong> 本測驗僅為娛樂與參考，並非醫療建議。若有任何身心困擾，請尋求專業協助。
+                            </div>
+                        </div>
+                        
                         {% if auto_redirect %}
-                        <!-- 已有報告時顯示重新上傳選項並自動導向心理測驗 -->
-                        <div class="w-full max-w-3xl sm:max-w-full mb-8 text-center">
-                            <div class="inline-block bg-white/70 border border-gray-200 text-gray-700 rounded-2xl px-6 py-4 text-base leading-relaxed shadow-sm">
-                                <p class="mb-3" style="font-size: 200%;">已找到您最近一次的健檢報告，系統將為您跳轉至心理測驗。</p>
+                        <div class="w-full max-w-3xl sm:max-w-full mb-7 text-center">
+                            <div class="inline-block warm-note warm-border text-gray-700 rounded-2xl px-6 py-4 text-sm leading-relaxed shadow-sm">
+                                <p class="mb-2 text-lg font-semibold">已找到您最近一次的健檢報告，系統將為您跳轉至心理測驗。</p>
                                 <a href="{{ url_for('upload_health', reupload=1) }}" class="button-reupload">
                                     <span class="paw-icon" aria-hidden="true">🐾</span>
                                     <span class="button-text">我要重新上傳報告</span>
@@ -437,34 +474,13 @@
                         <script>
                             setTimeout(function () {
                                 window.location.href = {{ psychology_url|tojson }};
-                            }, 3000);
+                            }, 2500);
                         </script>
-                        {% endif %}
-                        <!-- 上傳頁免責聲明 -->
-                        <div class="w-full max-w-4xl sm:max-w-full mb-8">
-                            <div class="bg-amber-100 border border-amber-300 text-amber-900 rounded-xl px-6 py-4 text-sm text-center leading-relaxed">
-                                <strong>【特別提醒】</strong> 本測驗僅為娛樂與參考，並非醫療建議。若有任何身心困擾，請尋求專業協助。
-                            </div>
-                        </div>
-                        {% if force_reupload %}
-                        <!-- 提醒使用者正在重新上傳 -->
-                        <div class="w-full max-w-3xl sm:max-w-full mb-6">
-                            <div class="bg-white/80 border border-gray-200 text-gray-700 rounded-xl px-5 py-3 text-sm text-center">
-                                您選擇重新上傳健檢報告，提交後將覆蓋最新紀錄。
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% if not auto_redirect %}
-                        <div class="bg-white rounded-lg shadow-sm p-6 max-w-md w-full sm:max-w-full">
-                            {% if error %}
-                            <p class="text-sm text-red-600 mb-4 text-center">{{ error }}</p>
-                            {% endif %}
-                            {% for category, message in get_flashed_messages(with_categories=true) %}
-                            <p class="text-sm {% if category == 'error' %}text-red-600{% elif category == 'warning' %}text-yellow-600{% else %}text-green-600{% endif %} mb-4 text-center">{{ message }}</p>
-                            {% endfor %}
-                            <form method="POST" action="{{ url_for('upload_health') }}" enctype="multipart/form-data" class="space-y-6">
+                        {% else %}
+                        <div class="warm-surface rounded-lg shadow-sm p-5 max-w-md w-full sm:max-w-full text-sm">
+                            <form method="POST" action="#" enctype="multipart/form-data" class="space-y-6">
                                 <div>
-                                    <label class="block text-sm font-medium mb-2">選擇檔案或拍照上傳</label>
+                                    <label class="block text-sm font-medium mb-2 text-center">選擇檔案或拍照上傳</label>
                                     
                                     <!-- 上傳區域 -->
                                     <div class="upload-section" onclick="triggerFileInput()">
@@ -505,20 +521,10 @@
                                     </div>
                                 </div>
                                 
-                                <button type="submit" class="w-full py-3 px-4 bg-gray-700 text-white rounded hover:bg-gray-800 transition-colors duration-300 mt-8">
+                                <button type="submit" class="w-full py-3 px-4 rounded warm-cta transition-colors duration-300 mt-8">
                                     上傳健康報告
                                 </button>
                             </form>
-                            
-                            <!-- 顯示健康分析結果 -->
-                            {% if get_flashed_messages(with_categories=true) %}
-                            <div class="mt-6 bg-white rounded-lg shadow-sm p-6 max-w-md w-full sm:max-w-full">
-                                <h2 class="text-xl font-bold mb-4">健康報告分析結果</h2>
-                                {% for category, message in get_flashed_messages(with_categories=true) %}
-                                <p class="text-sm {% if category == 'error' %}text-red-600{% elif category == 'warning' %}text-yellow-600{% else %}text-green-600{% endif %} mb-2">{{ message }}</p>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
                         </div>
                         {% endif %}
                     </div>
@@ -637,7 +643,7 @@
             }
 
             // 監聽表單提交
-            const uploadForm = document.querySelector('form[action="{{ url_for("upload_health") }}"]');
+            const uploadForm = document.querySelector('form[action="#"]');
             if (uploadForm) {
                 uploadForm.addEventListener('submit', (e) => {
                     // 檢查是否有選擇檔案
@@ -661,17 +667,9 @@
                 });
             }
 
-            // 如果有自動跳轉，顯示 loading
-            {% if auto_redirect %}
-            showLoading('正在為您跳轉至心理測驗...');
-            {% endif %}
-
             // 頁面載入完成後，隱藏可能殘留的 loading
             window.addEventListener('load', () => {
-                // 如果不是自動跳轉的情況，確保 loading 是隱藏的
-                {% if not auto_redirect %}
                 hideLoading();
-                {% endif %}
             });
         </script>
     </body>

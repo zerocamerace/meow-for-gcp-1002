@@ -4,6 +4,7 @@ import os
 import time
 from io import BytesIO
 from PIL import Image
+
 # 🟢 修改（google-genai）：切換到新的 google-genai 套件
 from google import genai
 from google.genai import types as genai_types
@@ -90,9 +91,11 @@ def _generate_gemini_content(parts, generation_config=None):
         raise last_error
     raise RuntimeError("Gemini API returned empty response for all candidate models")
 
+
 # Global variables to store health standards and alias mappings
 HEALTH_STANDARDS = {}
 HEALTH_ALIASES = {}
+
 
 def load_health_standards():
     """Load health standards from a JSON file and create an alias mapping."""
@@ -101,23 +104,27 @@ def load_health_standards():
         with open(HEALTH_STANDARDS_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
             HEALTH_STANDARDS = data.get("health_standards", {})
-        
+
         # Create a reverse mapping from aliases to standard keys
         for key, value in HEALTH_STANDARDS.items():
-            if 'aliases' in value and isinstance(value['aliases'], list):
-                for alias in value['aliases']:
+            if "aliases" in value and isinstance(value["aliases"], list):
+                for alias in value["aliases"]:
                     HEALTH_ALIASES[alias.strip().lower()] = key
-        
+
         logging.debug(f"Health standards loaded: {list(HEALTH_STANDARDS.keys())}")
         logging.debug(f"Alias mapping created: {list(HEALTH_ALIASES.keys())}")
     except FileNotFoundError:
-        logging.error(f"Failed to load health standards: {HEALTH_STANDARDS_FILE} not found.")
+        logging.error(
+            f"Failed to load health standards: {HEALTH_STANDARDS_FILE} not found."
+        )
         raise
     except Exception as e:
         logging.error(f"Failed to load health standards: {e}")
         raise
 
+
 load_health_standards()
+
 
 # --- 3. Core Function Modules ---
 def extract_pdf_text(pdf_data):
@@ -132,6 +139,7 @@ def extract_pdf_text(pdf_data):
     except Exception as e:
         logging.error(f"Failed to extract PDF text: {str(e)}")
         return None
+
 
 def get_gemini_prompt(user_uid, file_type, gender):
     """根據文件類型和性別生成 Gemini 提示"""
@@ -181,11 +189,12 @@ def get_gemini_prompt(user_uid, file_type, gender):
         return f"{base_prompt}\n以下是健檢報告的文本內容："
     return base_prompt
 
+
 def analyze_image_with_gemini(image_data, user_uid, gender):
     """分析圖片並返回健康數據"""
     logging.info("Sending image to Gemini for analysis...")
     prompt = get_gemini_prompt(user_uid, "image", gender)
-    
+
     try:
         img = Image.open(BytesIO(image_data))
         if img.format not in ["JPEG", "PNG"]:
@@ -201,10 +210,12 @@ def analyze_image_with_gemini(image_data, user_uid, gender):
             data=image_buffer.getvalue(), mime_type=f"image/{img.format.lower()}"
         )
 
-        response = _generate_gemini_content([
-            prompt,
-            image_part,
-        ])
+        response = _generate_gemini_content(
+            [
+                prompt,
+                image_part,
+            ]
+        )
 
         logging.info("Gemini image analysis complete, processing returned data...")
         gemini_output_str = (
@@ -229,6 +240,7 @@ def analyze_image_with_gemini(image_data, user_uid, gender):
         logging.error(f"Failed to analyze image with Gemini: {str(e)}")
         return None
 
+
 def analyze_pdf_with_gemini(pdf_data, user_uid, gender):
     """分析 PDF 並返回健康數據"""
     logging.info("Sending PDF text to Gemini for analysis...")
@@ -238,7 +250,7 @@ def analyze_pdf_with_gemini(pdf_data, user_uid, gender):
         return None
 
     prompt = get_gemini_prompt(user_uid, "pdf", gender)
-    
+
     try:
         response = _generate_gemini_content([prompt, text])
 
@@ -265,19 +277,20 @@ def analyze_pdf_with_gemini(pdf_data, user_uid, gender):
         logging.error(f"Failed to analyze PDF with Gemini: {str(e)}")
         return None
 
+
 def calculate_health_score(vital_stats, gender=None):
     """
     根據健檢數據與分級標準計算分數。
     A級扣5分、B級扣10分、C級扣15分，滿分100分最低1分。
-    
+
     Args:
         vital_stats (dict): 從健檢報告提取的數據。
         gender (str, optional): 使用者的性別，'male' 或 'female'。
     """
     score = 100
     warnings = []
-    
-    gender_key = gender.lower() if gender in ['male', 'female'] else None
+
+    gender_key = gender.lower() if gender in ["male", "female"] else None
 
     # Helper function to get numeric value, also handles qualitative text
     def get_numeric_value(val):
@@ -285,10 +298,14 @@ def calculate_health_score(vital_stats, gender=None):
             return val
         if isinstance(val, str):
             val_lower = val.strip().lower()
-            if val_lower in ["負", "negative", "(-)", "-"]: return 0
-            if val_lower in ["+/-", "+"]: return 1
-            if val_lower in ["++", "+++"]: return 2
-            if val_lower == "++++": return 3
+            if val_lower in ["負", "negative", "(-)", "-"]:
+                return 0
+            if val_lower in ["+/-", "+"]:
+                return 1
+            if val_lower in ["++", "+++"]:
+                return 2
+            if val_lower == "++++":
+                return 3
         try:
             return float(val)
         except (ValueError, TypeError):
@@ -296,17 +313,17 @@ def calculate_health_score(vital_stats, gender=None):
 
     for key, value in vital_stats.items():
         standard_info = HEALTH_STANDARDS.get(key)
-        
-        if not standard_info or value is None or 'grades' not in standard_info:
+
+        if not standard_info or value is None or "grades" not in standard_info:
             continue
-        
+
         grade = None
         grades_to_check = None
-        
-        if gender_key and gender_key in standard_info['grades']:
-            grades_to_check = standard_info['grades'][gender_key]
-        elif 'general' in standard_info['grades']:
-            grades_to_check = standard_info['grades']['general']
+
+        if gender_key and gender_key in standard_info["grades"]:
+            grades_to_check = standard_info["grades"][gender_key]
+        elif "general" in standard_info["grades"]:
+            grades_to_check = standard_info["grades"]["general"]
         else:
             continue
 
@@ -327,29 +344,47 @@ def calculate_health_score(vital_stats, gender=None):
                     if value_lower in [t.strip().lower() for t in thresholds]:
                         grade = grade_level
                         break
-        
+
         if grade == "A":
             score -= 5
-            warnings.append(f"{standard_info.get('name', key)} 數值為 A 級 ({value})，超過正常範圍")
+            warnings.append(
+                f"{standard_info.get('name', key)} 數值為 A 級 ({value})，超過正常範圍"
+            )
         elif grade == "B":
             score -= 10
-            warnings.append(f"{standard_info.get('name', key)} 數值為 B 級 ({value})，顯著超出正常範圍")
+            warnings.append(
+                f"{standard_info.get('name', key)} 數值為 B 級 ({value})，顯著超出正常範圍"
+            )
         elif grade == "C":
             score -= 15
-            warnings.append(f"{standard_info.get('name', key)} 數值為 C 級 ({value})，嚴重超出正常範圍")
+            warnings.append(
+                f"{standard_info.get('name', key)} 數值為 C 級 ({value})，嚴重超出正常範圍"
+            )
 
     # 綜合性三高判斷 - 修正為根據數值判斷，而非警告訊息
     three_high_count = 0
     glucose_val = vital_stats.get("glucose")
-    if glucose_val is not None and get_numeric_value(glucose_val) is not None and get_numeric_value(glucose_val) >= 100:
+    if (
+        glucose_val is not None
+        and get_numeric_value(glucose_val) is not None
+        and get_numeric_value(glucose_val) >= 100
+    ):
         three_high_count += 1
     tcho_val = vital_stats.get("total_cholesterol")
-    if tcho_val is not None and get_numeric_value(tcho_val) is not None and get_numeric_value(tcho_val) >= 200:
+    if (
+        tcho_val is not None
+        and get_numeric_value(tcho_val) is not None
+        and get_numeric_value(tcho_val) >= 200
+    ):
         three_high_count += 1
     sys_bp_val = vital_stats.get("blood_pressure_systolic")
-    if sys_bp_val is not None and get_numeric_value(sys_bp_val) is not None and get_numeric_value(sys_bp_val) >= 130:
+    if (
+        sys_bp_val is not None
+        and get_numeric_value(sys_bp_val) is not None
+        and get_numeric_value(sys_bp_val) >= 130
+    ):
         three_high_count += 1
-            
+
     if three_high_count == 1:
         score -= 5
         warnings.append("符合「一高」條件，額外扣 5 分。")
@@ -362,9 +397,10 @@ def calculate_health_score(vital_stats, gender=None):
 
     if score < 1:
         score = 1
-    
+
     logging.debug(f"Health score: {score}, Warnings: {warnings}")
     return score, warnings
+
 
 # 新增生理性別參數
 def analyze_health_report(file_data, user_id, file_type, gender):
