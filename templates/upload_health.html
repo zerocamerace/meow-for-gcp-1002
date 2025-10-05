@@ -198,6 +198,64 @@
                 background-color: #f3f4f6;
             }
 
+            /* GALING 避免傳非健檢報告 10/5 */
+            .invalid-report-card {
+                background-color: #fff7ed;
+                border: 1px solid #fdba74;
+                border-radius: 18px;
+                padding: 24px;
+                margin-bottom: 24px;
+                box-shadow: 0 8px 16px rgba(253, 186, 116, 0.15);
+                text-align: center;
+            }
+            /* GALING 避免傳非健檢報告 10/5 */
+            .invalid-report-message {
+                font-size: 1.15rem;
+                font-weight: 600;
+                color: #a16207;
+            }
+            /* GALING 避免傳非健檢報告 10/5 */
+            .invalid-report-actions {
+                display: flex;
+                justify-content: center;
+                gap: 12px;
+                margin-top: 18px;
+                flex-wrap: wrap;
+            }
+            /* GALING 避免傳非健檢報告 10/5 */
+            .btn-invalid-primary, .btn-invalid-secondary {
+                padding: 10px 18px;
+                border-radius: 999px;
+                font-weight: 600;
+                font-size: 0.95rem;
+                transition: all 0.2s ease;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+            }
+            /* GALING 避免傳非健檢報告 10/5 */
+            .btn-invalid-primary {
+                background: linear-gradient(90deg, #4b5563, #1f2937);
+                color: #ffffff;
+                box-shadow: 0 4px 10px rgba(31, 41, 55, 0.2);
+            }
+            /* GALING 避免傳非健檢報告 10/5 */
+            .btn-invalid-primary:hover {
+                background: linear-gradient(90deg, #1f2937, #111827);
+            }
+            /* GALING 避免傳非健檢報告 10/5 */
+            .btn-invalid-secondary {
+                background-color: #fff;
+                color: #374151;
+                border: 1px solid #d1d5db;
+            }
+            /* GALING 避免傳非健檢報告 10/5 */
+            .btn-invalid-secondary:hover {
+                border-color: #9ca3af;
+                color: #1f2937;
+            }
+
             .button-reupload {
                 display: inline-flex;
                 align-items: center;
@@ -455,11 +513,30 @@
                         </div>
                         {% endif %}
                         {% if not auto_redirect %}
+                        {% set flashed_messages = get_flashed_messages(with_categories=true) %}
+                        {% set msg_ns = namespace(invalid_message=None, general=[]) %}
+                        {% for category, message in flashed_messages %}
+                            {% if category == 'invalid_report' %}
+                                {% set msg_ns.invalid_message = message %}
+                            {% else %}
+                                {% set _ = msg_ns.general.append((category, message)) %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if invalid_report_prompt %}
+                        <!-- GALING 避免傳非健檢報告 10/5 -->
+                        <div class="invalid-report-card" role="alert">
+                            <p class="invalid-report-message">{{ msg_ns.invalid_message or 'Sorry喵，系統未讀取到健檢報告相關數據' }}</p>
+                            <div class="invalid-report-actions">
+                                <a class="btn-invalid-secondary" href="{{ url_for('upload_health', reupload=1) }}">繼續重新上傳</a>
+                                <a class="btn-invalid-primary" href="{{ url_for('psychology_test') }}">使用既有報告</a>
+                            </div>
+                        </div>
+                        {% endif %}
                         <div class="bg-white rounded-lg shadow-sm p-6 max-w-md w-full sm:max-w-full">
                             {% if error %}
                             <p class="text-sm text-red-600 mb-4 text-center">{{ error }}</p>
                             {% endif %}
-                            {% for category, message in get_flashed_messages(with_categories=true) %}
+                            {% for category, message in msg_ns.general %}
                             <p class="text-sm {% if category == 'error' %}text-red-600{% elif category == 'warning' %}text-yellow-600{% else %}text-green-600{% endif %} mb-4 text-center">{{ message }}</p>
                             {% endfor %}
                             <form method="POST" action="{{ url_for('upload_health') }}" enctype="multipart/form-data" class="space-y-6">
@@ -511,10 +588,10 @@
                             </form>
                             
                             <!-- 顯示健康分析結果 -->
-                            {% if get_flashed_messages(with_categories=true) %}
+                            {% if msg_ns.general %}
                             <div class="mt-6 bg-white rounded-lg shadow-sm p-6 max-w-md w-full sm:max-w-full">
                                 <h2 class="text-xl font-bold mb-4">健康報告分析結果</h2>
-                                {% for category, message in get_flashed_messages(with_categories=true) %}
+                                {% for category, message in msg_ns.general %}
                                 <p class="text-sm {% if category == 'error' %}text-red-600{% elif category == 'warning' %}text-yellow-600{% else %}text-green-600{% endif %} mb-2">{{ message }}</p>
                                 {% endfor %}
                             </div>

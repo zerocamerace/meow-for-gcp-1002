@@ -188,7 +188,8 @@
                 #webcrumbs .lg\:max-w-3xl { max-width: 48rem; }
             }
         </style>
-        <link rel="manifest" href="/manifest.json" />
+        <!-- GALING 10/5 新增manifest.json -->
+        <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}" />
         <link rel="icon" href="https://cdn.webcrumbs.org/assets/images/landing/favicon.ico" />
         <link rel="apple-touch-icon" sizes="192x192" href="https://cdn.webcrumbs.org/assets/images/landing/logo192.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="https://cdn.webcrumbs.org/assets/images/landing/logo512.png" />
