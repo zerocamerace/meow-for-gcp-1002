@@ -1,4 +1,4 @@
-import json
+﻿import json
 import logging
 import os
 import time
@@ -118,6 +118,40 @@ def load_health_standards():
         raise
 
 load_health_standards()
+
+# GALING 避免傳非健檢報告 10/5
+def _is_valid_metric_value(value):
+    if value is None:
+        return False
+    if isinstance(value, (int, float)):
+        return True
+    if isinstance(value, str):
+        cleaned = value.strip().lower()
+        if not cleaned:
+            return False
+        invalid_tokens = {
+            'null', 'n/a', 'na', 'none', 'unknown', '未提供', '未檢測', '未測', '無', '無資料', 'n.d.', '-', '—'
+        }
+        if cleaned in invalid_tokens:
+            return False
+        qualitative_tokens = {
+            'positive', 'negative', '+', '-', '+/-', '++', '+++', '++++', '陽性', '陰性', 'trace', '微量'
+        }
+        if cleaned in qualitative_tokens:
+            return True
+        if any(ch.isdigit() for ch in cleaned):
+            return True
+    return False
+
+# GALING 避免傳非健檢報告 10/5
+def _count_recognized_metrics(vital_stats):
+    if not isinstance(vital_stats, dict):
+        return 0
+    recognized = 0
+    for key, value in vital_stats.items():
+        if key in HEALTH_STANDARDS and _is_valid_metric_value(value):
+            recognized += 1
+    return recognized
 
 # --- 3. Core Function Modules ---
 def extract_pdf_text(pdf_data):
@@ -377,18 +411,26 @@ def analyze_health_report(file_data, user_id, file_type, gender):
         gemini_data = analyze_pdf_with_gemini(file_data, user_id, gender)
     else:
         logging.error(f"Unsupported file type: {file_type}")
-        return None, 0, []
+        return None, 0, [], 0
 
     if not gemini_data:
         logging.warning("No data returned from Gemini analysis")
-        return None, 0, []
+        return None, 0, [], 0
+
+    # GALING 避免傳非健檢報告 10/5
+    vital_stats = gemini_data.get("vital_stats", {})
+    recognized_metric_count = _count_recognized_metrics(vital_stats)
+    if recognized_metric_count <= 0:
+        logging.warning("No recognizable health metrics found in report")
+        return None, 0, [], 0
 
     # Example: In a real app, 'gender' would come from the user's profile
     health_score, health_warnings = calculate_health_score(
-        gemini_data.get("vital_stats", {}), gender=gender
+        vital_stats, gender=gender
     )
     logging.debug(
-        f"Health score calculated: {health_score}, warnings: {health_warnings}"
+        f"Health score calculated: {health_score}, warnings: {health_warnings}, matched_metrics: {recognized_metric_count}"
     )
 
-    return gemini_data, health_score, health_warnings
+    return gemini_data, health_score, health_warnings, recognized_metric_count
+

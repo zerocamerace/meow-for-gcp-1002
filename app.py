@@ -934,9 +934,9 @@ def upload_health():
     has_existing_report = bool(existing_reports)
 
     auto_redirect = False
-    if has_existing_report and not reupload_requested and request.method == "GET":
-        logging.debug("Existing health report found; enabling auto redirect to psychology_test")
-        auto_redirect = True
+    invalid_report_prompt = session.pop('invalid_report_prompt', False)
+    if invalid_report_prompt:
+        auto_redirect = False
     # 🟢 修改結束
 
     if request.method == "POST":
@@ -975,23 +975,31 @@ def upload_health():
 
         # 分析健康報告
         logging.debug("Starting health report analysis...")
+        recognized_metric_count = 0
         try:
             file.seek(0)  # 重置檔案指針
             file_data = file.read()
             file_type = "image" if is_image else "pdf"
-            analysis_data, health_score, health_warnings = analyze_health_report(
+            analysis_data, health_score, health_warnings, recognized_metric_count = analyze_health_report(
                 file_data, user_id, file_type, gender=user_gender  # 🟢 修改：將生理性別傳遞至分析模組
             )
             logging.debug(
-                f"Analysis result - data: {analysis_data is not None}, score: {health_score}, warnings: {len(health_warnings)}"
+                f"Analysis result - data: {analysis_data is not None}, score: {health_score}, warnings: {len(health_warnings)}, matched_metrics: {recognized_metric_count}"
             )
-            if not analysis_data:
-                logging.warning("Health report analysis returned no data")
-                flash("健康報告分析失敗，請確保檔案包含清晰數據！", "warning")
+            # GALING 避免傳非健檢報告 10/5
+            if recognized_metric_count <= 0 or not analysis_data:
+                logging.warning("No recognizable health metrics were extracted; prompting re-upload")
+                try:
+                    blob.delete()
+                except Exception as cleanup_error:
+                    logging.warning(f"Failed to delete invalid upload: {cleanup_error}")
+                session['invalid_report_prompt'] = True
+                flash("Sorry喵，系統未讀取到健檢報告相關數據", "invalid_report")
+                return redirect(url_for('upload_health'))
         except Exception as analysis_e:
             logging.error(f"Health report analysis failed: {str(analysis_e)}")
             flash(f"健康報告分析失敗：{str(analysis_e)}", "warning")
-            analysis_data, health_score, health_warnings = None, 0, []
+            analysis_data, health_score, health_warnings, recognized_metric_count = None, 0, [], 0
 
         # 準備 Firestore 文檔
         health_report_doc = {
@@ -1043,6 +1051,7 @@ def upload_health():
         force_reupload=reupload_requested,
         has_existing_report=has_existing_report,
         auto_redirect=auto_redirect,
+        invalid_report_prompt=invalid_report_prompt,
         psychology_url=url_for("psychology_test"),
     )
 

@@ -1,0 +1,22 @@
+﻿{
+  "name": "貓咪談心室",
+  "short_name": "談心室",
+  "description": "陪你與喵奶奶、喵記者一起談心的情緒陪伴平台",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FDFCFB",
+  "theme_color": "#A491D3",
+  "icons": [
+    {
+      "src": "/static/window.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/static/window.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    }
+  ]
+}

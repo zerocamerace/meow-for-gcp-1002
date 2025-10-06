@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>貓咪談心室</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GALING 把Tailwind那支JS擺到static資料夾 10/05 -->
+    <script src="{{ url_for('static', filename='tailwind-3.4.17.js') }}"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -98,6 +99,167 @@
             resize: none;
             overflow-y: hidden;
         }
+
+        .selection-mode-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .selection-mode-card > *:not(.selection-bubble-container) {
+            position: relative;
+            z-index: 1;
+        }
+        .selection-bubble-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .selection-bubble {
+            position: absolute;
+            bottom: -80px;
+            border-radius: 9999px;
+            background: rgba(209, 196, 233, 0.45);
+            box-shadow: 0 0 18px rgba(255, 255, 255, 0.35);
+            transform: translateY(0) scale(0.7);
+            opacity: 0;
+            animation: selectionBubbleFloat linear forwards;
+        }
+        @keyframes selectionBubbleFloat {
+            0% {
+                transform: translateY(0) scale(0.6);
+                opacity: 0;
+            }
+            20% {
+                opacity: var(--bubble-opacity, 0.6);
+            }
+            100% {
+                transform: translateY(-120%) scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        /* GALING 品牌介紹視窗彈出10/04 */
+        .brand-intro-modal {
+            background: rgba(32, 24, 50, 0.72);
+        }
+        /* GALING 品牌介紹視窗彈出10/04 */
+        .brand-intro-card {
+            max-width: 480px;
+            width: min(92%, 480px);
+            background: #fff8f3;
+        }
+        /* GALING 品牌介紹視窗彈出10/04 */
+        .brand-intro-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* GALING 調整喵奶奶頭像52px/48px 10/04 */
+        .grandma-avatar, .reporter-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 9999px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        @media (max-width: 640px) {
+            /* GALING 調整喵奶奶頭像52px/48px 10/04 */
+            .grandma-avatar, .reporter-avatar {
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        /* GALING 10/04 按鈕動畫統一設定 */
+        .paw-button {
+            background: none;
+            border: none;
+            padding: 4px;
+            line-height: 0;
+            cursor: pointer;
+            transition: transform 0.12s ease-in-out;
+            flex-shrink: 0;
+        }
+        .paw-button:focus-visible {
+            outline: 2px solid var(--accent-primary);
+            outline-offset: 2px;
+        }
+        .paw-button[disabled] {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        .send-icon {
+            display: block;
+            width: 40px;
+            height: 40px;
+            font-size: 32px;
+            line-height: 40px;
+            text-align: center;
+        }
+        .send-icon.paw {
+            color: #A491D3;
+        }
+        .send-icon.mic {
+            color: #FF9AA2;
+        }
+        .paw-button[disabled] .send-icon {
+            color: #d5c8f0;
+        }
+        @keyframes bounce-stamp {
+            0% { transform: translateY(0) scale(1); }
+            30% { transform: translateY(6px) scale(0.9); }
+            60% { transform: translateY(-3px) scale(1.06); }
+            100% { transform: translateY(0) scale(1); }
+        }
+        .paw-button.is-sending .send-icon.paw {
+            animation: bounce-stamp 0.6s ease-out 1;
+        }
+        .paw-button.is-sending .send-icon.mic {
+            animation: spin 0.6s ease-out 1;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes grandma-avatar-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 99, 0.9); }
+            70% { transform: scale(1.08); box-shadow: 0 0 0 14px rgba(255, 215, 99, 0); }
+            100% { transform: scale(1); box-shadow: none; }
+        }
+        /* GALING 脈衝動畫 10-04 */
+        .grandma-avatar.is-speaking, .reporter-avatar.is-speaking {
+            animation: grandma-avatar-pulse 0.8s ease-out 1;
+        }
+
+        /* GALING 10/03 聊天文字調整 */
+        .chat-message {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        @media (min-width: 768px) {
+            .chat-message {
+                font-size: 17px;
+            }
+        }
+
+        /* GALING 10/02 對話框尺寸調大 */
+        .chat-input-wrapper {
+            width: min(100%, 420px);
+            margin: 0 auto;
+        }
+        /* GALING 10/02 對話框尺寸調大 */
+        #message-input, #send-button {
+            min-height: 56px;
+        }
+        @media (min-width: 768px) {
+            /* GALING 10/02 對話框尺寸調大 */
+            #message-input, #send-button {
+                min-height: 60px;
+            }
+        }
     </style>
 </head>
 <body class="text-[var(--text-primary)] flex items-center justify-center min-h-screen p-4">
@@ -107,8 +269,34 @@
         <!-- Mode Selection View -->
         <div id="selection-view" class="flex flex-col items-center justify-center h-full view-transition">
             <div class="text-center mb-12">
-                 <svg class="w-24 h-24 mx-auto text-purple-200 mb-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M15.5,14.5c-0.83,0-1.5-0.67-1.5-1.5s.67-1.5,1.5-1.5 s1.5,0.67,1.5,1.5S16.33,14.5,15.5,14.5z M8.5,14.5c-0.83,0-1.5-0.67-1.5-1.5s.67-1.5,1.5-1.5s1.5,0.67,1.5,1.5S9.33,14.5,8.5,14.5z M12,9.5C9.12,9.5,7.5,7.71,7.5,6C7.5,5.17,8.17,4.5,9,4.5c0.76,0,1.38,0.57,1.48,1.3c0.11,0.77,0.76,1.2,1.52,1.2s1.41-0.43,1.52-1.2 c0.1-0.73,0.72-1.3,1.48-1.3c0.83,0,1.5,0.67,1.5,1.5C16.5,7.71,14.88,9.5,12,9.5z"/></svg>
-                <h1 class="text-4xl md:text-5xl font-bold mb-2">貓咪談心室</h1>
+                 <!--<svg class="w-24 h-24 mx-auto text-purple-200 mb-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M15.5,14.5c-0.83,0-1.5-0.67-1.5-1.5s.67-1.5,1.5-1.5 s1.5,0.67,1.5,1.5S16.33,14.5,15.5,14.5z M8.5,14.5c-0.83,0-1.5-0.67-1.5-1.5s.67-1.5,1.5-1.5s1.5,0.67,1.5,1.5S9.33,14.5,8.5,14.5z M12,9.5C9.12,9.5,7.5,7.71,7.5,6C7.5,5.17,8.17,4.5,9,4.5c0.76,0,1.38,0.57,1.48,1.3c0.11,0.77,0.76,1.2,1.52,1.2s1.41-0.43,1.52-1.2 c0.1-0.73,0.72-1.3,1.48-1.3c0.83,0,1.5,0.67,1.5,1.5C16.5,7.71,14.88,9.5,12,9.5z"/></svg>-->
+                <!-- GALING 10/4 貓咪 Logo 區塊 (使用 SVG 繪製 - 增加眼睛和鬍鬚) 
+                 顏色已改為橘色 text-orange-400 -->
+            <div class="mb-4">
+                <svg class="w-20 h-20 text-orange-400 mx-auto transform hover:scale-110 transition duration-300" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 臉部主體 (Head) -->
+                    <circle cx="16" cy="18" r="10" fill="currentColor" fill-opacity="0.8" stroke="none"/>
+                    
+                    <!-- 左耳 (Left Ear) - 逆時針旋轉 45 度 (回到上一個旋轉版本)，Y 座標維持 11.7 -->
+                    <path d="M8 5.4 L12.5 11.7 L3.5 11.7 Z" fill="currentColor" transform="rotate(-50 8 12)"/>
+                    <!-- 右耳 (Right Ear) - 順時針旋轉 45 度 (回到上一個旋轉版本)，Y 座標維持 11.7 -->
+                    <path d="M24 5.4 L28.5 11.7 L19.5 11.7 Z" fill="currentColor" transform="rotate(50 24 12)"/>
+                    
+                    <!-- 眼睛 (Eyes - 深色圓點) -->
+                    <circle cx="12" cy="16" r="1.5" fill="#333" stroke="none"/>
+                    <circle cx="20" cy="16" r="1.5" fill="#333" stroke="none"/>
+                    
+                    <!-- 鼻子 (Nose - 小三角形) -->
+                    <path d="M16 18 L15 20 L17 20 Z" fill="#333" stroke="none"/>
+                    
+                    <!-- 鬍鬚 (Whiskers - 簡單線條) -->
+                    <line x1="20" y1="21" x2="28" y2="21" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
+                    <line x1="20" y1="23" x2="28" y2="24" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
+                    <line x1="12" y1="21" x2="4" y2="21" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
+                    <line x1="12" y1="23" x2="4" y2="24" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
+                </svg>
+            </div>
+                 <h1 class="text-4xl md:text-5xl font-bold mb-2">貓咪談心室</h1>
                 <p class="text-lg text-[var(--text-secondary)]">選一位貓咪朋友，開始你們的悄悄話時間。</p>
                 <!-- 🟢 修改開始：提供重新上傳健檢報告入口（強化外觀與新增貓爪 emoji） -->
                 <a href="{{ url_for('upload_health', reupload=1) }}" class="inline-flex items-center gap-4 mt-6 px-8 py-3.5 rounded-full text-base font-semibold text-gray-700 border border-transparent bg-white/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all" style="font-size: 200%;">
@@ -117,18 +305,20 @@
                 <!-- 🟢 修改結束 -->
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
-                <button onclick="selectMode('deep-chat')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6">
-                    <div class="bg-purple-100 p-4 rounded-full"><svg class="w-10 h-10 text-purple-500" viewBox="0 0 24 24" fill="currentColor"><path d="M19.78,11.73c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09C17.91,12.2,17.5,12.5,17,12.5c-0.46,0-0.86-0.26-1.06-0.64 c-0.33-0.63-0.01-1.41,0.62-1.74l0.16-0.08c-0.12-0.53-0.30-1.04-0.54-1.51c-0.78-1.52-2.02-2.76-3.54-3.54 c-0.47-0.24-0.98-0.42-1.51-0.54l-0.08,0.16c-0.33,0.63-1.11,0.95-1.74,0.62C8.6,7.14,8.34,6.74,8.34,6.27 c0-0.50,0.30-0.91,0.69-1.27l0.09-0.09c0.39-0.39,0.39-1.02,0-1.41c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09 C7.20,4,7,4.54,7,5c0,1.10,0.90,2,2,2c0.23,0,0.45-0.04,0.66-0.11L9.50,7.17C8.50,7.50,7.50,8.50,7.17,9.50L6.89,9.34 C6.96,9.13,7,8.90,7,8.67c0-1.10-0.90-2-2-2c-0.46,0-0.99,0.20-1.32,0.53L3.59,7.29C3.20,7.68,3.20,8.31,3.59,8.71z M15.29,3.59 c0.39-0.39,1.02-0.39,1.41,0l0.09,0.09C17.18,4,17.40,4.54,17.40,5c0,1.10-0.90,2-2,2c-0.23,0-0.45-0.04-0.66-0.11L14.50,7.17 c1,0.33,2,1.33,2.33,2.33l0.28-0.16C17.04,9.13,17,8.90,17,8.67c0-1.10,0.90-2,2-2c0.46,0,0.99,0.20,1.32,0.53l0.09,0.09 c0.39,0.39,1.02,0.39,1.41,0c0.39-0.39,0.39-1.02,0-1.41L21.71,3.59C21.32,3.20,20.78,3.20,20.39,3.59z M12,14c-2.21,0-4,1.79-4,4 s1.79,4,4,4s4-1.79,4-4S14.21,14,12,14z"/></svg></div>
+                <button onclick="selectMode('deep-chat')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6 relative overflow-hidden selection-mode-card" data-bubble-color="rgba(184, 172, 215, 0.55)">
+                    <div class="bg-purple-100 p-4 rounded-full"><img src="{{ url_for('static', filename='grandma.jpg') }}" alt="喵奶奶春蘭" class="w-[60px] h-[60px] rounded-full object-cover shadow-sm" /></div>
                     <div class="flex-1">
                         <h2 class="text-2xl font-bold">深度聊聊</h2>
-                        <p class="text-[var(--text-secondary)] text-sm max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 overflow-hidden transition-all duration-300 mt-1">讓溫柔的「喵奶奶」陪你深入探索內心世界，慢慢梳理思緒。</p>
+                        <!-- GALING 修改描述位置+新增綽號 10/04 -->
+                        <p class="text-[var(--text-secondary)] text-sm mt-2 leading-relaxed">讓溫柔的「喵奶奶春蘭」陪你深入探索內心世界，慢慢梳理思緒，你可以傳送任何想聊的心情話語給喵奶奶春蘭，若感覺聊夠了，可以按「悄悄話總結」噢！</p>
                     </div>
                 </button>
-                <button onclick="selectMode('quick-qa')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6">
-                    <div class="bg-amber-100 p-4 rounded-full"><svg class="w-10 h-10 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5,14h-0.79l-0.28-0.27c1.2-1.4,1.82-3.31,1.48-5.34c-0.47-2.78-2.79-5-5.59-5.34c-4.23-0.52-7.79,3.04-7.27,7.27 c0.34,2.8,2.56,5.12,5.34,5.59c2.03,0.34,3.94-0.28,5.34-1.48L14,14.47V15.5l5,5l1.5-1.5L15.5,14z M9.5,14C7.01,14,5,11.99,5,9.5 C5,7.01,7.01,5,9.5,5S14,7.01,14,9.5C14,11.99,11.99,14,9.5,14z"/></svg></div>
+                <button onclick="selectMode('quick-qa')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6 relative overflow-hidden selection-mode-card" data-bubble-color="rgba(255, 201, 130, 0.55)">
+                    <div class="bg-amber-100 p-4 rounded-full"><img src="{{ url_for('static', filename='reporter.jpg') }}" alt="喵記者馬克" class="w-[60px] h-[60px] rounded-full object-cover shadow-sm" /></div>
                     <div class="flex-1">
                         <h2 class="text-2xl font-bold">焦點訪談</h2>
-                        <p class="text-[var(--text-secondary)] text-sm max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 overflow-hidden transition-all duration-300 mt-1">由專業的「喵記者」引導，快速釐清當下的心情與狀況。</p>
+                        <!-- GALING 修改描述位置+新增綽號 10/04 -->
+                        <p class="text-[var(--text-secondary)] text-sm mt-2 leading-relaxed">由專業的「喵記者馬克」提問 3 題至 15 題選擇題，你可以三選一作答，也可以改輸入文字傳送答案；若感覺聊夠了可以按「悄悄話總結」，讓馬克陪你快速釐清當下的心情與狀況。</p>
                     </div>
                 </button>
             </div>
@@ -141,7 +331,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 </button>
                 <div class="flex-grow">
-                    <h1 id="dashboard-title" class="text-xl font-bold text-slate-700">與 喵奶奶 深度聊聊</h1>
+                    <h1 id="dashboard-title" class="text-xl font-bold text-slate-700">與 喵奶奶春蘭 深度聊聊</h1>
                     <div id="progress-bar-container" class="w-full bg-gray-200 rounded-full h-1.5 mt-1.5">
                         <div id="progress-bar-fill" class="bg-[var(--accent-primary)] h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
@@ -157,10 +347,13 @@
                         <!-- Quick replies will be injected here -->
                     </div>
                     <div class="p-4 border-t border-gray-100">
-                        <div class="flex items-center gap-3">
-                            <textarea id="message-input" rows="1" class="w-full p-3 border-gray-200 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] transition-all" placeholder="說點什麼吧... (Ctrl+Enter 送出)"></textarea>
-                            <button onclick="sendMessage()" class="bg-[var(--accent-primary)] text-white p-3 rounded-lg hover:bg-[var(--accent-primary-hover)] transition-all disabled:bg-gray-400 disabled:cursor-not-allowed" id="send-button">
-                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 12.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm-7 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                        <!-- GALING 10/02 對話框尺寸調大 -->
+                        <div class="flex items-center gap-3 chat-input-wrapper w-full">
+                            <!-- 10/02Galing修改 自動偵測裝置 電腦/筆電Ctrl+Enter送出 -->
+                            <textarea id="message-input" rows="1" class="w-full p-3 border-gray-200 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] transition-all" placeholder="說點什麼吧... 按右邊按鈕送出訊息"></textarea>
+                            <!-- GALING 10/03 貓爪按鈕動畫 -->
+                            <button onclick="sendMessage()" class="paw-button" id="send-button" type="button" aria-label="送出訊息">
+                                <span id="send-icon" class="send-icon paw">🐾</span>
                             </button>
                         </div>
                     </div>
@@ -186,6 +379,17 @@
         </div>
     </div>
     
+    <!-- GALING 品牌介紹視窗彈出10/04 -->
+    <div id="brand-intro-modal" class="fixed inset-0 brand-intro-modal flex items-center justify-center p-6 z-50 hidden opacity-0 transition-opacity duration-300">
+        <div id="brand-intro-card" class="brand-intro-card rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300 relative">
+            <button type="button" id="brand-intro-close" class="absolute top-4 right-4 bg-white/80 hover:bg-white text-gray-600 rounded-full p-2 shadow-md transition" aria-label="關閉品牌介紹視窗">×</button>
+            <img src="{{ url_for('static', filename='window.jpg') }}" alt="品牌介紹">
+            <div class="p-6 bg-white/90 backdrop-blur-sm">
+                <button id="brand-intro-enter-btn" class="w-full bg-gradient-to-r from-orange-400 to-orange-500 text-white font-semibold py-3 rounded-full shadow-lg hover:shadow-xl transition">進入貓咪談心室</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Custom Confirmation Modal -->
     <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 z-50 hidden transition-opacity duration-300 opacity-0">
         <div class="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full transform transition-transform duration-300 scale-95">
@@ -221,7 +425,16 @@
         const chatHistory = document.getElementById('chat-history');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
+        const sendIcon = document.getElementById('send-icon');
         const quickRepliesContainer = document.getElementById('quick-replies-container');
+        // GALING 品牌介紹視窗彈出10/04
+        const brandIntroModal = document.getElementById('brand-intro-modal');
+        // GALING 品牌介紹視窗彈出10/04
+        const brandIntroCard = document.getElementById('brand-intro-card');
+        // GALING 品牌介紹視窗彈出10/04
+        const brandIntroEnterBtn = document.getElementById('brand-intro-enter-btn');
+        // GALING 品牌介紹視窗彈出10/04
+        const brandIntroCloseBtn = document.getElementById('brand-intro-close');
         const reportSummary = document.getElementById('report-summary');
         const confirmModal = document.getElementById('confirm-modal');
         const confirmReturnBtn = document.getElementById('confirm-return-btn');
@@ -231,6 +444,8 @@
         const progressBarFill = document.getElementById('progress-bar-fill');
         const chatPanel = document.getElementById('chat-panel');
         const mainGrid = document.getElementById('main-grid');
+        const selectionModeCards = document.querySelectorAll('.selection-mode-card');
+        const selectionBubbleEffects = [];
 
         // --- App State ---
         const appState = {
@@ -240,17 +455,202 @@
             isAnalysisReady: false,
             isReportGenerated: false,
             turnCount: 0,
-            confidence: 0
+            confidence: 0,
+            qaQuestionCount: 0,
+            isMaxQaReached: false,
+            hasShownMaxQaReminder: false
         };
+
+
+        // --- 10/04 Galing新增 Selection Card Bubble Effect ---
+        function createSelectionBubbleEffect(card) {
+            const container = document.createElement('div');
+            container.className = 'selection-bubble-container';
+            card.appendChild(container);
+
+            const color = card.dataset.bubbleColor || 'rgba(209, 196, 233, 0.45)';
+            const minSize = Number(card.dataset.bubbleMin || 26);
+            const maxSize = Number(card.dataset.bubbleMax || 72);
+            const minDuration = Number(card.dataset.bubbleDurationMin || 5);
+            const maxDuration = Number(card.dataset.bubbleDurationMax || 11);
+            const spawnInterval = Number(card.dataset.bubbleInterval || 200);
+            const initialCount = Math.max(1, Number(card.dataset.bubbleInitial || 18));
+
+            let intervalId = null;
+            let running = false;
+
+            const spawnBubble = (isInitial = false) => {
+                if (!document.body.contains(card)) return;
+                const bubble = document.createElement('span');
+                bubble.className = 'selection-bubble';
+
+                const size = Math.random() * (maxSize - minSize) + minSize;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${Math.random() * 100}%`;
+
+                const duration = Math.random() * (maxDuration - minDuration) + minDuration;
+                bubble.style.animationDuration = `${duration}s`;
+                const delay = isInitial ? Math.random() * 1.2 : Math.random() * 1.8;
+                bubble.style.animationDelay = `${delay}s`;
+
+                bubble.style.backgroundColor = color;
+                bubble.style.setProperty('--bubble-opacity', (Math.random() * 0.35 + 0.35).toFixed(2));
+
+                bubble.addEventListener('animationend', () => bubble.remove());
+                container.appendChild(bubble);
+                return bubble;
+            };
+
+            const start = () => {
+                if (running) return;
+                running = true;
+                container.innerHTML = '';
+                const firstBubble = spawnBubble(false);
+                if (firstBubble) {
+                    firstBubble.style.animationDelay = '0s';
+                }
+                for (let i = 1; i < initialCount; i++) {
+                    spawnBubble(true);
+                }
+                intervalId = window.setInterval(() => spawnBubble(false), spawnInterval);
+            };
+
+            const stop = () => {
+                if (!running) return;
+                running = false;
+                if (intervalId !== null) {
+                    window.clearInterval(intervalId);
+                    intervalId = null;
+                }
+                container.innerHTML = '';
+            };
+
+            return { start, stop };
+        }
+
+        function toggleSelectionBubbles(shouldRun) {
+            selectionBubbleEffects.forEach(effect => {
+                if (!effect) return;
+                if (shouldRun) {
+                    effect.start();
+                } else {
+                    effect.stop();
+                }
+            });
+        }
+
+        // GALING 品牌介紹視窗彈出10/04
+        function showBrandIntroModal() {
+            if (!brandIntroModal || !brandIntroCard) return;
+            brandIntroModal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                brandIntroModal.classList.remove('opacity-0');
+                brandIntroCard.classList.remove('scale-95');
+            });
+        }
+
+        // GALING 品牌介紹視窗彈出10/04
+        function closeBrandIntroModal() {
+            if (!brandIntroModal || !brandIntroCard) return;
+            brandIntroModal.classList.add('opacity-0');
+            brandIntroCard.classList.add('scale-95');
+            setTimeout(() => {
+                if (brandIntroModal.classList.contains('opacity-0')) {
+                    brandIntroModal.classList.add('hidden');
+                }
+            }, 300);
+        }
+
+        function initSelectionBubbleEffects() {
+            selectionModeCards.forEach(card => {
+                const effect = createSelectionBubbleEffect(card);
+                selectionBubbleEffects.push(effect);
+            });
+            toggleSelectionBubbles(true);
+        }
+
+        initSelectionBubbleEffects();
 
         // --- Loading Messages ---
         const loadingMessages = {
             'deep-chat': ["奶奶正在為你泡一杯熱茶...", "讓我想想... 哎呀，毛線球滾到哪去了？", "別急，溫暖的話語需要慢慢醞釀。"],
             'quick-qa': ["稿子正在快速編輯中！", "獨家消息！你的心情頭條即將發布！", "正在確認消息來源，請稍候..."]
         };
+        const PAW_STAMP_DURATION = 600; // GALING 10/04 發送按鈕動畫時間 (ms)
+
+        const GRANDMA_PULSE_DURATION = 800; // GALING 10/03 喵奶奶脈衝動畫時間 (ms)
+
+
+
+
+        // GALING 調整喵奶奶頭像動畫 10/04
+        const grandmaAvatarUrl = "{{ url_for('static', filename='grandma.jpg') }}";
+        const reportAvatarUrl = "{{ url_for('static', filename='reporter.jpg') }}";
+
+
+        // 10/02Galing修改 自動偵測裝置 電腦/筆電Ctrl+Enter送出
+        const DESKTOP_PLACEHOLDER_MESSAGE = "說點什麼吧... (Ctrl+Enter 送出)";
+        const MOBILE_PLACEHOLDER_MESSAGE = "說點什麼吧... 按右邊按鈕送出訊息";
+        let isDesktopDevice = false;
+        let resolvedPlaceholderText = MOBILE_PLACEHOLDER_MESSAGE;
+
+        // 10/02Galing修改 自動偵測裝置 電腦/筆電Ctrl+Enter送出
+        function detectDesktopDevice() {
+            try {
+                if (window.matchMedia && window.matchMedia("(pointer: fine)").matches && (!navigator.maxTouchPoints || navigator.maxTouchPoints <= 1)) {
+                    return true;
+                }
+                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {
+                    return false;
+                }
+                const ua = (navigator.userAgent || "").toLowerCase();
+                if (/(android|iphone|ipad|mobile|tablet)/i.test(ua)) {
+                    return false;
+                }
+                if (/(windows|macintosh|linux|x11)/i.test(ua)) {
+                    return true;
+                }
+            } catch (error) {
+                console.warn("Device detection failed", error);
+            }
+            return false;
+        }
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
+            // 10/02Galing修改 自動偵測裝置 電腦/筆電Ctrl+Enter送出
+            isDesktopDevice = detectDesktopDevice();
+            resolvedPlaceholderText = isDesktopDevice ? DESKTOP_PLACEHOLDER_MESSAGE : MOBILE_PLACEHOLDER_MESSAGE;
+            messageInput.placeholder = resolvedPlaceholderText;
+
+            // GALING 品牌介紹視窗彈出10/04
+            if (brandIntroEnterBtn) {
+                brandIntroEnterBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closeBrandIntroModal();
+                });
+            }
+            // GALING 品牌介紹視窗彈出10/04
+            if (brandIntroCloseBtn) {
+                brandIntroCloseBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closeBrandIntroModal();
+                });
+            }
+            // GALING 品牌介紹視窗彈出10/04
+            if (brandIntroCard) {
+                brandIntroCard.addEventListener('click', (event) => event.stopPropagation());
+            }
+            // GALING 品牌介紹視窗彈出10/04
+            if (brandIntroModal) {
+                brandIntroModal.addEventListener('click', closeBrandIntroModal);
+            }
+            // GALING 品牌介紹視窗彈出10/04
+            if (healthReportData && brandIntroModal && brandIntroCard) {
+                showBrandIntroModal();
+            }
+
             messageInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
                     e.preventDefault();
@@ -283,10 +683,25 @@
         // --- View & State Management ---
         function selectMode(mode) {
             appState.mode = mode;
+            toggleSelectionBubbles(false);
             resetState();
-            
-            dashboardTitle.textContent = mode === 'deep-chat' ? '與 喵奶奶 深度聊聊' : '與 喵記者 焦點訪談';
-            
+            appState.qaQuestionCount = 0;
+            appState.isMaxQaReached = false;
+            appState.hasShownMaxQaReminder = false;
+
+            dashboardTitle.textContent = mode === 'deep-chat' ? '與 喵奶奶春蘭 深度聊聊' : '與 喵記者馬克 焦點訪談';
+            if (sendIcon) {
+                if (mode === 'deep-chat') {
+                    sendIcon.textContent = '🐾';
+                    sendIcon.classList.remove('mic');
+                    sendIcon.classList.add('paw');
+                } else {
+                    sendIcon.textContent = '🎙️';
+                    sendIcon.classList.remove('paw');
+                    sendIcon.classList.add('mic');
+                }
+            }
+
             selectionView.classList.add('opacity-0', 'scale-95');
             setTimeout(() => {
                 selectionView.classList.add('hidden');
@@ -307,6 +722,7 @@
                 selectionView.classList.remove('hidden');
                 setTimeout(() => {
                     selectionView.classList.remove('opacity-0', 'scale-95');
+                    toggleSelectionBubbles(true);
                 }, 50);
                 resetState();
                 resetUI();
@@ -387,17 +803,26 @@
         function resetState() {
             Object.assign(appState, {
                 conversationHistory: [], isLoading: false, isAnalysisReady: false,
-                isReportGenerated: false, turnCount: 0, confidence: 0
+                isReportGenerated: false, turnCount: 0, confidence: 0,
+                qaQuestionCount: 0, isMaxQaReached: false, hasShownMaxQaReminder: false
             });
         }
 
         function resetUI() {
             chatHistory.innerHTML = '';
             messageInput.value = '';
+            // 10/02Galing修改 自動偵測裝置 電腦/筆電Ctrl+Enter送出
+            messageInput.placeholder = resolvedPlaceholderText;
             quickRepliesContainer.innerHTML = '';
             reportSummary.textContent = '完成對話後，這裡會出現一份暖心總結。';
             updateProgressBar(0);
-            
+
+            if (sendIcon) {
+                sendIcon.textContent = '🐾';
+                sendIcon.classList.remove('mic');
+                sendIcon.classList.add('paw');
+            }
+
             // 移除生成貓咪圖卡按鈕
             const existingButton = document.getElementById('generate-card-button');
             if (existingButton) {
@@ -417,7 +842,7 @@
 
             if (appState.mode === 'quick-qa') {
                 const initialModelMessage = {
-                    nextPrompt: "你好！我是喵記者，對什麼事感到好奇呢？我們來聊聊吧！",
+                    nextPrompt: "你好！我是喵記者馬克，對什麼事感到好奇呢？我們來聊聊吧！",
                     quickReplies: ["工作", "健康", "人際關係"],
                 };
                 addMessage('gemini', initialModelMessage.nextPrompt);
@@ -425,20 +850,25 @@
                 appState.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify(initialModelMessage) }] });
 
             } else {
-                 addMessage('gemini', "孩子，你好啊。我是喵奶奶，心裡有什麼事，都可以跟我慢慢說。");
-                 appState.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify({nextPrompt: "孩子，你好啊。我是喵奶奶，心裡有什麼事，都可以跟我慢慢說。"}) }] });
+                 addMessage('gemini', "孩子，你好啊。我是喵奶奶春蘭，心裡有什麼事，都可以跟我慢慢說。");
+                 appState.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify({nextPrompt: "孩子，你好啊。我是喵奶奶春蘭，心裡有什麼事，都可以跟我慢慢說。"}) }] });
             }
         }
 
         async function sendMessage(quickReplyText = null) {
             const text = quickReplyText || messageInput.value.trim();
             if (!text || appState.isLoading) return;
-            
+
+            sendButton.classList.add('is-sending');
+            setTimeout(() => {
+                sendButton.classList.remove('is-sending');
+            }, PAW_STAMP_DURATION);
+
             addMessage('user', text);
             messageInput.value = '';
             messageInput.style.height = 'auto';
             clearQuickReplies();
-            
+
             const explicitTriggerKeywords = ['總結', '回顧', '幫我總結', '聊夠了', '可以總結一下嗎', '那接下來呢', '我應該怎麼做', '怎麼辦', '怎麼做', '我準備好總結了'];
             const isExplicitTrigger = explicitTriggerKeywords.some(keyword => text.includes(keyword));
 
@@ -450,8 +880,19 @@
 
             appState.conversationHistory.push({ role: 'user', parts: [{ text }] });
             appState.turnCount++;
+            const isFinalQuickQaAnswer = appState.mode === 'quick-qa' && appState.isMaxQaReached;
+
+            if (isFinalQuickQaAnswer) {
+                if (!appState.hasShownMaxQaReminder) {
+                    addMessage('gemini', "謝謝你完成所有題目啦！如果想整理這次的訪談，可以點「悄悄話總結」。");
+                    appState.hasShownMaxQaReminder = true;
+                }
+                renderGenerateReportButton();
+                return;
+            }
+
             setLoading(true);
-            
+
             try {
                 const modelResponse = await callChatAPI(buildPrompt());
                 handleModelResponse(modelResponse);
@@ -463,11 +904,23 @@
             }
         }
 
+
         function handleModelResponse(response) {
             if(!response || !response.nextPrompt) {
                 console.error("Invalid response from model:", response);
                 addMessage('gemini', "抱歉，我好像有點迷糊了，可以再問一次嗎？");
                 return;
+            }
+
+            if (appState.mode === 'quick-qa' && !appState.isMaxQaReached) {
+                appState.qaQuestionCount += 1;
+                if (appState.qaQuestionCount >= 15) {
+                    const finalPromptLabel = '【這是最後一題】';
+                    if (typeof response.nextPrompt === 'string' && !response.nextPrompt.includes(finalPromptLabel)) {
+                        response.nextPrompt = `${finalPromptLabel}${response.nextPrompt}`;
+                    }
+                    appState.isMaxQaReached = true;
+                }
             }
 
             appState.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify(response) }] });
@@ -672,6 +1125,7 @@
                         1. 根據使用者的主題選擇 ("工作", "健康", 或 "人際關係")，提出第一個相關問題。
                         2. 問題要簡潔明瞭，並附上三個相關的快速回覆按鈕選項。
                         3. 對話的「信心指數」（confidence_0_100）從 20 開始。
+                        4. 訪談最多只能提出 15 題選擇題，第 15 題要在題目前加上「【這是最後一題】」，之後不要再出題或提供選項。
                         
                         回傳格式 (必須是嚴格的 JSON):
                         {
@@ -689,6 +1143,7 @@
                         2. 同時給他三個相關的快速回覆選項。
                         3. 「信心指數」(confidence_0_100) 在之前的 ${appState.confidence} 基礎上增加 15-25。
                         4. 不要自己決定何時結束對話，使用者會看到一個按鈕來決定何時產生報告。
+                        5. 訪談最多只能提出 15 題選擇題，第 15 題要在題目前加上「【這是最後一題】」，之後不要再出題或提供選項。
                         
                         回傳格式 (必須是嚴格的 JSON):
                         {
@@ -794,38 +1249,66 @@
             const messageWrapper = document.createElement('div');
             messageWrapper.className = `flex items-end gap-2 max-w-[85%] chat-bubble ${sender === 'user' ? 'self-end flex-row-reverse' : 'self-start'}`;
 
-            const icon = document.createElement('div');
-            icon.className = 'w-8 h-8 rounded-full flex-shrink-0';
-
             const bubble = document.createElement('div');
             bubble.className = `p-3 rounded-2xl`;
+            bubble.classList.add('chat-message');
+
+            let avatarElement = null;
 
             if (sender === 'user') {
-                icon.classList.add('bg-gray-200');
-                icon.innerHTML = `<svg class="w-full h-full text-gray-500 p-1.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
+                const userIcon = document.createElement('div');
+                userIcon.className = 'w-8 h-8 rounded-full flex-shrink-0 bg-gray-200';
+                userIcon.innerHTML = `<svg class="w-full h-full text-gray-500 p-1.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
                 bubble.classList.add('bg-[var(--user-bubble)]', 'text-[var(--text-primary)]', 'rounded-br-none');
                 bubble.textContent = text;
-            } else { // gemini
-                icon.classList.add(appState.mode === 'deep-chat' ? 'bg-purple-100' : 'bg-amber-100');
-                const catIcon = appState.mode === 'deep-chat' ?
-                    `<svg class="w-full h-full text-purple-500 p-1" viewBox="0 0 24 24" fill="currentColor"><path d="M19.78,11.73c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09C17.91,12.2,17.5,12.5,17,12.5c-0.46,0-0.86-0.26-1.06-0.64 c-0.33-0.63-0.01-1.41,0.62-1.74l0.16-0.08c-0.12-0.53-0.30-1.04-0.54-1.51c-0.78-1.52-2.02-2.76-3.54-3.54 c-0.47-0.24-0.98-0.42-1.51-0.54l-0.08,0.16c-0.33,0.63-1.11,0.95-1.74,0.62C8.6,7.14,8.34,6.74,8.34,6.27 c0-0.50,0.30-0.91,0.69-1.27l0.09-0.09c0.39-0.39,0.39-1.02,0-1.41c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09 C7.20,4,7,4.54,7,5c0,1.10,0.90,2,2,2c0.23,0,0.45-0.04,0.66-0.11L9.50,7.17C8.50,7.50,7.50,8.50,7.17,9.50L6.89,9.34 C6.96,9.13,7,8.90,7,8.67c0-1.10-0.90-2-2-2c-0.46,0-0.99,0.20-1.32,0.53L3.59,7.29C3.20,7.68,3.20,8.31,3.59,8.71z M15.29,3.59 c0.39-0.39,1.02-0.39,1.41,0l0.09,0.09C17.18,4,17.40,4.54,17.40,5c0,1.10-0.90,2-2,2c-0.23,0-0.45-0.04-0.66-0.11L14.50,7.17 c1,0.33,2,1.33,2.33,2.33l0.28-0.16C17.04,9.13,17,8.90,17,8.67c0-1.10,0.90-2,2-2c0.46,0,0.99,0.20,1.32,0.53l0.09,0.09 c0.39,0.39,1.02,0.39,1.41,0c0.39-0.39,0.39-1.02,0-1.41L21.71,3.59C21.32,3.20,20.78,3.20,20.39,3.59z M12,14c-2.21,0-4,1.79-4,4 s1.79,4,4,4s4-1.79,4-4S14.21,14,12,14z"/></svg>` :
-                    `<svg class="w-full h-full text-amber-500 p-1" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5,14h-0.79l-0.28-0.27c1.2-1.4,1.82-3.31,1.48-5.34c-0.47-2.78-2.79-5-5.59-5.34c-4.23-0.52-7.79,3.04-7.27,7.27 c0.34,2.8,2.56,5.12,5.34,5.59c2.03,0.34,3.94-0.28,5.34-1.48L14,14.47V15.5l5,5l1.5-1.5L15.5,14z M9.5,14C7.01,14,5,11.99,5,9.5 C5,7.01,7.01,5,9.5,5S14,7.01,14,9.5C14,11.99,11.99,14,9.5,14z"/></svg>`;
-                icon.innerHTML = catIcon;
+                avatarElement = userIcon;
+            } else { // model
                 bubble.classList.add('bg-[var(--gemini-bubble)]', 'text-[var(--text-primary)]', 'rounded-bl-none', 'border', 'border-gray-100');
                 bubble.textContent = text;
+
+                if (appState.mode === 'deep-chat') {
+                    // GALING 調整喵奶奶頭像動畫 10/04
+                    const grandmaImg = document.createElement('img');
+                    grandmaImg.src = grandmaAvatarUrl;
+                    grandmaImg.alt = '喵奶奶春蘭';
+                    grandmaImg.className = 'grandma-avatar';
+                    avatarElement = grandmaImg;
+                } else {
+                    // GALING 脈衝動畫 10-04 喵記者馬克頭像
+                    const reporterImg = document.createElement('img');
+                    reporterImg.src = reportAvatarUrl;
+                    reporterImg.alt = '喵記者馬克';
+                    reporterImg.className = 'reporter-avatar';
+                    avatarElement = reporterImg;
+                }
             }
 
-            messageWrapper.appendChild(icon);
+            if (avatarElement) {
+                messageWrapper.appendChild(avatarElement);
+            }
+
             messageWrapper.appendChild(bubble);
             chatHistory.appendChild(messageWrapper);
             chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            if (sender !== 'user' && avatarElement) {
+                const shouldPulse = (appState.mode === 'deep-chat' && avatarElement.classList.contains('grandma-avatar')) ||
+                    (appState.mode === 'quick-qa' && avatarElement.classList.contains('reporter-avatar'));
+                if (shouldPulse) {
+                    // GALING 脈衝動畫 10-04
+                    triggerAvatarPulse(avatarElement);
+                }
+            }
         }
 
-        function setLoading(isLoading, customMessage = null) {
+
+function setLoading(isLoading, customMessage = null) {
             appState.isLoading = isLoading;
             sendButton.disabled = isLoading;
             messageInput.disabled = isLoading;
-            messageInput.placeholder = isLoading ? "貓咪正在思考中..." : "說點什麼吧... (Ctrl+Enter 送出)";
+            // 10/02Galing修改 自動偵測裝置 電腦/筆電Ctrl+Enter送出
+            const nextPlaceholder = isLoading ? "貓咪正在思考中..." : resolvedPlaceholderText;
+            messageInput.placeholder = nextPlaceholder;
 
             const existingLoader = document.getElementById('loading-indicator');
             if (existingLoader) {
@@ -837,29 +1320,50 @@
                 messageWrapper.id = 'loading-indicator';
                 messageWrapper.className = 'flex items-center gap-3 self-start chat-bubble';
 
-                const icon = document.createElement('div');
-                icon.className = `w-8 h-8 rounded-full flex-shrink-0 ${appState.mode === 'deep-chat' ? 'bg-purple-100' : 'bg-amber-100'}`;
-                const catIcon = appState.mode === 'deep-chat' ?
-                    `<svg class="w-full h-full text-purple-500 p-1" viewBox="0 0 24 24" fill="currentColor"><path d="M19.78,11.73c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09C17.91,12.2,17.5,12.5,17,12.5c-0.46,0-0.86-0.26-1.06-0.64 c-0.33-0.63-0.01-1.41,0.62-1.74l0.16-0.08c-0.12-0.53-0.30-1.04-0.54-1.51c-0.78-1.52-2.02-2.76-3.54-3.54 c-0.47-0.24-0.98-0.42-1.51-0.54l-0.08,0.16c-0.33,0.63-1.11,0.95-1.74,0.62C8.6,7.14,8.34,6.74,8.34,6.27 c0-0.50,0.30-0.91,0.69-1.27l0.09-0.09c0.39-0.39,0.39-1.02,0-1.41c-0.39-0.39-1.02-0.39-1.41,0l-0.09,0.09 C7.20,4,7,4.54,7,5c0,1.10,0.90,2,2,2c0.23,0,0.45-0.04,0.66-0.11L9.50,7.17C8.50,7.50,7.50,8.50,7.17,9.50L6.89,9.34 C6.96,9.13,7,8.90,7,8.67c0-1.10-0.90-2-2-2c-0.46,0-0.99,0.20-1.32,0.53L3.59,7.29C3.20,7.68,3.20,8.31,3.59,8.71z M15.29,3.59 c0.39-0.39,1.02-0.39,1.41,0l0.09,0.09C17.18,4,17.40,4.54,17.40,5c0,1.10-0.90,2-2,2c-0.23,0-0.45-0.04-0.66-0.11L14.50,7.17 c1,0.33,2,1.33,2.33,2.33l0.28-0.16C17.04,9.13,17,8.90,17,8.67c0-1.10,0.90-2,2-2c0.46,0,0.99,0.20,1.32,0.53l0.09,0.09 c0.39,0.39,1.02,0.39,1.41,0c0.39-0.39,0.39-1.02,0-1.41L21.71,3.59C21.32,3.20,20.78,3.20,20.39,3.59z M12,14c-2.21,0-4,1.79-4,4 s1.79,4,4,4s4-1.79,4-4S14.21,14,12,14z"/></svg>` :
-                    `<svg class="w-full h-full text-amber-500 p-1" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5,14h-0.79l-0.28-0.27c1.2-1.4,1.82-3.31,1.48-5.34c-0.47-2.78-2.79-5-5.59-5.34c-4.23-0.52-7.79,3.04-7.27,7.27 c0.34,2.8,2.56,5.12,5.34,5.59c2.03,0.34,3.94-0.28,5.34-1.48L14,14.47V15.5l5,5l1.5-1.5L15.5,14z M9.5,14C7.01,14,5,11.99,5,9.5 C5,7.01,7.01,5,9.5,5S14,7.01,14,9.5C14,11.99,11.99,14,9.5,14z"/></svg>`;
-                icon.innerHTML = catIcon;
+                let loaderAvatar = null;
+                if (appState.mode === 'deep-chat') {
+                    // GALING 調整喵奶奶頭像動畫 10/04
+                    const grandmaImg = document.createElement('img');
+                    grandmaImg.src = grandmaAvatarUrl;
+                    grandmaImg.alt = '喵奶奶春蘭';
+                    grandmaImg.className = 'grandma-avatar';
+                    loaderAvatar = grandmaImg;
+                } else {
+                    // GALING 脈衝動畫 10-04 喵記者馬克頭像
+                    const reporterImg = document.createElement('img');
+                    reporterImg.src = reportAvatarUrl;
+                    reporterImg.alt = '喵記者馬克';
+                    reporterImg.className = 'reporter-avatar';
+                    loaderAvatar = reporterImg;
+                }
 
                 const bubble = document.createElement('div');
                 bubble.className = 'p-3 rounded-2xl bg-[var(--gemini-bubble)] border border-gray-100 flex items-center gap-3';
                 const dots = document.createElement('div');
                 dots.className = 'dot-flashing';
                 const loadingText = document.createElement('span');
-                loadingText.className = 'text-sm text-[var(--text-secondary)] italic';
-                const messages = loadingMessages[appState.mode] || ["請稍候..."];
+                loadingText.className = 'text-sm text-[var(--text-secondary)] italic chat-message';
+                const messages = loadingMessages[appState.mode] || ['請稍候...'];
                 loadingText.textContent = customMessage || messages[Math.floor(Math.random() * messages.length)];
 
                 bubble.appendChild(dots);
                 bubble.appendChild(loadingText);
-                messageWrapper.appendChild(icon);
+                if (loaderAvatar) {
+                    messageWrapper.appendChild(loaderAvatar);
+                }
                 messageWrapper.appendChild(bubble);
                 chatHistory.appendChild(messageWrapper);
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             }
+        }
+
+                // GALING 脈衝動畫 10-04
+        function triggerAvatarPulse(avatarElement) {
+            if (!avatarElement) return;
+            avatarElement.classList.add('is-speaking');
+            setTimeout(() => {
+                avatarElement.classList.remove('is-speaking');
+            }, GRANDMA_PULSE_DURATION);
         }
 
         function renderQuickReplies(replies) {
@@ -983,3 +1487,4 @@
     </script>
 </body>
 </html>
+
