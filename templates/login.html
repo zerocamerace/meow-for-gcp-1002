@@ -17,6 +17,75 @@
                 line-height: inherit;
                 margin: 0;
                 overflow-x: hidden;
+                background-color: #E2D1C3; /* #1005庭婕這裡改了背景為暖黃色 */
+            }
+            #webcrumbs .warm-shell {
+                background-color: #E2D1C3; /* #1005庭婕這裡新增整體暖黃色主底 */
+            }
+            #webcrumbs .warm-surface {
+                background-color: #EFE0D2; /* #1005庭婕這裡統一卡片為暖黃色調 */
+            }
+            #webcrumbs .warm-cta {
+                background-color: #E2D1C3; /* #1005庭婕這裡讓按鈕呼應暖黃色主題 */
+                color: #3F2B1E;
+                border: 1px solid #CDB59F;
+            }
+            #webcrumbs .warm-cta:hover {
+                background-color: #D7C0AE; /* #1005庭婕這裡設定暖黃色按鈕滑過效果 */
+                color: #2B1C13;
+            }
+            /* #1005庭婕這裡新增登入主按鈕漸層與視覺強調 */
+            #webcrumbs .warm-cta-main {
+                background: linear-gradient(135deg, #E8CDB2, #D5B194);
+                color: #3F2B1E;
+                border: none;
+                font-weight: 600;
+                letter-spacing: 1px;
+            }
+            #webcrumbs .warm-cta-main:hover {
+                background: linear-gradient(135deg, #DCC1AA, #C7A487);
+            }
+            /* #1005庭婕這裡設定建立帳號按鈕為棕色系 */
+            #webcrumbs .warm-cta-secondary {
+                background-color: #A47858;
+                color: #fff;
+                font-weight: 600;
+                border: 2px solid #7F5C41;
+            }
+            #webcrumbs .warm-cta-secondary:hover {
+                background-color: #7F5C41;
+            }
+            /* #1005庭婕這裡新增舒適分隔線與留白 */
+            #webcrumbs .cta-divider {
+                border-bottom: 1px solid rgba(205, 181, 159, 0.6);
+                margin: 24px 0;
+            }
+            /* #1005庭婕這裡設定舒適閱讀字級與行距 */
+            #webcrumbs .comfort-text {
+                font-size: 16px;
+                line-height: 1.5;
+            }
+            #webcrumbs .warm-divider {
+                border-bottom: 1px solid rgba(205, 181, 159, 0.6); /* #1005庭婕這裡把分隔線換成暖色系 */
+            }
+            #webcrumbs .warm-menu {
+                background-color: rgba(191, 153, 125, 0.92); /* 讓下拉選單更深一點，視覺集中 */
+                border: none; /* #1005庭婕這裡拿掉深色框線 */
+                box-shadow: 0 6px 16px rgba(63, 43, 30, 0.12); /* 更柔和的陰影高度 */
+                width: auto !important; /* 讓選單依內容縮小，覆蓋原本 w-40 設定 */
+                min-width: 88px; /* 預留基本寬度以避免字太擠 */
+                border-radius: 9999px; /* 改成橢圓 pill 造型 */
+                padding: 4px 12px; /* 收緊上下左右空間 */
+            }
+            #webcrumbs .warm-menu-link {
+                color: #3F2B1E; /* #1005庭婕這裡設定下拉選項文字為暖色系 */
+                text-align: center; /* 讓文字置中與膠囊對齊 */
+                padding: 4px 0 !important; /* 讓文字與底色距離更靠近，覆蓋 px-4/py-2 */
+                font-weight: 600;
+            }
+            #webcrumbs .warm-menu-link:hover {
+                background-color: transparent; /* 保持原色，移除滑過時的深色底 */
+                color: #2B1C13;
             }
             img {
                 max-width: 100%;
@@ -200,22 +269,14 @@
     </head>
     <body>
         <div id="webcrumbs">
-            <div class="max-w-[1200px] w-full bg-gray-50 font-sans mx-auto">
-                <header class="bg-white py-4 px-6 sm:px-2 flex justify-between items-center border-b border-gray-100">
+            <div class="max-w-[1200px] w-full font-sans mx-auto warm-shell">
+                <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
                     <div class="flex items-center">
-                        <svg class="h-6 w-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2C14.5 2 16.5 4 16.5 6.5C16.5 9 14.5 11 12 11C9.5 11 7.5 9 7.5 6.5C7.5 4 9.5 2 12 2Z"></path>
-                            <path d="M5 20C5 16.5 8 14 12 14C16 14 19 16.5 19 20"></path>
-                            <path d="M12 14L12 22M9 17L15 19M9 19L15 17"></path>
-                        </svg>
-                        <h1 class="ml-2 text-xl font-medium">Meow Yourself</h1>
+                        <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" class="h-6 w-auto" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
                     </div>
                     <nav class="hidden md:flex space-x-6">
                         <a href="{{ url_for('home') }}" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
                             <span class="material-symbols-outlined mr-1">home</span> 首頁
-                        </a>
-                        <a href="#" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
-                            <span class="material-symbols-outlined mr-1">pets</span> 我的貓咪
                         </a>
                     </nav>
                     <div class="flex items-center">
@@ -223,8 +284,8 @@
                             <summary class="list-none flex items-center cursor-pointer">
                                 <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" class="h-8 w-8 rounded-full border border-gray-200 hover:border-gray-400 transition-all duration-200" alt="Profile" />
                             </summary>
-                            <div id="profile-menu" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-sm py-1 z-10 border border-gray-100">
-                                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-200">登出</a>
+                            <div id="profile-menu" class="absolute right-0 mt-2 w-40 rounded shadow-sm py-1 z-10 border border-gray-100 warm-surface warm-menu">
+                                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">登出</a>
                             </div>
                         </details>
                     </div>
@@ -235,28 +296,32 @@
                         <p class="text-xl sm:text-lg text-gray-600 mb-8 text-center max-w-2xl sm:max-w-full">
                             歡迎回來！請登入你的帳戶。
                         </p>
-                        <div class="bg-white rounded-lg shadow-sm p-5 max-w-md w-full sm:max-w-full">
+                        <div class="warm-surface rounded-lg shadow-sm p-6 max-w-md w-full sm:max-w-full">
                             {% if error %}
                             <p class="text-sm text-red-600 mb-4 text-center">{{ error }}</p>
                             {% endif %}
                             {% for category, message in get_flashed_messages(with_categories=true) %}
                             <p class="text-sm {% if category == 'error' %}text-red-600{% else %}text-green-600{% endif %} mb-4 text-center">{{ message }}</p>
                             {% endfor %}
-                            <form method="POST" action="{{ url_for('login') }}" class="space-y-4">
-                                <div>
+                            <!-- #1005庭婕這裡優化登入表單排版與閱讀體驗 -->
+                            <form method="POST" action="{{ url_for('login') }}" class="space-y-4 comfort-text">
+                                <div class="mb-4">
                                     <label class="block text-sm font-medium mb-1">電子郵件</label>
                                     <input type="email" name="email" class="w-full p-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-400" required>
                                 </div>
-                                <div>
+                                <div class="mb-4">
                                     <label class="block text-sm font-medium mb-1">密碼</label>
                                     <input type="password" name="password" class="w-full p-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-400" required>
                                 </div>
-                                <button type="submit" class="w-full py-2 px-4 bg-gray-700 text-white rounded hover:bg-gray-800 transition-colors duration-300">
+                                <button type="submit" class="w-full py-3 px-4 rounded warm-cta-main transition-colors duration-300 text-base mt-6">
                                     登入
                                 </button>
-                                <p class="text-sm text-gray-600 text-center mt-4">
-                                    還沒有帳號？<a href="{{ url_for('register') }}" class="text-gray-700 hover:text-gray-800">立即註冊</a>
-                                </p>
+                                <div class="cta-divider"></div>
+                                <div class="flex justify-center">
+                                    <a href="{{ url_for('register') }}" class="inline-flex items-center justify-center px-6 py-3 rounded warm-cta-secondary transition-colors duration-300 text-base shadow-sm">
+                                        還沒有帳號嗎？請點此建立新帳號
+                                    </a>
+                                </div>
                             </form>
                         </div>
                     </div>

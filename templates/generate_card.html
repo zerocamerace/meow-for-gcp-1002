@@ -17,8 +17,45 @@
             line-height: inherit;
             margin: 0;
             overflow-x: hidden;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #E2D1C3; /* #1005庭婕這裡改了背景為暖黃色 */
             min-height: 100vh;
+        }
+        .warm-shell {
+            background-color: #E2D1C3; /* #1005庭婕這裡新增整體暖黃色底色 */
+        }
+        .warm-surface {
+            background-color: #EFE0D2; /* #1005庭婕這裡讓卡片改成暖黃色調 */
+        }
+        .warm-cta {
+            background-color: #E2D1C3; /* #1005庭婕這裡調整按鈕為暖黃色 */
+            color: #3F2B1E;
+            border: 1px solid #CDB59F;
+        }
+        .warm-cta:hover {
+            background-color: #D7C0AE; /* #1005庭婕這裡設定暖黃色按鈕滑過效果 */
+            color: #2B1C13;
+        }
+        .warm-note {
+            background-color: rgba(226, 209, 195, 0.85); /* #1005庭婕這裡新增暖黃色透亮區塊 */
+        }
+        .warm-menu {
+            background-color: rgba(191, 153, 125, 0.92); /* 讓下拉選單更深一點，視覺集中 */
+            border: none; /* #1005庭婕這裡拿掉深色框線 */
+            box-shadow: 0 6px 16px rgba(63, 43, 30, 0.12); /* 更柔和的陰影高度 */
+            width: auto !important; /* 讓選單依內容縮小，覆蓋原本 w-40 設定 */
+            min-width: 88px; /* 預留基本寬度以避免字太擠 */
+            border-radius: 9999px; /* 改成橢圓 pill 造型 */
+            padding: 4px 12px; /* 收緊上下左右空間 */
+        }
+        .warm-menu-link {
+            color: #3F2B1E; /* #1005庭婕這裡設定下拉選項文字為暖色系 */
+            text-align: center; /* 讓文字置中與膠囊對齊 */
+            padding: 4px 0 !important; /* 讓文字與底色距離更靠近，覆蓋 px-4/py-2 */
+            font-weight: 600;
+        }
+        .warm-menu-link:hover {
+            background-color: transparent; /* 保持原色，移除滑過時的深色底 */
+            color: #2B1C13;
         }
         img {
             max-width: 100%;
@@ -41,22 +78,25 @@
         
         /* 基礎樣式 */
         .container {
-            max-width: 1200px;
+            max-width: min(1200px, 100%);
+            width: 100%;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
+            padding: 0 clamp(16px, 4vw, 32px);
+            background: rgba(226, 209, 195, 0.85); /* #1005庭婕這裡把版心換成暖黃色透明底 */
             backdrop-filter: blur(10px);
             border-radius: 20px;
             min-height: 100vh;
+            box-shadow: 0 20px 40px rgba(63, 43, 30, 0.12);
         }
         
         .header {
-            background: rgba(255, 255, 255, 0.9);
+            background-color: #E2D1C3; /* #1005庭婕這裡調整抬頭區為暖黃色 */
             backdrop-filter: blur(10px);
             padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(205, 181, 159, 0.5);
             border-radius: 20px 20px 0 0;
         }
         
@@ -66,11 +106,6 @@
             color: #374151;
         }
         
-        .logo svg {
-            height: 24px;
-            width: 24px;
-            margin-right: 8px;
-        }
         
         .nav {
             display: flex;
@@ -96,23 +131,22 @@
         
         /* 主要內容區域 */
         .main-content {
-            padding: 40px 24px;
+            padding: clamp(24px, 5vw, 40px) clamp(16px, 5vw, 32px);
             text-align: center;
         }
         
         .title {
             font-size: 48px;
             font-weight: 700;
-            color: white;
+            color: #3F2B1E; /* #1005庭婕這裡調整主標題文字為暖色系 */
             margin-bottom: 16px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .subtitle {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.9);
+            font-size: clamp(16px, 2.5vw, 18px);
+            color: #4B392B; /* #1005庭婕這裡更新副標文字為暖色調 */
             margin-bottom: 40px;
-            max-width: 600px;
+            max-width: min(600px, 100%);
             margin-left: auto;
             margin-right: auto;
             line-height: 1.6;
@@ -120,11 +154,11 @@
         
         /* 貓咪卡片設計 */
         .cat-card {
-            background: linear-gradient(135deg, #ffeaa7, #fab1a0, #fd79a8, #fdcb6e);
+            background: linear-gradient(135deg, #F6E4D3, #E2D1C3, #D5B79A); /* #1005庭婕這裡改成暖黃色漸層卡片 */
             border-radius: 24px;
-            padding: 32px;
+            padding: clamp(24px, 5vw, 32px);
             margin: 0 auto 40px;
-            max-width: 400px;
+            max-width: min(400px, 100%);
             position: relative;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             transform: perspective(1000px) rotateY(0deg);
@@ -163,8 +197,8 @@
         }
         
         .cat-image {
-            width: 200px;
-            height: 200px;
+            width: clamp(160px, 40vw, 200px);
+            height: clamp(160px, 40vw, 200px);
             border-radius: 50%;
             object-fit: cover;
             border: 6px solid rgba(255, 255, 255, 0.8);
@@ -177,12 +211,12 @@
             position: absolute;
             top: -10px;
             right: 20px;
-            background: white;
+            background: #EFE0D2; /* #1005庭婕這裡把對話泡泡換暖黃色 */
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 14px;
-            color: #2d3436;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: #3F2B1E;
+            box-shadow: 0 4px 12px rgba(63, 43, 30, 0.15);
         }
         
         .cat-speech-bubble::after {
@@ -194,7 +228,7 @@
             height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-top: 6px solid white;
+            border-top: 6px solid #EFE0D2; /* #1005庭婕這裡同步對話泡泡箭頭顏色 */
         }
         
         .cat-name {
@@ -216,11 +250,12 @@
             justify-content: space-between;
             gap: 12px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         
         .status-item {
             flex: 1;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(226, 209, 195, 0.7); /* #1005庭婕這裡讓健康指標區塊變暖黃色 */
             padding: 12px 8px;
             border-radius: 12px;
             text-align: center;
@@ -248,18 +283,19 @@
         
         /* 分享按鈕區域 */
         .share-section {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(226, 209, 195, 0.85); /* #1005庭婕這裡改成暖黃色分享區塊 */
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 24px;
             margin-bottom: 32px;
-            max-width: 500px;
+            max-width: min(500px, 100%);
             margin-left: auto;
             margin-right: auto;
+            box-shadow: 0 12px 28px rgba(63, 43, 30, 0.12);
         }
         
         .share-title {
-            color: white;
+            color: #3F2B1E; /* #1005庭婕這裡調整分享標題文字顏色 */
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 16px;
@@ -306,8 +342,9 @@
         }
         
         .share-copy {
-            background: rgba(255, 255, 255, 0.9);
-            color: #374151;
+            background: #E2D1C3; /* #1005庭婕這裡改成暖黃色複製按鈕 */
+            color: #3F2B1E;
+            border: 1px solid #CDB59F;
         }
 
         /* 🟡 0930 修改：提供可重複使用的隱藏樣式，避免刪除原始區塊 */
@@ -343,13 +380,15 @@
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            background: linear-gradient(135deg, #E8CDB2, #D5B194); /* #1005庭婕這裡改主行動按鈕為暖黃色漸層 */
+            color: #3F2B1E;
+            border: 1px solid #CDB59F;
         }
         
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.9);
-            color: #374151;
+            background: #E2D1C3; /* #1005庭婕這裡同步次要按鈕暖色調 */
+            color: #3F2B1E;
+            border: 1px solid #CDB59F;
         }
 
         /* 通知提示樣式 */
@@ -380,7 +419,7 @@
 
         /* 連結顯示區域 */
         .link-display {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(226, 209, 195, 0.85); /* #1005庭婕這裡把連結展示區改為暖黃色 */
             backdrop-filter: blur(10px);
             border-radius: 12px;
             padding: 16px;
@@ -393,8 +432,8 @@
             padding: 12px;
             border: none;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #374151;
+            background: #E2D1C3; /* #1005庭婕這裡同步輸入框為暖黃色 */
+            color: #3F2B1E;
             font-size: 14px;
             text-align: center;
         }
@@ -415,23 +454,9 @@
             }
             
             .title {
-                font-size: 32px;
+                font-size: clamp(24px, 7vw, 32px);
             }
-            
-            .main-content {
-                padding: 20px 16px;
-            }
-            
-            .cat-card {
-                margin: 0 16px 32px;
-                padding: 24px;
-            }
-            
-            .cat-image {
-                width: 160px;
-                height: 160px;
-            }
-            
+
             .action-buttons {
                 flex-direction: column;
                 align-items: center;
@@ -453,6 +478,36 @@
                 transform: translateY(0);
             }
         }
+
+        @media (max-width: 480px) {
+            .health-status {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .status-item {
+                width: 100%;
+            }
+            .cat-speech-bubble {
+                right: 12px;
+                left: 12px;
+                top: -12px;
+                font-size: 12px;
+            }
+            .cat-speech-bubble::after {
+                left: auto;
+                right: 32px;
+            }
+            .share-section {
+                padding: 20px 16px;
+                max-width: min(400px, 100%);
+            }
+            .share-buttons {
+                gap: 8px;
+            }
+            .btn {
+                padding: 14px 20px;
+            }
+        }
     </style>
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="https://cdn.webcrumbs.org/assets/images/landing/favicon.ico" />
@@ -471,12 +526,7 @@
     <div class="container">
         <header class="header">
             <div class="logo">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2C14.5 2 16.5 4 16.5 6.5C16.5 9 14.5 11 12 11C9.5 11 7.5 9 7.5 6.5C7.5 4 9.5 2 12 2Z"></path>
-                    <path d="M5 20C5 16.5 8 14 12 14C16 14 19 16.5 19 20"></path>
-                    <path d="M12 14L12 22M9 17L15 19M9 19L15 17"></path>
-                </svg>
-                <span style="font-weight: 600; font-size: 20px;">Meow Yourself</span>
+                <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: 24px; width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
             </div>
             <nav class="nav">
                 <!-- 🟢 修改：首頁按鈕導向首頁路由 -->

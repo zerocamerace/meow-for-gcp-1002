@@ -26,7 +26,13 @@ from pathlib import Path  # 🟡 0929修改：設定圖卡輸出路徑
 from io import BytesIO  # 🟡 0929修改：處理圖片位元組資料
 from urllib.parse import urlparse  # 🟡 0929修改：驗證圖片網址安全性
 
-from PIL import Image, ImageDraw, ImageFont, ImageOps, ImageFilter  # 🟡 0929修改：繪製圖卡
+from PIL import (
+    Image,
+    ImageDraw,
+    ImageFont,
+    ImageOps,
+    ImageFilter,
+)  # 🟡 0929修改：繪製圖卡
 from health_report_module import analyze_health_report
 from google.cloud.firestore import SERVER_TIMESTAMP
 from google import genai
@@ -34,6 +40,7 @@ from google.genai import types as genai_types
 from dotenv import load_dotenv
 import json
 import re
+
 
 def extract_json_from_response(text: str) -> dict:
     """抽取第一個 JSON 物件並解析。"""  # 0929修改03：強化解析容錯
@@ -199,7 +206,11 @@ def _to_datetime(value):
 
 def _cleanup_old_cards(max_files: int = 40):  # 🟡 0929修改：限制圖卡輸出數量
     try:
-        files = sorted(CAT_CARD_DIR.glob("catcard_*.png"), key=lambda p: p.stat().st_mtime, reverse=True)
+        files = sorted(
+            CAT_CARD_DIR.glob("catcard_*.png"),
+            key=lambda p: p.stat().st_mtime,
+            reverse=True,
+        )
         for stale in files[max_files:]:
             stale.unlink(missing_ok=True)
     except Exception as exc:
@@ -242,9 +253,10 @@ def _normalize_health_data(report: dict):
 
     return warnings, vitals_display
 
+
 # 🟡 0929修改：九宮格貓咪分區
 def _score_to_interval(score) -> int | None:
-    """將數值分數換成 1~3 區間。"""  
+    """將數值分數換成 1~3 區間。"""
     if score is None:
         return None
     try:
@@ -258,6 +270,7 @@ def _score_to_interval(score) -> int | None:
     if value <= 66:
         return 2
     return 3
+
 
 def _resolve_persona_key(health_score, mind_score) -> str | None:
     """根據身心分數挑選對應的既有貓咪圖。"""  # 🟡 0929修改：依分數選擇貓咪類型
@@ -284,7 +297,9 @@ def _validate_report_schema(payload: dict) -> dict:
         raise TypeError("summary must be string")
 
     keywords = payload.get("keywords")
-    if not isinstance(keywords, list) or not all(isinstance(item, str) for item in keywords):
+    if not isinstance(keywords, list) or not all(
+        isinstance(item, str) for item in keywords
+    ):
         raise TypeError("keywords must be list[str]")
 
     emotion_vector = payload.get("emotionVector")
@@ -300,7 +315,9 @@ def _validate_report_schema(payload: dict) -> dict:
     return payload
 
 
-def fetch_cat_image(max_retries: int = 3, timeout: int = 12, max_bytes: int = 8_000_000):
+def fetch_cat_image(
+    max_retries: int = 3, timeout: int = 12, max_bytes: int = 8_000_000
+):
     """從 TheCatAPI 取得貓圖，失敗時改用備援圖庫。"""  # 🟡 0929修改：新增貓圖來源
     api_url = "https://api.thecatapi.com/v1/images/search?size=med&mime_types=jpg,png"
     headers = {}
@@ -323,20 +340,33 @@ def fetch_cat_image(max_retries: int = 3, timeout: int = 12, max_bytes: int = 8_
                 if image_bytes:
                     return image_bytes, final_url
             elif resp.status_code in {429, 500, 502, 503, 504}:
-                logging.warning("Cat API temporary failure %s, backoff %ss", resp.status_code, backoff)
+                logging.warning(
+                    "Cat API temporary failure %s, backoff %ss",
+                    resp.status_code,
+                    backoff,
+                )
                 time.sleep(backoff)
                 backoff = min(backoff * 2, 8)
                 continue
             else:
-                raise ValueError(f"Cat API status {resp.status_code}: {resp.text[:200]}")
+                raise ValueError(
+                    f"Cat API status {resp.status_code}: {resp.text[:200]}"
+                )
         except Exception as exc:
-            logging.warning("Cat API request failed (attempt %s/%s): %s", attempt + 1, max_retries, exc)
+            logging.warning(
+                "Cat API request failed (attempt %s/%s): %s",
+                attempt + 1,
+                max_retries,
+                exc,
+            )
             time.sleep(backoff)
             backoff = min(backoff * 2, 8)
 
     logging.warning("Cat API all retries exhausted, switching to fallback image pool")
     fallback_url = random.choice(CAT_FALLBACK_IMAGES)
-    image_bytes, final_url = _download_image(fallback_url, timeout, max_bytes, allow_fallback_errors=False)
+    image_bytes, final_url = _download_image(
+        fallback_url, timeout, max_bytes, allow_fallback_errors=False
+    )
     if image_bytes:
         return image_bytes, final_url
     logging.error("Fallback gallery also failed, using placeholder")
@@ -344,7 +374,9 @@ def fetch_cat_image(max_retries: int = 3, timeout: int = 12, max_bytes: int = 8_
     return placeholder, None
 
 
-def _download_image(url: str, timeout: int, max_bytes: int, allow_fallback_errors: bool = True):
+def _download_image(
+    url: str, timeout: int, max_bytes: int, allow_fallback_errors: bool = True
+):
     try:
         resp = requests.get(url, timeout=timeout, stream=True)
         if resp.status_code != 200:
@@ -384,19 +416,25 @@ def generate_cat_card_text(report: dict, psychology: dict, preferred_style: str)
 
     contents = _build_genai_contents(prompt, [])
     try:
-        response = _generate_with_retry(contents, generation_config=JSON_RESPONSE_CONFIG)
+        response = _generate_with_retry(
+            contents, generation_config=JSON_RESPONSE_CONFIG
+        )
         if not response or not getattr(response, "candidates", None):
             return None
         candidate = response.candidates[0]
         text = ""
-        parts = getattr(candidate.content, "parts", None) or []  # 0929修改03：parts 可能為 None，改採空清單避免迴圈錯誤
+        parts = (
+            getattr(candidate.content, "parts", None) or []
+        )  # 0929修改03：parts 可能為 None，改採空清單避免迴圈錯誤
         for part in parts:
             if getattr(part, "text", None):
                 text += part.text
         try:
             parsed = extract_json_from_response(text)
         except Exception:
-            logging.exception("0929修改03：Cat card JSON parse failed; raw snippet=%r", text[:500])
+            logging.exception(
+                "0929修改03：Cat card JSON parse failed; raw snippet=%r", text[:500]
+            )
             parsed = None
         if isinstance(parsed, dict):
             return parsed
@@ -464,7 +502,11 @@ def build_cat_card(report: dict, psychology: dict):
         suggested_style = "steady"
 
     ai_payload = generate_cat_card_text(report, psychology, suggested_style)
-    style_key = ai_payload.get("styleKey") if ai_payload and ai_payload.get("styleKey") in CAT_STYLES else suggested_style
+    style_key = (
+        ai_payload.get("styleKey")
+        if ai_payload and ai_payload.get("styleKey") in CAT_STYLES
+        else suggested_style
+    )
     style = CAT_STYLES[style_key]
 
     # Finalize fields with AI payload or defaults
@@ -484,12 +526,18 @@ def build_cat_card(report: dict, psychology: dict):
         mood=mood_label,
         health=int(round(health_value)),
     )
-    insight = (ai_payload or {}).get("insight") or psychology.get("summary") or f"當下情緒偏向 {mood_label}，記得照顧自己。"
+    insight = (
+        (ai_payload or {}).get("insight")
+        or psychology.get("summary")
+        or f"當下情緒偏向 {mood_label}，記得照顧自己。"
+    )
     action = (ai_payload or {}).get("action") or random.choice(style["actions"])
 
     vitality = max(0, min(100, int(round(health_value))))
     companionship = max(0, min(100, int(round(mood_value))))
-    stability = max(0, min(100, int((vitality + companionship) / 2 + random.randint(-4, 4))))
+    stability = max(
+        0, min(100, int((vitality + companionship) / 2 + random.randint(-4, 4)))
+    )
 
     return {
         "persona": persona,
@@ -533,6 +581,8 @@ def circle_crop_image(image_bytes, diameter: int = 260) -> Image.Image:
     return output
 
     # 🟡 0929修改：繪製圖卡(先試圖抓對應圖檔，失敗再退回 TheCatAPI)
+
+
 def render_cat_card_image(card: dict, user_id: str, cache_key: str | None = None):
     """生成圖卡 PNG，並回傳檔名與來源 URL。"""  # 🟡 0929修改：圖卡繪製
     timeout = 12
@@ -551,18 +601,30 @@ def render_cat_card_image(card: dict, user_id: str, cache_key: str | None = None
                     static_path = persona_entry.get("static_path")
                     if static_path:
                         try:
-                            source_url = url_for("static", filename=static_path, _external=True)
+                            source_url = url_for(
+                                "static", filename=static_path, _external=True
+                            )
                         except RuntimeError:
                             source_url = f"/static/{static_path}"
                 except Exception as exc:
-                    logging.warning("Failed to load local persona image %s: %s", local_path, exc)
+                    logging.warning(
+                        "Failed to load local persona image %s: %s", local_path, exc
+                    )
                     image_bytes = None
             else:
-                candidate_url = persona_entry.get("url") if isinstance(persona_entry, dict) else persona_entry
+                candidate_url = (
+                    persona_entry.get("url")
+                    if isinstance(persona_entry, dict)
+                    else persona_entry
+                )
                 if candidate_url:
-                    image_bytes, source_url = _download_image(candidate_url, timeout, max_bytes)
+                    image_bytes, source_url = _download_image(
+                        candidate_url, timeout, max_bytes
+                    )
                     if not image_bytes:
-                        logging.warning("Persona image download failed for %s", persona_key)
+                        logging.warning(
+                            "Persona image download failed for %s", persona_key
+                        )
 
     if not image_bytes:
         image_bytes, source_url = fetch_cat_image(timeout=timeout, max_bytes=max_bytes)
@@ -595,9 +657,13 @@ def render_cat_card_image(card: dict, user_id: str, cache_key: str | None = None
 
     x_margin = 80
     y = 90
-    draw.text((x_margin, y), card.get("persona", "療癒系貓咪"), font=title_font, fill=accent)
+    draw.text(
+        (x_margin, y), card.get("persona", "療癒系貓咪"), font=title_font, fill=accent
+    )
     y += 70
-    draw.text((x_margin, y), card.get("name", "專屬貓咪"), font=name_font, fill=text_color)
+    draw.text(
+        (x_margin, y), card.get("name", "專屬貓咪"), font=name_font, fill=text_color
+    )
     y += 80
 
     speech_text = _wrap_text(card.get("speech"), 14)
@@ -610,20 +676,37 @@ def render_cat_card_image(card: dict, user_id: str, cache_key: str | None = None
 
     insight_text = _wrap_text(card.get("insight"), 20)
     if insight_text:
-        draw.text((x_margin, y), f"心情結論：\n{insight_text}", font=small_font, fill=text_color)
+        draw.text(
+            (x_margin, y),
+            f"心情結論：\n{insight_text}",
+            font=small_font,
+            fill=text_color,
+        )
         y += 120
 
     for stat in card.get("stats", []):
-        draw.text((x_margin, y), f"{stat.get('label')}: {stat.get('value')}", font=small_font, fill=text_color)
+        draw.text(
+            (x_margin, y),
+            f"{stat.get('label')}: {stat.get('value')}",
+            font=small_font,
+            fill=text_color,
+        )
         y += 40
 
     action_text = _wrap_text(card.get("action"), 18)
     if action_text:
-        draw.text((x_margin, y), f"建議行動：{action_text}", font=small_font, fill=text_color)
+        draw.text(
+            (x_margin, y), f"建議行動：{action_text}", font=small_font, fill=text_color
+        )
 
     circle_x = width - 320
     circle_y = 120
-    highlight_box = (circle_x - 20, circle_y - 20, circle_x + cat_image.width + 20, circle_y + cat_image.height + 20)
+    highlight_box = (
+        circle_x - 20,
+        circle_y - 20,
+        circle_x + cat_image.width + 20,
+        circle_y + cat_image.height + 20,
+    )
     draw.ellipse(highlight_box, fill="#fdf6ff")
     base.paste(cat_image, (circle_x, circle_y), cat_image)
 
@@ -634,11 +717,14 @@ def render_cat_card_image(card: dict, user_id: str, cache_key: str | None = None
 
     return filename, _safe_url(source_url)
 
+
 # 載入 .env 檔案
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "your-secret-key")  # 從 .env 載入或使用預設值
+app.secret_key = os.getenv(
+    "FLASK_SECRET_KEY", "your-secret-key"
+)  # 從 .env 載入或使用預設值
 logging.basicConfig(level=logging.DEBUG)
 
 # 🟡 0929修改：設定圖卡輸出位置與備援資料
@@ -749,6 +835,7 @@ except Exception as e:
 # def _print_url_map():
 #    logging.debug("URL Map:\n" + "\n".join([str(r) for r in app.url_map.iter_rules()]))
 
+
 # 圖片代理：避免跨域限制影響下載圖卡
 @app.route("/proxy_image")
 def proxy_image():
@@ -777,11 +864,13 @@ def proxy_image():
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
+
 # 首頁
 @app.route("/")
 def home():
     is_logged_in = "user_id" in session
     return render_template("home.html", is_logged_in=is_logged_in)
+
 
 # 註冊
 @app.route("/register", methods=["GET", "POST"])
@@ -802,7 +891,9 @@ def register():
         if not email or not password or not gender:
             flash("請輸入電子郵件、密碼和生理性別！", "error")
             logging.warning("Missing email, password, or gender in form submission")
-            return render_template("register.html", error="請輸入電子郵件、密碼和生理性別")
+            return render_template(
+                "register.html", error="請輸入電子郵件、密碼和生理性別"
+            )
         # 🟢 修改結束
         try:
             user = auth.create_user(email=email, password=password)
@@ -833,9 +924,23 @@ def register():
 
     return render_template("register.html")
 
+
 # 登入
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    def _localized_login_error(message: str, email: str) -> str:
+        """Convert Firebase login error messages to user-friendly Traditional Chinese."""
+        msg = (message or "").lower()
+        if "no user record" in msg:
+            return f"登入失敗：找不到此電子郵件帳號（{email}）。"
+        if "invalid password" in msg or "password is invalid" in msg:
+            return "登入失敗：密碼不正確，請再試一次。"
+        if "too many attempts" in msg:
+            return "登入失敗：嘗試次數過多，請稍後再試。"
+        if "user disabled" in msg:
+            return "登入失敗：此帳號已被停用，請聯絡管理員。"
+        return "登入失敗：系統目前忙碌，請稍後再試。"
+
     if request.method == "GET":
         session.pop("_flashes", None)
 
@@ -850,7 +955,7 @@ def login():
         if not email or not password:
             flash("請輸入電子郵件和密碼！", "error")
             logging.warning("Missing email or password in login submission")
-            return render_template("login.html", error="請輸入電子郵件和密碼")
+            return render_template("login.html")
 
         try:
             user = auth.get_user_by_email(email)
@@ -864,14 +969,15 @@ def login():
         except FirebaseError as e:
             error_message = str(e)
             logging.error(f"Login failed: {error_message}")
-            flash(f"登入失敗：{error_message}", "error")
-            return render_template("login.html", error=f"登入失敗：{error_message}")
+            flash(_localized_login_error(error_message, email), "error")
+            return render_template("login.html")
         except Exception as e:
             logging.error(f"Unexpected login error: {str(e)}")
-            flash(f"登入失敗：{str(e)}", "error")
-            return render_template("login.html", error=f"登入失敗：{str(e)}")
+            flash("登入失敗：系統目前忙碌，請稍後再試。", "error")
+            return render_template("login.html")
 
     return render_template("login.html")
+
 
 # 登出
 @app.route("/logout")
@@ -881,11 +987,13 @@ def logout():
     flash("已成功登出！", "success")
     return redirect(url_for("home"))
 
+
 # 九宮格貓咪頁面
 @app.route("/featured_cats")
 def featured_cats():
     is_logged_in = "user_id" in session
     return render_template("featured_cats.html", is_logged_in=is_logged_in)
+
 
 # 上傳健康報告
 @app.route("/upload_health", methods=["GET", "POST"])
@@ -937,6 +1045,8 @@ def upload_health():
     invalid_report_prompt = session.pop('invalid_report_prompt', False)
     if invalid_report_prompt:
         auto_redirect = False
+    elif request.method == "GET" and has_existing_report and not reupload_requested:
+        auto_redirect = True
     # 🟢 修改結束
 
     if request.method == "POST":
@@ -969,7 +1079,7 @@ def upload_health():
 
         blob = bucket.blob(blob_path)
         blob.upload_from_file(file, content_type=file.mimetype)
-        #blob.make_public()
+        # blob.make_public()
         file_url = blob.public_url
         logging.debug(f"File uploaded successfully to Storage: {file_url}")
 
@@ -1055,8 +1165,11 @@ def upload_health():
         psychology_url=url_for("psychology_test"),
     )
 
+
 # 心理測驗
-@app.route("/psychology_test", methods=["GET", "POST"])  # 🟢 修改：允許 POST 以處理心理測驗提交
+@app.route(
+    "/psychology_test", methods=["GET", "POST"]
+)  # 🟢 修改：允許 POST 以處理心理測驗提交
 def psychology_test():
     if "user_id" not in session:
         flash("請先登入！", "error")
@@ -1066,9 +1179,7 @@ def psychology_test():
     try:
         # 🟢 修改：改為查詢頂層 health_reports 並依 user_uid 過濾，避免找不到文件
         health_reports = list(
-            db.collection("health_reports")
-              .where("user_uid", "==", user_id)
-              .stream()
+            db.collection("health_reports").where("user_uid", "==", user_id).stream()
         )  # 🟢 修改：原本是 users/{uid}/health_reports
         logging.debug(
             f"Psychology test check - existing reports: {len(health_reports)}"
@@ -1087,6 +1198,7 @@ def psychology_test():
 
         latest_report_data = None
         try:
+
             def _report_sort_key(doc_snapshot):
                 data = doc_snapshot.to_dict() or {}
                 created = data.get("created_at")
@@ -1137,6 +1249,7 @@ def psychology_test():
         )
     # 🟢 修改結束
 
+
 # 聊天 API 端點（代理 Gemini API）
 @app.route("/chat_api", methods=["POST"])
 def chat_api():
@@ -1159,7 +1272,9 @@ def chat_api():
             return jsonify({"error": "conversationHistory 為空或格式無效"}), 400
 
         try:
-            response = _generate_with_retry(contents, generation_config=JSON_RESPONSE_CONFIG)
+            response = _generate_with_retry(
+                contents, generation_config=JSON_RESPONSE_CONFIG
+            )
         except Exception as e:
             logging.error(f"Gemini generation failed: {e}")
             return jsonify({"nextPrompt": "AI 助手暫時無法回應，請稍後再試。"}), 200
@@ -1170,7 +1285,9 @@ def chat_api():
 
         candidate = response.candidates[0]
         reply = ""
-        parts = getattr(candidate.content, "parts", None) or []  # 0929修改03：parts 可能為 None，改採空清單避免迴圈錯誤
+        parts = (
+            getattr(candidate.content, "parts", None) or []
+        )  # 0929修改03：parts 可能為 None，改採空清單避免迴圈錯誤
         for part in parts:
             if getattr(part, "text", None):
                 reply += part.text
@@ -1185,7 +1302,9 @@ def chat_api():
             parsed_json = extract_json_from_response(reply)
             logging.debug(f"Successfully parsed JSON: {parsed_json}")
         except Exception:
-            logging.exception("0929修改03：chat_api JSON parse failed; raw snippet=%r", reply[:500])
+            logging.exception(
+                "0929修改03：chat_api JSON parse failed; raw snippet=%r", reply[:500]
+            )
             parsed_json = None
 
         if parsed_json and isinstance(parsed_json, dict):
@@ -1193,12 +1312,15 @@ def chat_api():
                 return jsonify(parsed_json)
             return jsonify({"nextPrompt": reply})
 
-        logging.warning(f"Could not parse JSON from reply, returning as plain text: {reply}")
+        logging.warning(
+            f"Could not parse JSON from reply, returning as plain text: {reply}"
+        )
         return jsonify({"nextPrompt": reply})
-    
+
     except Exception as e:
         logging.error(f"Unexpected error in chat_api: {str(e)}, data: {data}")
         return jsonify({"error": f"伺服器錯誤：{str(e)}"}), 500
+
 
 # 報告 API 端點（代理 Gemini API）
 @app.route("/report_api", methods=["POST"])
@@ -1212,7 +1334,9 @@ def report_api():
         return jsonify({"error": "缺少必要的參數"}), 400
 
     try:
-        logging.debug(f"Received conversationHistory for report: {len(data['conversationHistory'])} messages")
+        logging.debug(
+            f"Received conversationHistory for report: {len(data['conversationHistory'])} messages"
+        )
 
         contents = _build_genai_contents(
             data.get("systemInstruction"), data["conversationHistory"]
@@ -1222,23 +1346,40 @@ def report_api():
             return jsonify({"error": "conversationHistory 為空或格式無效"}), 400
 
         try:
-            response = _generate_with_retry(contents, generation_config=JSON_RESPONSE_CONFIG)
+            response = _generate_with_retry(
+                contents, generation_config=JSON_RESPONSE_CONFIG
+            )
         except Exception as e:
             logging.error(f"Gemini report generation failed: {e}")
-            return jsonify({"summary": "模型沒有產生報告內容，請稍後再試。", "keywords": [], "emotionVector": {"valence": 50, "arousal": 50, "dominance": 50}}), 200
+            return (
+                jsonify(
+                    {
+                        "summary": "模型沒有產生報告內容，請稍後再試。",
+                        "keywords": [],
+                        "emotionVector": {
+                            "valence": 50,
+                            "arousal": 50,
+                            "dominance": 50,
+                        },
+                    }
+                ),
+                200,
+            )
 
         if not response or not getattr(response, "candidates", None):
             logging.warning("Gemini report: no candidates, fallback to empty summary")
             report_json = {
                 "summary": "模型沒有產生報告內容，請稍後再試。",
                 "keywords": [],
-                "emotionVector": {"valence": 50, "arousal": 50, "dominance": 50}
+                "emotionVector": {"valence": 50, "arousal": 50, "dominance": 50},
             }
             return jsonify(report_json), 200
 
         candidate = response.candidates[0]
         summary_text = ""
-        parts = getattr(candidate.content, "parts", None) or []  # 0929修改03：parts 可能為 None，改採空清單避免迴圈錯誤
+        parts = (
+            getattr(candidate.content, "parts", None) or []
+        )  # 0929修改03：parts 可能為 None，改採空清單避免迴圈錯誤
         for part in parts:
             if getattr(part, "text", None):
                 summary_text += part.text
@@ -1248,7 +1389,7 @@ def report_api():
             report_json = {
                 "summary": "模型沒有提供完整內容。",
                 "keywords": [],
-                "emotionVector": {"valence": 50, "arousal": 50, "dominance": 50}
+                "emotionVector": {"valence": 50, "arousal": 50, "dominance": 50},
             }
             return jsonify(report_json), 200
 
@@ -1271,26 +1412,39 @@ def report_api():
                 ),
                 502,
             )
-    
+
     except Exception as e:
         logging.error(f"Unexpected error in report_api: {str(e)}, data: {data}")
         return jsonify({"error": f"伺服器錯誤：{str(e)}"}), 500
 
+
 # 儲存心理測驗分數
 # 🟢 修改：明確指定 endpoint 名稱，避免因函式名或載入順序造成的註冊差異
-@app.route("/save_psychology_scores", methods=["POST"], endpoint="save_psychology_scores")  # 🟢 修改
+@app.route(
+    "/save_psychology_scores", methods=["POST"], endpoint="save_psychology_scores"
+)  # 🟢 修改
 def save_psychology_scores():
     if "user_id" not in session:
         return jsonify({"error": "未登入"}), 401
 
     data = request.get_json()
-    if not data or not all(key in data for key in ["mindScore", "bodyScore", "combinedScore"]):
+    if not data or not all(
+        key in data for key in ["mindScore", "bodyScore", "combinedScore"]
+    ):
         return jsonify({"error": "缺少必要的分數參數"}), 400
 
     try:
         user_id = session["user_id"]
-        test_id = db.collection("users").document(user_id).collection("psychology_tests").document().id
-        db.collection("users").document(user_id).collection("psychology_tests").document(test_id).set(
+        test_id = (
+            db.collection("users")
+            .document(user_id)
+            .collection("psychology_tests")
+            .document()
+            .id
+        )
+        db.collection("users").document(user_id).collection(
+            "psychology_tests"
+        ).document(test_id).set(
             {
                 "mind_score": data["mindScore"],
                 "body_score": data["bodyScore"],
@@ -1299,7 +1453,7 @@ def save_psychology_scores():
                 "keywords": data.get("keywords", []),
                 "emotion_vector": data.get("emotionVector", {}),
                 "conversation_history": data.get("conversationHistory", []),
-                "submit_time": SERVER_TIMESTAMP
+                "submit_time": SERVER_TIMESTAMP,
             }
         )
         logging.debug(f"Psychology scores saved for user {user_id}, test {test_id}")
@@ -1307,6 +1461,7 @@ def save_psychology_scores():
     except Exception as e:
         logging.error(f"Error saving psychology scores: {str(e)}")
         return jsonify({"error": f"儲存分數失敗：{str(e)}"}), 500
+
 
 # 生成貓咪圖卡
 @app.route("/generate_card")
@@ -1321,9 +1476,7 @@ def generate_card():
         user_id = session["user_id"]
         # 🟢 修改：同樣改為查詢頂層 health_reports
         health_report_docs = (
-            db.collection("health_reports")
-            .where("user_uid", "==", user_id)
-            .stream()
+            db.collection("health_reports").where("user_uid", "==", user_id).stream()
         )
         reports = []
         for doc in health_report_docs:
@@ -1354,7 +1507,9 @@ def generate_card():
             reports,
             key=lambda r: _to_datetime(r.get("created_at") or r.get("report_date")),
         )
-        warnings, vitals_display = _normalize_health_data(latest_report)  # 🟡 0929修改：整理健檢提醒與指標
+        warnings, vitals_display = _normalize_health_data(
+            latest_report
+        )  # 🟡 0929修改：整理健檢提醒與指標
         latest_report["_display_warnings"] = warnings
         latest_report["_display_vitals"] = vitals_display
 
@@ -1373,7 +1528,9 @@ def generate_card():
         if cache_entry:
             cache_path = CAT_CARD_DIR / cache_entry.get("filename", "")
             cache_age = time.time() - cache_entry.get("timestamp", 0)
-            cache_key_match = cache_entry.get("cache_key") == cache_key_current  # 🟡 1001修改01：僅當最新報告/測驗與快取一致時才沿用
+            cache_key_match = (
+                cache_entry.get("cache_key") == cache_key_current
+            )  # 🟡 1001修改01：僅當最新報告/測驗與快取一致時才沿用
             if cache_path.exists() and cache_age < 3600 and cache_key_match:
                 logging.debug("Using cached cat card for user %s", user_id)
                 card_payload = cache_entry.get("card", {})
@@ -1385,7 +1542,9 @@ def generate_card():
             if warnings:
                 card_payload["warnings"] = warnings
             cache_key = cache_key_current
-            image_filename, cat_source = render_cat_card_image(card_payload, user_id, cache_key=cache_key)
+            image_filename, cat_source = render_cat_card_image(
+                card_payload, user_id, cache_key=cache_key
+            )
             session["cat_card_cache"] = {
                 "timestamp": time.time(),
                 "filename": image_filename,
@@ -1413,6 +1572,7 @@ def generate_card():
         return render_template(
             "generate_card.html", error=f"生成圖卡失敗：{str(e)}", is_logged_in=True
         )
+
 
 if __name__ == "__main__":
     # 若要列印路由表，可在這裡印出（避免 Flask 3 的 before_first_request）

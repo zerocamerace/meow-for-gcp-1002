@@ -17,8 +17,42 @@
         body {
             line-height: inherit;
             margin: 0;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background-color: #E2D1C3; /* #1005庭婕這裡改了背景為暖黃色 */
             font-family: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+        }
+        .warm-shell {
+            background-color: #E2D1C3; /* #1005庭婕這裡新增整體暖黃色底色 */
+        }
+        .warm-surface {
+            background-color: #EFE0D2; /* #1005庭婕這裡統一卡片換暖色調 */
+        }
+        .warm-cta {
+            background-color: #E2D1C3; /* #1005庭婕這裡更新按鈕暖色主題 */
+            color: #3F2B1E;
+            border: 1px solid #CDB59F;
+        }
+        .warm-cta:hover {
+            background-color: #D7C0AE; /* #1005庭婕這裡設定暖色按鈕滑過效果 */
+            color: #2B1C13;
+        }
+        .warm-menu {
+            background-color: rgba(191, 153, 125, 0.92); /* 讓下拉選單更深一點，視覺集中 */
+            border: none; /* #1005庭婕這裡拿掉深色框線 */
+            box-shadow: 0 6px 16px rgba(63, 43, 30, 0.12); /* 更柔和的陰影高度 */
+            width: auto !important; /* 讓選單依內容縮小，覆蓋原本 w-40 設定 */
+            min-width: 88px; /* 預留基本寬度以避免字太擠 */
+            border-radius: 9999px; /* 改成橢圓 pill 造型 */
+            padding: 4px 12px; /* 收緊上下左右空間 */
+        }
+        .warm-menu-link {
+            color: #3F2B1E; /* #1005庭婕這裡設定下拉選項文字為暖色系 */
+            text-align: center; /* 讓文字置中與膠囊對齊 */
+            padding: 4px 0 !important; /* 讓文字與底色距離更靠近，覆蓋 px-4/py-2 */
+            font-weight: 600;
+        }
+        .warm-menu-link:hover {
+            background-color: transparent; /* 保持原色，移除滑過時的深色底 */
+            color: #2B1C13;
         }
         
         .material-symbols-outlined {
@@ -45,10 +79,10 @@
         
         /* 頁首樣式 */
         .header {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(226, 209, 195, 0.95); /* #1005庭婕這裡將頁首換成暖黃色 */
             backdrop-filter: blur(10px);
             padding: 16px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(205, 181, 159, 0.4);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -69,12 +103,6 @@
             font-size: 20px;
         }
         
-        .logo svg {
-            height: 24px;
-            width: 24px;
-            margin-right: 8px;
-        }
-        
         .nav {
             display: flex;
             gap: 24px;
@@ -83,14 +111,14 @@
         .nav-item {
             display: flex;
             align-items: center;
-            color: #6b7280;
+            color: #5A4636; /* #1005庭婕這裡調整導覽文字為暖色調 */
             text-decoration: none;
             transition: color 0.2s;
             font-weight: 500;
         }
         
         .nav-item:hover {
-            color: #374151;
+            color: #3F2B1E; /* #1005庭婕這裡設定導覽滑過暖色 */
         }
         
         .nav-item .material-symbols-outlined {
@@ -111,7 +139,7 @@
         .page-title h1 {
             font-size: 48px;
             font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #E8CDB2, #D5B194); /* #1005庭婕這裡改為暖黃色漸層標題 */
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -129,13 +157,13 @@
         /* 貓咪卡片網格 */
         .cats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 24px;
             margin-bottom: 40px;
         }
         
         .cat-card {
-            background: white;
+            background: #EFE0D2; /* #1005庭婕這裡把九宮格卡片改為暖黃色 */
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -170,13 +198,13 @@
             position: absolute;
             top: 12px;
             right: 12px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(226, 209, 195, 0.9); /* #1005庭婕這裡更新徽章為暖黃色 */
             backdrop-filter: blur(10px);
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
-            color: #374151;
+            color: #3F2B1E;
         }
         
         .cat-content {
@@ -211,14 +239,14 @@
         }
         
         .trait-item .material-symbols-outlined {
-            color: #667eea;
+            color: #B78968; /* #1005庭婕這裡把圖示換成暖黃色調 */
             margin-right: 4px;
             font-size: 14px;
         }
         
         /* 底部行動區塊 */
         .bottom-cta {
-            background: white;
+            background: #EFE0D2; /* #1005庭婕這裡調整底部行動區為暖黃色 */
             border-radius: 16px;
             padding: 40px;
             text-align: center;
@@ -243,27 +271,28 @@
             align-items: center;
             gap: 8px;
             padding: 16px 32px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            background: linear-gradient(135deg, #E8CDB2, #D5B194); /* #1005庭婕這裡更新行動按鈕為暖黃色漸層 */
+            color: #3F2B1E;
             text-decoration: none;
             border-radius: 25px;
             font-weight: 600;
             transition: all 0.3s ease;
+            border: 1px solid #CDB59F;
         }
         
         .cta-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(63, 43, 30, 0.2); /* #1005庭婕這裡改暖黃色陰影 */
         }
         
         /* 登入狀態提示 */
         .login-hint {
-            background: rgba(102, 126, 234, 0.1);
-            border: 1px solid rgba(102, 126, 234, 0.2);
+            background: rgba(226, 209, 195, 0.8); /* #1005庭婕這裡更新登入提示為暖黃色 */
+            border: 1px solid rgba(205, 181, 159, 0.6);
             border-radius: 12px;
             padding: 12px 16px;
             margin-top: 16px;
-            color: #667eea;
+            color: #3F2B1E;
             font-size: 14px;
             display: flex;
             align-items: center;
@@ -272,17 +301,18 @@
         
         .login-hint .material-symbols-outlined {
             font-size: 18px;
+            color: #B78968; /* #1005庭婕這裡同步登入提示圖示暖色 */
         }
         
         /* 貓咪選擇效果 */
         .cat-card.selected {
-            border: 3px solid #667eea;
-            box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.3);
+            border: 3px solid #B78968; /* #1005庭婕這裡調整選取狀態為暖黃色 */
+            box-shadow: 0 0 0 1px rgba(183, 137, 104, 0.3);
         }
         
         .cat-card.selected .cat-badge {
-            background: #667eea;
-            color: white;
+            background: #B78968; /* #1005庭婕這裡同步選取徽章暖色 */
+            color: #3F2B1E;
         }
         
         /* 響應式設計 */
@@ -338,12 +368,7 @@
         <div class="container">
             <div class="header-content">
                 <a href="/" class="logo">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2C14.5 2 16.5 4 16.5 6.5C16.5 9 14.5 11 12 11C9.5 11 7.5 9 7.5 6.5C7.5 4 9.5 2 12 2Z"></path>
-                        <path d="M5 20C5 16.5 8 14 12 14C16 14 19 16.5 19 20"></path>
-                        <path d="M12 14L12 22M9 17L15 19M9 19L15 17"></path>
-                    </svg>
-                    Meow Yourself
+                    <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: 24px; width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
                 </a>
                 <nav class="nav">
                     <a href="/" class="nav-item">
