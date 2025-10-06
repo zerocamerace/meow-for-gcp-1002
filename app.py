@@ -1047,6 +1047,12 @@ def upload_health():
             "Existing health report found; enabling auto redirect to psychology_test"
         )
         auto_redirect = True
+    invalid_report_prompt = session.pop('invalid_report_prompt', False)
+    auto_redirect = (
+        has_existing_report
+        and not reupload_requested
+        and not invalid_report_prompt
+    )
     # 🟢 修改結束
 
     if request.method == "POST":

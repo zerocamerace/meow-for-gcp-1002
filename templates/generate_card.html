@@ -39,15 +39,22 @@
             background-color: rgba(226, 209, 195, 0.85); /* #1005庭婕這裡新增暖黃色透亮區塊 */
         }
         .warm-menu {
-            background-color: rgba(226, 209, 195, 0.95); /* #1005庭婕這裡調整下拉選單為柔和暖色 */
+            background-color: rgba(191, 153, 125, 0.92); /* 讓下拉選單更深一點，視覺集中 */
             border: none; /* #1005庭婕這裡拿掉深色框線 */
-            box-shadow: 0 8px 20px rgba(63, 43, 30, 0.08); /* #1005庭婕這裡加上淡淡陰影 */
+            box-shadow: 0 6px 16px rgba(63, 43, 30, 0.12); /* 更柔和的陰影高度 */
+            width: auto !important; /* 讓選單依內容縮小，覆蓋原本 w-40 設定 */
+            min-width: 88px; /* 預留基本寬度以避免字太擠 */
+            border-radius: 9999px; /* 改成橢圓 pill 造型 */
+            padding: 4px 12px; /* 收緊上下左右空間 */
         }
         .warm-menu-link {
             color: #3F2B1E; /* #1005庭婕這裡設定下拉選項文字為暖色系 */
+            text-align: center; /* 讓文字置中與膠囊對齊 */
+            padding: 4px 0 !important; /* 讓文字與底色距離更靠近，覆蓋 px-4/py-2 */
+            font-weight: 600;
         }
         .warm-menu-link:hover {
-            background-color: rgba(205, 181, 159, 0.35); /* #1005庭婕這裡讓下拉選項滑過保持輕盈 */
+            background-color: transparent; /* 保持原色，移除滑過時的深色底 */
             color: #2B1C13;
         }
         img {
