@@ -17,47 +17,48 @@
                 line-height: inherit;
                 margin: 0;
                 overflow-x: hidden;
-                background-color: #E2D1C3; /* #1005庭婕這裡改了背景為暖黃色 */
+                background-color: #f1e7e0;
+                background-image: linear-gradient(155deg, #f1e7e0 0%, #e7d2c5 48%, #f9f1ec 100%);
             }
             #webcrumbs .warm-shell {
-                background-color: #E2D1C3; /* #1005庭婕這裡新增整體暖黃色主底 */
+                background: linear-gradient(185deg, #faeee7 0%, #f1e7e0 60%, #e6d1c4 100%);
             }
             #webcrumbs .warm-surface {
-                background-color: #EFE0D2; /* #1005庭婕這裡統一卡片為暖黃色調 */
+                background: linear-gradient(160deg, rgba(250, 238, 231, 0.94) 0%, rgba(233, 209, 194, 0.96) 100%);
             }
             #webcrumbs .warm-cta {
-                background-color: #E2D1C3; /* #1005庭婕這裡讓按鈕呼應暖黃色主題 */
-                color: #3F2B1E;
-                border: 1px solid #CDB59F;
+                background: linear-gradient(135deg, #f5d9c5 0%, #e9c4ae 100%);
+                color: #5b4032;
+                border: 1px solid rgba(205, 175, 154, 0.6);
             }
             #webcrumbs .warm-cta:hover {
-                background-color: #D7C0AE; /* #1005庭婕這裡設定暖黃色按鈕滑過效果 */
-                color: #2B1C13;
+                background: linear-gradient(135deg, #eccfbb 0%, #dfb49a 100%);
+                color: #4a3124;
             }
             /* #1005庭婕這裡新增登入主按鈕漸層與視覺強調 */
             #webcrumbs .warm-cta-main {
-                background: linear-gradient(135deg, #E8CDB2, #D5B194);
-                color: #3F2B1E;
+                background: linear-gradient(135deg, #f3cfba, #e3b89d);
+                color: #543a2c;
                 border: none;
                 font-weight: 600;
                 letter-spacing: 1px;
             }
             #webcrumbs .warm-cta-main:hover {
-                background: linear-gradient(135deg, #DCC1AA, #C7A487);
+                background: linear-gradient(135deg, #e9c4ae, #d6a98c);
             }
             /* #1005庭婕這裡設定建立帳號按鈕為棕色系 */
             #webcrumbs .warm-cta-secondary {
-                background-color: #A47858;
+                background-color: #c09073;
                 color: #fff;
                 font-weight: 600;
-                border: 2px solid #7F5C41;
+                border: 2px solid #a47257;
             }
             #webcrumbs .warm-cta-secondary:hover {
-                background-color: #7F5C41;
+                background-color: #a47257;
             }
             /* #1005庭婕這裡新增舒適分隔線與留白 */
             #webcrumbs .cta-divider {
-                border-bottom: 1px solid rgba(205, 181, 159, 0.6);
+                border-bottom: 1px solid rgba(206, 181, 165, 0.6);
                 margin: 24px 0;
             }
             /* #1005庭婕這裡設定舒適閱讀字級與行距 */
@@ -66,26 +67,26 @@
                 line-height: 1.5;
             }
             #webcrumbs .warm-divider {
-                border-bottom: 1px solid rgba(205, 181, 159, 0.6); /* #1005庭婕這裡把分隔線換成暖色系 */
+                border-bottom: 1px solid rgba(206, 181, 165, 0.6);
             }
             #webcrumbs .warm-menu {
-                background-color: rgba(191, 153, 125, 0.92); /* 讓下拉選單更深一點，視覺集中 */
-                border: none; /* #1005庭婕這裡拿掉深色框線 */
-                box-shadow: 0 6px 16px rgba(63, 43, 30, 0.12); /* 更柔和的陰影高度 */
+                background-color: rgba(210, 171, 148, 0.9);
+                border: none;
+                box-shadow: 0 6px 16px rgba(110, 83, 63, 0.16);
                 width: auto !important; /* 讓選單依內容縮小，覆蓋原本 w-40 設定 */
                 min-width: 88px; /* 預留基本寬度以避免字太擠 */
                 border-radius: 9999px; /* 改成橢圓 pill 造型 */
                 padding: 4px 12px; /* 收緊上下左右空間 */
             }
             #webcrumbs .warm-menu-link {
-                color: #3F2B1E; /* #1005庭婕這裡設定下拉選項文字為暖色系 */
+                color: #4d3528;
                 text-align: center; /* 讓文字置中與膠囊對齊 */
                 padding: 4px 0 !important; /* 讓文字與底色距離更靠近，覆蓋 px-4/py-2 */
                 font-weight: 600;
             }
             #webcrumbs .warm-menu-link:hover {
-                background-color: transparent; /* 保持原色，移除滑過時的深色底 */
-                color: #2B1C13;
+                background-color: transparent;
+                color: #3a271c;
             }
             img {
                 max-width: 100%;
@@ -272,7 +273,7 @@
             <div class="max-w-[1200px] w-full font-sans mx-auto warm-shell">
                 <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
                     <div class="flex items-center">
-                        <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" class="h-6 w-auto" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+                        <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
                     </div>
                     <nav class="hidden md:flex space-x-6">
                         <a href="{{ url_for('home') }}" class="hover:text-gray-700 transition-colors duration-200 flex items-center">

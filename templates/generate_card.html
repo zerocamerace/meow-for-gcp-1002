@@ -17,45 +17,46 @@
             line-height: inherit;
             margin: 0;
             overflow-x: hidden;
-            background-color: #E2D1C3; /* #1005庭婕這裡改了背景為暖黃色 */
+            background-color: #f1e7e0;
+            background-image: linear-gradient(155deg, #f1e7e0 0%, #e7d2c5 45%, #f8f1eb 100%);
             min-height: 100vh;
         }
         .warm-shell {
-            background-color: #E2D1C3; /* #1005庭婕這裡新增整體暖黃色底色 */
+            background: linear-gradient(185deg, #faeee7 0%, #f1e7e0 60%, #e6d1c4 100%);
         }
         .warm-surface {
-            background-color: #EFE0D2; /* #1005庭婕這裡讓卡片改成暖黃色調 */
+            background: linear-gradient(160deg, rgba(250, 238, 231, 0.94) 0%, rgba(233, 209, 194, 0.96) 100%);
         }
         .warm-cta {
-            background-color: #E2D1C3; /* #1005庭婕這裡調整按鈕為暖黃色 */
-            color: #3F2B1E;
-            border: 1px solid #CDB59F;
+            background: linear-gradient(135deg, #f4d9c5 0%, #e1b89d 100%);
+            color: #5b4032;
+            border: 1px solid rgba(205, 175, 154, 0.6);
         }
         .warm-cta:hover {
-            background-color: #D7C0AE; /* #1005庭婕這裡設定暖黃色按鈕滑過效果 */
-            color: #2B1C13;
+            background: linear-gradient(135deg, #ebcdb7 0%, #d6a98c 100%);
+            color: #4a3124;
         }
         .warm-note {
-            background-color: rgba(226, 209, 195, 0.85); /* #1005庭婕這裡新增暖黃色透亮區塊 */
+            background: linear-gradient(135deg, rgba(249, 237, 230, 0.9) 0%, rgba(233, 209, 194, 0.9) 100%);
         }
         .warm-menu {
-            background-color: rgba(191, 153, 125, 0.92); /* 讓下拉選單更深一點，視覺集中 */
-            border: none; /* #1005庭婕這裡拿掉深色框線 */
-            box-shadow: 0 6px 16px rgba(63, 43, 30, 0.12); /* 更柔和的陰影高度 */
+            background-color: rgba(210, 171, 148, 0.9);
+            border: none;
+            box-shadow: 0 6px 16px rgba(110, 83, 63, 0.16);
             width: auto !important; /* 讓選單依內容縮小，覆蓋原本 w-40 設定 */
             min-width: 88px; /* 預留基本寬度以避免字太擠 */
             border-radius: 9999px; /* 改成橢圓 pill 造型 */
             padding: 4px 12px; /* 收緊上下左右空間 */
         }
         .warm-menu-link {
-            color: #3F2B1E; /* #1005庭婕這裡設定下拉選項文字為暖色系 */
+            color: #4d3528;
             text-align: center; /* 讓文字置中與膠囊對齊 */
             padding: 4px 0 !important; /* 讓文字與底色距離更靠近，覆蓋 px-4/py-2 */
             font-weight: 600;
         }
         .warm-menu-link:hover {
             background-color: transparent; /* 保持原色，移除滑過時的深色底 */
-            color: #2B1C13;
+            color: #3a271c;
         }
         img {
             max-width: 100%;
@@ -81,22 +82,22 @@
             max-width: min(1200px, 100%);
             width: 100%;
             margin: 0 auto;
-            padding: 0 clamp(16px, 4vw, 32px);
-            background: rgba(226, 209, 195, 0.85); /* #1005庭婕這裡把版心換成暖黃色透明底 */
+            padding: 0;
+            background: linear-gradient(160deg, rgba(249, 239, 233, 0.9) 0%, rgba(233, 210, 195, 0.92) 100%);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             min-height: 100vh;
-            box-shadow: 0 20px 40px rgba(63, 43, 30, 0.12);
+            box-shadow: 0 26px 48px rgba(110, 83, 63, 0.14);
         }
         
         .header {
-            background-color: #E2D1C3; /* #1005庭婕這裡調整抬頭區為暖黃色 */
+            background: linear-gradient(160deg, rgba(249, 239, 233, 0.95) 0%, rgba(232, 206, 191, 0.92) 100%);
             backdrop-filter: blur(10px);
-            padding: 16px 24px;
+            padding: 16px clamp(16px, 4vw, 32px);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(205, 181, 159, 0.5);
+            border-bottom: 1px solid rgba(206, 181, 165, 0.55);
             border-radius: 20px 20px 0 0;
         }
         
@@ -115,13 +116,13 @@
         .nav-item {
             display: flex;
             align-items: center;
-            color: #6b7280;
+            color: #5b4032;
             text-decoration: none;
             transition: color 0.2s;
         }
         
         .nav-item:hover {
-            color: #374151;
+            color: #3f2a1f;
         }
         
         .nav-item .material-symbols-outlined {
@@ -138,13 +139,16 @@
         .title {
             font-size: 48px;
             font-weight: 700;
-            color: #3F2B1E; /* #1005庭婕這裡調整主標題文字為暖色系 */
+            background: linear-gradient(135deg, #f4d9c5, #e1b89d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 16px;
         }
         
         .subtitle {
             font-size: clamp(16px, 2.5vw, 18px);
-            color: #4B392B; /* #1005庭婕這裡更新副標文字為暖色調 */
+            color: #6b5243;
             margin-bottom: 40px;
             max-width: min(600px, 100%);
             margin-left: auto;
@@ -306,7 +310,7 @@
         
         /* 分享按鈕區域 */
         .share-section {
-            background: rgba(226, 209, 195, 0.85); /* #1005庭婕這裡改成暖黃色分享區塊 */
+            background: linear-gradient(160deg, rgba(249, 239, 233, 0.9) 0%, rgba(233, 209, 194, 0.9) 100%);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 24px;
@@ -314,11 +318,11 @@
             max-width: min(500px, 100%);
             margin-left: auto;
             margin-right: auto;
-            box-shadow: 0 12px 28px rgba(63, 43, 30, 0.12);
+            box-shadow: 0 18px 36px rgba(110, 83, 63, 0.16);
         }
         
         .share-title {
-            color: #3F2B1E; /* #1005庭婕這裡調整分享標題文字顏色 */
+            color: #5b4032;
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 16px;
@@ -365,9 +369,9 @@
         }
         
         .share-copy {
-            background: #E2D1C3; /* #1005庭婕這裡改成暖黃色複製按鈕 */
-            color: #3F2B1E;
-            border: 1px solid #CDB59F;
+            background: linear-gradient(135deg, #f4d7c3 0%, #e8c3ad 100%);
+            color: #5b4032;
+            border: 1px solid rgba(205, 175, 154, 0.6);
         }
 
         /* 🟡 0930 修改：提供可重複使用的隱藏樣式，避免刪除原始區塊 */
@@ -403,15 +407,15 @@
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #E8CDB2, #D5B194); /* #1005庭婕這裡改主行動按鈕為暖黃色漸層 */
-            color: #3F2B1E;
-            border: 1px solid #CDB59F;
+            background: linear-gradient(135deg, #f4d9c5, #e1b89d);
+            color: #5b4032;
+            border: 1px solid rgba(205, 175, 154, 0.6);
         }
         
         .btn-secondary {
-            background: #E2D1C3; /* #1005庭婕這裡同步次要按鈕暖色調 */
-            color: #3F2B1E;
-            border: 1px solid #CDB59F;
+            background: linear-gradient(135deg, #f3d2bf 0%, #e2baa1 100%);
+            color: #5b4032;
+            border: 1px solid rgba(205, 175, 154, 0.6);
         }
 
         /* 通知提示樣式 */
@@ -442,7 +446,7 @@
 
         /* 連結顯示區域 */
         .link-display {
-            background: rgba(226, 209, 195, 0.85); /* #1005庭婕這裡把連結展示區改為暖黃色 */
+            background: linear-gradient(160deg, rgba(249, 239, 233, 0.9) 0%, rgba(233, 209, 194, 0.9) 100%);
             backdrop-filter: blur(10px);
             border-radius: 12px;
             padding: 16px;
@@ -455,8 +459,8 @@
             padding: 12px;
             border: none;
             border-radius: 8px;
-            background: #E2D1C3; /* #1005庭婕這裡同步輸入框為暖黃色 */
-            color: #3F2B1E;
+            background: rgba(241, 231, 224, 0.9);
+            color: #5b4032;
             font-size: 14px;
             text-align: center;
         }
@@ -536,7 +540,7 @@
     <link rel="icon" href="https://cdn.webcrumbs.org/assets/images/landing/favicon.ico" />
     <link rel="apple-touch-icon" sizes="192x192" href="https://cdn.webcrumbs.org/assets/images/landing/logo192.png" />
     <link rel="apple-touch-icon" sizes="512x512" href="https://cdn.webcrumbs.org/assets/images/landing/logo512.png" />
-    <meta name="theme-color" content="#667eea" />
+    <meta name="theme-color" content="#f1e7e0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Meow Yourself" />
@@ -554,7 +558,7 @@
     <div class="container">
         <header class="header">
             <div class="logo">
-                <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: 24px; width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+                <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
             </div>
             <nav class="nav">
                 <!-- 🟢 修改：首頁按鈕導向首頁路由 -->
