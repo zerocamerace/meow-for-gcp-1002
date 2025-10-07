@@ -403,12 +403,23 @@ def _download_image(
 
 
 def generate_cat_card_text(report: dict, psychology: dict, preferred_style: str):
-    """呼叫 Gemini 產生貓卡敘述。"""  # 🟡 0929修改：貓卡文案
+    """呼叫 Gemini 產生貓卡敘述與生活推薦。"""  # 🟡 1007 修改『圖卡生成推薦』：擴充文案欄位
     prompt = (
-        "你是一位數位貓咪圖卡設計師，會根據使用者的健康與心理測驗資料提供一隻陪伴貓咪。\n"
-        "回傳 JSON，欄位包含 styleKey (bright/steady/healer 其一)、persona、name、speech (15 字內)、"
-        "summary (60 字內)、insight (50 字內)、action (40 字內)、keywords (陣列，可空)。"
-        "所有文字使用繁體中文。\n"
+        "你是一位數位貓咪圖卡策展師，會依據使用者的健康與心理測驗資料提供陪伴資訊。\n"
+        "請回傳 JSON，必須包含下列欄位：\n"
+        "- styleKey: bright/steady/healer 之一。\n"
+        "- persona: 角色定位。\n"
+        "- name: 貓咪名稱。\n"
+        "- speech: 15 字內、溫暖有記憶點的開場話。\n"
+        "- summary: 60 字內，以故事化語氣描述當前狀態，不可提到任何精確數值或檢驗指標。\n"
+        "- insight: 50 字內，給出情緒洞察，避免出現具體數字或醫療指標名稱。\n"
+        "- action: 40 字內，提出實際可行的小提醒，同樣勿出現具體檢驗數值。\n"
+        "- keywords: 陣列，可空。\n"
+        "- recommendations: 物件，內含 movie/music/activity 三個子欄位，每個子欄位需提供 title 與 reason。\n"
+        "  * movie: 推薦一部符合當前情緒需求的電影或影集，reason 需點出氛圍或療癒重點。\n"
+        "  * music: 推薦一首歌曲或播放清單，說明為何適合此刻的節奏。\n"
+        "  * activity: 推薦一個放鬆或充電的小活動，要具體且富有品味。\n"
+        "所有文字務必使用繁體中文，保持溫柔且有品味，不可引用精確的血壓、血脂等數值。\n"
         f"建議風格：{preferred_style}\n"
         f"健康資料：{json.dumps(report, ensure_ascii=False, default=str)}\n"
         f"心理測驗：{json.dumps(psychology, ensure_ascii=False, default=str)}"
@@ -449,36 +460,100 @@ CAT_STYLES = {
         "title": "陽光守護者",
         "names": ["小橘光", "暖暖", "Sunny 喵"],
         "speech": ["今天也要補充水分喵！", "保持笑容，活力滿分！"],
-        "description": "我感受到你{mood}的能量，讓我們一起維持 {health} 分的好狀態。",
+        "description": "我感受到你{mood}的能量，讓我們把這份耀眼溫度延續下去。",
         "actions": [
             "午休時間散步 10 分鐘，讓身體熱起來",
             "今天晚餐試試多彩蔬菜盤，補充維生素",
         ],
         "palette": ("#FFEAA7", "#FD79A8", "#FFAFCC", "#2d3436"),
+        "curations": {
+            "movie": ("《翻滾吧！阿信》", "熱血卻富含體貼的勵志故事，帶來向上的動力"),
+            "music": ("City Pop 暖陽歌單", "輕快律動喚醒身體的節奏感"),
+            "activity": ("戶外晨間伸展", "在陽光下活動筋骨，吸收自然能量"),
+        },     # 🟡 1007 修改『圖卡生成推薦』
     },
     "steady": {
         "title": "溫柔照護隊長",
         "names": ["小霧", "Cotton", "霜霜"],
         "speech": ["放慢腳步，我陪著你喵。", "今天也記得深呼吸三次。"],
-        "description": "你的關鍵字是 {mood}，我會在日常提醒你保持節奏，讓 {health} 分更穩定。",
+        "description": "你的關鍵字是 {mood}，我會在日常提醒你保持節奏，讓步調更穩定。",
         "actions": [
             "睡前做 5 分鐘伸展，放鬆肌肉",
             "把今天的情緒寫在手帳，整理一下心緒",
         ],
         "palette": ("#E0FBFC", "#98C1D9", "#3D5A80", "#2d3436"),
+        "curations": {
+            "movie": ("《小森林》", "四季料理與田園步調，撫慰敏感心緒"),
+            "music": ("Lo-fi 書寫清單", "柔和節拍陪你整理思緒"),
+            "activity": ("手寫一封慢信", "用文字梳理情緒，讓心安定下來"),
+        },
     },
     "healer": {
         "title": "療癒訓練師",
         "names": ["小湯圓", "Mochi", "露露"],
         "speech": ["我們慢慢來，沒關係的喵。", "先照顧好自己，我在旁邊。"],
-        "description": "看見你需要休息的訊號，我會當你的提醒小鬧鐘，陪你把 {health} 分調整回來。",
+        "description": "看見你需要休息的訊號，我會當你的提醒小鬧鐘，陪你一起慢慢修復。",
         "actions": [
             "安排 15 分鐘的呼吸練習，舒緩壓力",
             "今天對自己說聲辛苦了，給自己一個擁抱",
         ],
         "palette": ("#E8EAF6", "#C5CAE9", "#9FA8DA", "#2d3436"),
+        "curations": {
+            "movie": ("《海邊的曼徹斯特》", "細膩描寫失落後的修復，讓情緒被看見"),
+            "music": ("Neo Classical 冥想曲", "舒緩鋼琴聲穩定呼吸節奏"),
+            "activity": ("居家香氛冥想", "點上喜歡的味道，跟著引導冥想放鬆"),
+        },
     },
 }
+
+# 🟡 1007 修改『圖卡生成推薦』：預設影音與活動建議
+def _fallback_recommendations(style_key: str) -> list[dict[str, str]]:
+    style = CAT_STYLES.get(style_key, {})
+    curations = style.get("curations", {})
+    defaults = {
+        "movie": ("《向左走向右走》", "浪漫淺嘗的節奏，陪你梳理心情"),
+        "music": ("Bossa Nova 咖啡廳", "溫柔節拍讓心慢慢沉靜"),
+        "activity": ("傍晚散步", "換個場景，讓腦袋短暫放空"),
+    }
+    mapping = [
+        ("movie", "推薦電影"),
+        ("music", "推薦音樂"),
+        ("activity", "推薦活動"),
+    ]
+    recommendations = []
+    for key, label in mapping:
+        title, reason = curations.get(key, defaults[key])
+        recommendations.append({"label": label, "title": title, "reason": reason})
+    return recommendations
+
+# 🟡 1007 修改『圖卡生成推薦』：整合 AI 與預設推薦
+def _normalize_recommendations(ai_payload: dict | None, style_key: str) -> list[dict[str, str]]:
+    payload = ai_payload or {}
+    raw_recs = payload.get("recommendations") or {}
+    mapping = [
+        ("movie", "推薦電影"),
+        ("music", "推薦音樂"),
+        ("activity", "推薦活動"),
+    ]
+    fallback_list = _fallback_recommendations(style_key)
+    normalized = []
+    for key, label in mapping:
+        source = raw_recs.get(key) if isinstance(raw_recs, dict) else None
+        title = ""
+        reason = ""
+        if isinstance(source, dict):
+            title = str(source.get("title") or "").strip()
+            reason = str(source.get("reason") or "").strip()
+        if not title or not reason:
+            fallback = next((item for item in fallback_list if item["label"] == label), None)
+            if fallback:
+                title = title or fallback["title"]
+                reason = reason or fallback["reason"]
+        normalized.append({"label": label, "title": title, "reason": reason})
+    if len(normalized) > 2:
+        random.shuffle(normalized)
+        normalized = normalized[:2]  # 🟡 1007 修改圖卡：僅呈現兩則建議
+    return normalized
 
 
 def build_cat_card(report: dict, psychology: dict):
@@ -511,6 +586,7 @@ def build_cat_card(report: dict, psychology: dict):
 
     # Finalize fields with AI payload or defaults
     # 🟡 0929修改：先試圖抓對應圖檔，失敗再退回 TheCatAPI
+    # 🟡 1007 修改『圖卡生成推薦』
     name = (ai_payload or {}).get("name") or random.choice(style["names"])
     persona_key = _resolve_persona_key(health_value, mood_value)
     persona_label = CAT_PERSONA_METADATA.get(persona_key)
@@ -522,10 +598,13 @@ def build_cat_card(report: dict, psychology: dict):
         model_keywords = [k.strip() for k in model_keywords.split(",") if k.strip()]
     mood_label = "、".join(model_keywords[:3]) if model_keywords else "平衡"
 
-    description = (ai_payload or {}).get("summary") or style["description"].format(
-        mood=mood_label,
-        health=int(round(health_value)),
-    )
+    description_template = style.get("description", "{mood} 的氣息值得被珍惜。")
+    try:
+        description = (ai_payload or {}).get("summary") or description_template.format(
+            mood=mood_label
+        )
+    except Exception:
+        description = (ai_payload or {}).get("summary") or description_template
     insight = (
         (ai_payload or {}).get("insight")
         or psychology.get("summary")
@@ -550,7 +629,8 @@ def build_cat_card(report: dict, psychology: dict):
             {"label": "活力指數", "value": f"{vitality}%"},
             {"label": "陪伴力", "value": f"{companionship}%"},
             {"label": "穩定度", "value": f"{stability}%"},
-        ],
+        ],  # 前端不再顯示分數，但保留結構以利後續調整
+        "recommendations": _normalize_recommendations(ai_payload, style_key),  # 🟡 1007 修改『圖卡生成推薦』：加入影音與活動建議
         "style_key": style_key,
         "palette": style.get("palette"),
         "keywords_list": model_keywords,

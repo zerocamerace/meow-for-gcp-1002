@@ -154,15 +154,19 @@
         
         /* 貓咪卡片設計 */
         .cat-card {
-            background: linear-gradient(135deg, #F6E4D3, #E2D1C3, #D5B79A); /* #1005庭婕這裡改成暖黃色漸層卡片 */
+            background: linear-gradient(135deg, #F6E4D3, #E2D1C3, #D5B79A); /* default fallback */
             border-radius: 24px;
             padding: clamp(24px, 5vw, 32px);
             margin: 0 auto 40px;
-            max-width: min(400px, 100%);
+            max-width: min(562px, 100%); /* 🟡 1007 修改8：再放大卡片寬度約 120% */
+            aspect-ratio: 9 / 14.4; /* 🟡 1007 修改8：高度減少為 90% */
             position: relative;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             transform: perspective(1000px) rotateY(0deg);
             transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(12px, 3vw, 20px);
         }
         
         .cat-card:hover {
@@ -197,8 +201,8 @@
         }
         
         .cat-image {
-            width: clamp(160px, 40vw, 200px);
-            height: clamp(160px, 40vw, 200px);
+            width: clamp(200px, 50vw, 250px); /* 🟡 1007 修改5：放大貓咪肖像 */
+            height: clamp(200px, 50vw, 250px);
             border-radius: 50%;
             object-fit: cover;
             border: 6px solid rgba(255, 255, 255, 0.8);
@@ -206,7 +210,7 @@
             margin: 0 auto;
             display: block;
         }
-        
+
         .cat-speech-bubble {
             position: absolute;
             top: -10px;
@@ -217,6 +221,9 @@
             font-size: 14px;
             color: #3F2B1E;
             box-shadow: 0 4px 12px rgba(63, 43, 30, 0.15);
+            white-space: nowrap; /* 🟡 1007 修改5：限定單行顯示 */
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .cat-speech-bubble::after {
@@ -232,47 +239,63 @@
         }
         
         .cat-name {
-            font-size: 24px;
+            font-size: 28px; /* 🟡 1007 修改7：放大主要標題字體 */
             font-weight: 700;
             color: #2d3436;
             margin-bottom: 8px;
         }
         
         .cat-description {
-            font-size: 14px;
+            font-size: 17px; /* 🟡 1007 修改7：放大內文 */
             color: #636e72;
             line-height: 1.5;
             margin-bottom: 20px;
+            text-align: justify; /* 🟡 1007 修改圖卡：更平衡的排版 */
+            text-justify: inter-ideograph;
+            hyphens: auto;
         }
         
-        .health-status {
+        /* 🟡 1007 修改『圖卡生成推薦』：推薦清單樣式 */
+        .curation-list {
+            margin-top: 20px;
+            background: rgba(226, 209, 195, 0.45); /* 🟡 1007 修改5：統一推薦底色層 */
+            border-radius: 16px;
+            padding: 18px 16px;
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 🟡 1007 修改圖卡：左右排版 */
+        }
+
+        .curation-item {
             display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .status-item {
-            flex: 1;
-            background: rgba(226, 209, 195, 0.7); /* #1005庭婕這裡讓健康指標區塊變暖黃色 */
-            padding: 12px 8px;
+            flex-direction: column;
+            gap: 6px;
             border-radius: 12px;
-            text-align: center;
+            padding: 12px;
+            border: 1px solid rgba(71, 109, 255, 0.28); /* 🟡 1007 修改5：以單一色系框線區隔 */
+            background: rgba(255, 255, 255, 0.72);
         }
-        
-        .status-label {
-            font-size: 10px;
-            color: #636e72;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+
+        .curation-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: #6b4d7a;
         }
-        
-        .status-value {
-            font-size: 16px;
+
+        .curation-title {
+            font-size: 19px; /* 🟡 1007 修改7：放大推薦標題 */
             font-weight: 700;
             color: #2d3436;
+        }
+
+        .curation-reason {
+            font-size: 15px; /* 🟡 1007 修改7：放大推薦說明 */
+            color: #4a4a4a;
+            line-height: 1.6;
+            text-align: justify;
+            text-justify: inter-ideograph;
+            hyphens: auto;
         }
         
         .ai-signature {
@@ -523,6 +546,11 @@
     {% set default_image = 'https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg' %}
     {% set card_url = c.get('cat_image_source') or card_image_url or c.get('image_url') or default_image %} <!-- 🟡 0929修改：優先使用資料庫圖卡來源 -->
     {% set proxy_card_url = card_url and url_for('proxy_image') ~ '?url=' ~ (card_url | urlencode) %}
+    {% set palette = c.get('palette') or ['#F6E4D3', '#E2D1C3', '#D5B79A', '#3F2B1E'] %}
+    {% set gradient = 'linear-gradient(135deg, ' ~ palette[0] ~ ', ' ~ palette[1] ~ ', ' ~ palette[2] ~ ')' %}
+    {% set speech_raw = c.speech or '你的健康是我的關注！' %}
+    {% set speech_clean = speech_raw.replace('嗨！', '').replace('哈囉！', '').replace('嗨!', '').replace('哈囉!', '').replace('嗨', '').replace('哈囉', '').replace('我是', '').strip() %} {# 🟡 1007 修改6：移除寒暄 #}
+    {% set speech_display = speech_clean if speech_clean else speech_raw %}
     <div class="container">
         <header class="header">
             <div class="logo">
@@ -546,14 +574,16 @@
             </p>
             
             <!-- 貓咪卡片 -->
-            <div class="cat-card" id="cat-card">
+            <div class="cat-card" id="cat-card" style="background: {{ gradient }};">
                 <div class="cat-card-header">
                     <div class="brand-logo">MEOW Yourself</div>
                     <div class="cat-type-badge">{{ c.persona or c.persona_label or '療癒系貓咪' }}</div> <!-- 0929修改：依照 AI 或九宮格顯示貓咪稱號 -->
                 </div>
                 
                 <div class="cat-image-section">
-                    <div class="cat-speech-bubble">{{ c.speech or '你的健康是我的關注！' }}</div>
+                    <div class="cat-speech-bubble"><!-- 🟡 1007 修改6：改為完整心情小語 -->
+                        {{ speech_display }}
+                    </div>
                     <img src="{{ card_url }}" alt="Your Cat" class="cat-image" {% if proxy_card_url %}data-proxy-src="{{ proxy_card_url }}"{% endif %} data-original-src="{{ card_url }}" />
                 </div>
                 
@@ -568,29 +598,17 @@
                     {% endif %}
                 </div>
                 
-                <div class="health-status">
-                    {% if c.stats %}
-                        {% for stat in c.stats %}
-                            <div class="status-item">
-                                <div class="status-label">{{ stat.label }}</div>
-                                <div class="status-value">{{ stat.value }}</div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="status-item">
-                            <div class="status-label">活力指數</div>
-                            <div class="status-value">85%</div>
-                        </div>
-                        <div class="status-item">
-                            <div class="status-label">關懷度</div>
-                            <div class="status-value">90%</div>
-                        </div>
-                        <div class="status-item">
-                            <div class="status-label">陪伴力</div>
-                            <div class="status-value">95%</div>
-                        </div>
-                    {% endif %}
+                {% if c.recommendations %}
+                <div class="curation-list"><!-- 🟡 1007 修改『圖卡生成推薦』：呈現影音與活動建議 -->
+                    {% for rec in c.recommendations %}
+                    <div class="curation-item"><!-- 🟡 1007 修改5：統一推薦底色 -->
+                        <div class="curation-label">{{ rec.label }}</div>
+                        <div class="curation-title">{{ rec.title }}</div>
+                        <div class="curation-reason">{{ rec.reason }}</div>
+                    </div>
+                    {% endfor %}
                 </div>
+                {% endif %}
                 
                 <div class="ai-signature">🤖 AI 生成專屬健康伙伴</div>
             </div>
@@ -653,8 +671,6 @@
             {% if psychology %}
             <div class="info-card">
                 <h3>情緒測驗摘要</h3>
-                {% set combined = psychology.get('combined_score') if psychology.get('combined_score') is not none else psychology.get('combinedScore') %}
-                <p><span class="info-label">綜合分數：</span>{{ combined if combined is not none else '尚未評估' }}</p>
                 {% if psychology.get('summary') %}
                 <p><span class="info-label">摘要：</span>{{ psychology.get('summary') }}</p>
                 {% endif %}

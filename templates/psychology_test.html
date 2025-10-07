@@ -359,36 +359,55 @@
                 <!-- GALING 10/4 貓咪 Logo 區塊 (使用 SVG 繪製 - 增加眼睛和鬍鬚) 
                  顏色已改為橘色 text-orange-400 -->
             <div class="mb-4">
-                <svg class="w-20 h-20 text-orange-400 mx-auto transform hover:scale-110 transition duration-300" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                    <!-- 臉部主體 (Head) -->
-                    <circle cx="16" cy="18" r="10" fill="currentColor" fill-opacity="0.8" stroke="none"/>
-                    
-                    <!-- 左耳 (Left Ear) - 逆時針旋轉 45 度 (回到上一個旋轉版本)，Y 座標維持 11.7 -->
-                    <path d="M8 5.4 L12.5 11.7 L3.5 11.7 Z" fill="currentColor" transform="rotate(-50 8 12)"/>
-                    <!-- 右耳 (Right Ear) - 順時針旋轉 45 度 (回到上一個旋轉版本)，Y 座標維持 11.7 -->
-                    <path d="M24 5.4 L28.5 11.7 L19.5 11.7 Z" fill="currentColor" transform="rotate(50 24 12)"/>
-                    
-                    <!-- 眼睛 (Eyes - 深色圓點) -->
-                    <circle cx="12" cy="16" r="1.5" fill="#333" stroke="none"/>
-                    <circle cx="20" cy="16" r="1.5" fill="#333" stroke="none"/>
-                    
-                    <!-- 鼻子 (Nose - 小三角形) -->
-                    <path d="M16 18 L15 20 L17 20 Z" fill="#333" stroke="none"/>
-                    
-                    <!-- 鬍鬚 (Whiskers - 簡單線條) -->
-                    <line x1="20" y1="21" x2="28" y2="21" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
-                    <line x1="20" y1="23" x2="28" y2="24" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
-                    <line x1="12" y1="21" x2="4" y2="21" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
-                    <line x1="12" y1="23" x2="4" y2="24" stroke="currentColor" stroke-opacity="0.6" stroke-width="1"/>
+                <!-- 🟡 1007 修改10『貓咪談心室SVG』：更新為帶條紋與鬍鬚的貓咪圖示 -->
+                <svg class="w-24 h-24 mx-auto transform hover:scale-110 transition duration-300" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="kittyFace" cx="50%" cy="45%" r="65%">
+                            <stop offset="0%" stop-color="#ffec9c" />
+                            <stop offset="100%" stop-color="#ffbf4f" />
+                        </radialGradient>
+                    </defs>
+                    <g stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M28 52 L46 20 L62 48" fill="#ffbf4f" stroke="#2b1b16" stroke-width="5" />
+                        <path d="M112 52 L94 20 L78 48" fill="#ffbf4f" stroke="#2b1b16" stroke-width="5" />
+                        <path d="M30 58 Q24 96 53 112 Q70 122 87 112 Q116 96 110 58 Q106 34 70 34 Q34 34 30 58" fill="url(#kittyFace)" stroke="#2b1b16" stroke-width="5" />
+                        <path d="M54 32 Q70 20 86 32" fill="none" stroke="#2b1b16" stroke-width="6" stroke-linecap="round" />
+                    </g>
+                    <g fill="#ffa861" stroke="#2b1b16" stroke-width="4">
+                        <path d="M55 38 C50 44 46 52 44 60 L52 58" />
+                        <path d="M85 38 C90 44 94 52 96 60 L88 58" />
+                    </g>
+                    <g fill="#2b1b16">
+                        <ellipse cx="55" cy="70" rx="7" ry="9" />
+                        <ellipse cx="85" cy="70" rx="7" ry="9" />
+                    </g>
+                    <path d="M66 74 L70 80 L74 74" fill="#2b1b16" />
+                    <path d="M58 86 C66 92 74 92 82 86" stroke="#2b1b16" stroke-width="5" stroke-linecap="round" fill="none" />
+                    <g stroke="#2b1b16" stroke-width="4" stroke-linecap="round">
+                        <path d="M40 70 L24 64" />
+                        <path d="M41 78 L23 78" />
+                        <path d="M40 86 L24 92" />
+                        <path d="M100 70 L116 64" />
+                        <path d="M99 78 L117 78" />
+                        <path d="M100 86 L116 92" />
+                    </g>
+                    <g fill="#fff">
+                        <circle cx="52" cy="66" r="2.5" />
+                        <circle cx="82" cy="66" r="2.5" />
+                    </g>
+                    <g fill="none" stroke="#ff8d54" stroke-width="6" stroke-linecap="round">
+                        <path d="M58 46 L66 46" />
+                        <path d="M70 42 L70 52" />
+                        <path d="M82 46 L90 46" />
+                    </g>
+                    <g fill="#ff9aa2">
+                        <circle cx="46" cy="84" r="4" />
+                        <circle cx="94" cy="84" r="4" />
+                    </g>
                 </svg>
             </div>
                  <h1 class="text-4xl md:text-5xl font-bold mb-2">貓咪談心室</h1>
                 <p class="text-lg text-[var(--text-secondary)]">選一位貓咪朋友，開始你們的悄悄話時間。</p>
-                <!-- 🟢 修改開始：提供重新上傳健檢報告入口（強化外觀與新增貓爪 emoji） -->
-                <a href="{{ url_for('upload_health', reupload=1) }}" class="inline-flex items-center gap-4 mt-6 px-8 py-3.5 rounded-full text-base font-semibold text-gray-700 border border-transparent bg-white/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all" style="font-size: 200%;">
-                    <span class="flex items-center gap-3">🐾 我要重新上傳報告</span>
-                </a>
-                <!-- 🟢 修改結束 -->
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
                 <button onclick="selectMode('deep-chat')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6 relative overflow-hidden selection-mode-card" data-bubble-color="rgba(184, 172, 215, 0.55)">
@@ -407,6 +426,12 @@
                         <p class="text-[var(--text-secondary)] text-sm mt-2 leading-relaxed">由專業的「喵記者馬克」提問 3 題至 15 題選擇題，你可以三選一作答，也可以改輸入文字傳送答案；若感覺聊夠了可以按「悄悄話總結」，讓馬克陪你快速釐清當下的心情與狀況。</p>
                     </div>
                 </button>
+            </div>
+            <!-- 🟡 1007 修改『重新上傳報告』：調整位置與字體 -->
+            <div class="mt-8 text-center">
+                <a href="{{ url_for('upload_health', reupload=1) }}" class="inline-flex items-center gap-3 px-6 py-2.5 rounded-full text-base font-semibold text-gray-700 border border-transparent bg-white/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all" style="font-size: 90%;">
+                    <span class="flex items-center gap-2">🐾 我要重新上傳報告</span>
+                </a>
             </div>
         </div>
 
@@ -432,8 +457,8 @@
                     <div id="quick-replies-container" class="p-2 flex flex-wrap gap-2 justify-center border-t border-gray-100">
                         <!-- Quick replies will be injected here -->
                     </div>
-                    <!-- 🟡 1005 修改：提示使用者可透過悄悄話總結結束對話並生成圖卡 -->
-                    <p class="px-4 text-center text-[var(--text-secondary)] text-xs tracking-wide">當你聊夠了，可以點「悄悄話總結」結束對話並生成圖卡</p>
+                    <!-- 🟡 1007 修改圖卡：待總結可見提醒 -->
+                    <p id="summary-reminder" class="px-4 text-center text-[var(--text-secondary)] text-xs tracking-wide hidden-section">當你聊夠了，可以點「悄悄話總結」結束對話並生成圖卡</p>
                     <div class="p-4 border-t border-gray-100">
                         <!-- GALING 10/02 對話框尺寸調大 -->
                         <div class="flex items-center gap-3 chat-input-wrapper w-full">
@@ -895,7 +920,7 @@
             if (!document.getElementById('generate-card-button')) {
                 const buttonContainer = document.createElement('div');
                 buttonContainer.className = 'mt-6 text-center';
-                
+
                 const generateCardBtn = document.createElement('button');
                 generateCardBtn.id = 'generate-card-button';
                 generateCardBtn.className = 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105';
@@ -910,9 +935,18 @@
                         window.location.href = "{{ url_for('generate_card') }}";
                     }, 220);
                 });
-                
+
                 buttonContainer.appendChild(generateCardBtn);
                 summaryContainer.appendChild(buttonContainer);
+            }
+            const summaryReminder = document.getElementById('summary-reminder');
+            if (summaryReminder) {
+                const reminderMessages = {
+                    'deep-chat': '奶奶會聽你慢慢說，這裡讓你可以想說什麼就說什麼。當你聊夠了，可以點「悄悄話總結」結束對話並生成圖卡',
+                    'quick-qa': '當你聊夠了，可以點「悄悄話總結」結束對話並生成圖卡',
+                };
+                summaryReminder.textContent = reminderMessages[appState.mode] || reminderMessages['quick-qa']; // 🟡 1007 修改貓咪談心室：依模式調整提醒文字
+                summaryReminder.classList.remove('hidden-section');
             }
         }
         
@@ -943,6 +977,10 @@
             const existingButton = document.getElementById('generate-card-button');
             if (existingButton) {
                 existingButton.parentElement.remove();
+            }
+            const summaryReminder = document.getElementById('summary-reminder');
+            if (summaryReminder) {
+                summaryReminder.classList.add('hidden-section'); // 🟡 1007 修改貓咪談心室：重置時隱藏提醒
             }
             if (magicOverlay) {
                 magicOverlay.classList.remove('active'); // 🟡 1006 修改：重設時隱藏魔法動畫
@@ -1299,7 +1337,7 @@
 
             return `
                 你的角色: 你是一位專業的心理分析師，同時也是一位溫暖的貓咪夥伴。
-                你的任務: 根據以下的健康報告摘要與對話紀錄，產生一份結構化的分析報告，並將身心狀態串連在一起給出建議。情緒分析需基於 VAD 模型（Valence-Arousal-Dominance），根據對話內容和健康數據動態生成 emotionVector 的值，範圍嚴格限制在 1-100：
+                你的任務: 根據以下的健康報告摘要與對話紀錄，產生一份結構化的分析報告，並將身心狀態串連在一起給出建議。切記不可直接揭露血壓、血脂等具體檢驗數值，需以趨勢或感受性的描述代替。情緒分析需基於 VAD 模型（Valence-Arousal-Dominance），根據對話內容和健康數據動態生成 emotionVector 的值，範圍嚴格限制在 1-100：
                 - Valence（情緒正負）：反映對話中的正面（高分）或負面（低分）情緒。
                 - Arousal（喚醒度）：反映對話中的情緒強度，低分表示平靜，高分表示激動。
                 - Dominance（支配感）：反映對話中用戶的控制感，低分表示無力感，高分表示掌控感。
@@ -1319,7 +1357,7 @@
 
                 請嚴格遵循以下的 JSON 格式回傳，不要有任何額外的文字或解釋:
                 {
-                "summary": "一段約 100-150 字的溫暖總結，用第二人稱（你）的角度，同理並總結使用者的狀況。必須遵循上述的風格指南，使用 **粗體** 和表情符號 ✨。",
+                "summary": "一段約 100-150 字的溫暖總結，用第二人稱（你）的角度，同理並總結使用者的狀況。不可出現任何檢驗數值或具體數字，需用趨勢性的描述呈現健康面向。必須遵循上述的風格指南，使用 **粗體** 和表情符號 ✨。",
                 "keywords": ["一個包含3-5個核心議題關鍵字的陣列"],
                 "emotionVector": {
                     "valence": "1-100 的整數，基於對話情緒正負",
